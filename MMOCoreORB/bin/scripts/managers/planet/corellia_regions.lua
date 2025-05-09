@@ -100,14 +100,14 @@ corellia_regions = {
 
 	-- Cities
 	{"@corellia_region_names:bela_vistal", 6788, -5654, {CIRCLE, 480}, CITY + NOSPAWNAREA},
-	{"@corellia_region_names:coronet", -178, -4504, {CIRCLE, 200}, CITY + NOSPAWNAREA},
+	{"@corellia_region_names:coronet", -178, -4504, {CIRCLE, 581}, CITY + NOSPAWNAREA},
 	{"@corellia_region_names:tyrena", -5282, -2526, {CIRCLE, 622}, CITY + NOSPAWNAREA},
 	{"@corellia_region_names:kor_vella", -3512, 3184, {CIRCLE, 758}, CITY + NOSPAWNAREA},
 	{"@corellia_region_names:doaba_guerfel", 3272, 5456, {CIRCLE, 632}, CITY + NOSPAWNAREA},
 	{"@corellia_region_names:vreni_island", -5472, -6272, {CIRCLE, 690}, CITY + NOSPAWNAREA},
 	{"@corellia_region_names:vreni_island_1", -5488, -6288, {CIRCLE, 528}, NOBUILDZONEAREA},
 
-	{"coronet_nobuild_1", -178, -4504, {CIRCLE, 1000}, CAMPINGAREA + NOBUILDZONEAREA},
+	{"coronet_nobuild_1", -178, -4504, {CIRCLE, 600}, CAMPINGAREA + NOBUILDZONEAREA},
 	{"tyrena_nobuild_1", -5282, -2526, {CIRCLE, 1200}, CAMPINGAREA + NOBUILDZONEAREA},
 	{"bela_vistal_nobuild_1", 6788, -5654, {CIRCLE, 1000}, CAMPINGAREA + NOBUILDZONEAREA},
 	{"vreni_island_nobuild_1", -5472, -6272, {CIRCLE, 1400}, CAMPINGAREA + NOBUILDZONEAREA},
