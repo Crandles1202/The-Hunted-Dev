@@ -100,7 +100,7 @@ corellia_regions = {
 
 	-- Cities
 	{"@corellia_region_names:bela_vistal", 6788, -5654, {CIRCLE, 480}, CITY + NOSPAWNAREA},
-	{"@corellia_region_names:coronet", -178, -4504, {CIRCLE, 581}, CITY + NOSPAWNAREA},
+	{"@corellia_region_names:coronet", -178, -4504, {CIRCLE, 200}, CITY + NOSPAWNAREA},
 	{"@corellia_region_names:tyrena", -5282, -2526, {CIRCLE, 622}, CITY + NOSPAWNAREA},
 	{"@corellia_region_names:kor_vella", -3512, 3184, {CIRCLE, 758}, CITY + NOSPAWNAREA},
 	{"@corellia_region_names:doaba_guerfel", 3272, 5456, {CIRCLE, 632}, CITY + NOSPAWNAREA},
