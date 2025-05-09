@@ -731,3 +731,4 @@ includeFile("events/ServerEventAutomation.lua")
 includeFile("../custom_scripts/screenplays/screenplays.lua")
 
 includeFile("custom_screenplays/screenplays.lua")
+includeFile("tasks/naboo/myswg_vendor.lua")

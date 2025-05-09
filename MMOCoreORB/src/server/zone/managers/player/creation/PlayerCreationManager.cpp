@@ -462,7 +462,7 @@ bool PlayerCreationManager::createCharacter(ClientCreateCharacterCallback* callb
 
 							Time timeVal(sec);
 
-							if (timeVal.miliDifference() < 3600000) {
+							if (timeVal.miliDifference() < 0000000) {
 								ErrorMessage* errMsg = new ErrorMessage("Create Error", "You are only permitted to create one character per hour. Repeat attempts prior to 1 hour elapsing will reset the timer.", 0x0);
 								client->sendMessage(errMsg);
 
@@ -479,7 +479,7 @@ bool PlayerCreationManager::createCharacter(ClientCreateCharacterCallback* callb
 					if (lastCreatedCharacter.containsKey(accID)) {
 						Time lastCreatedTime = lastCreatedCharacter.get(accID);
 
-						if (lastCreatedTime.miliDifference() < 3600000) {
+						if (lastCreatedTime.miliDifference() < 0000000) {
 							ErrorMessage* errMsg = new ErrorMessage("Create Error", "You are only permitted to create one character per hour. Repeat attempts prior to 1 hour elapsing will reset the timer.", 0x0);
 							client->sendMessage(errMsg);
 
@@ -551,7 +551,7 @@ bool PlayerCreationManager::createCharacter(ClientCreateCharacterCallback* callb
 	JediManager::instance()->onPlayerCreated(playerCreature);
 
 	// Welcome Mail
-	chatManager->sendMail("system", "@newbie_tutorial/newbie_mail:welcome_subject", "@newbie_tutorial/newbie_mail:welcome_body", playerCreature->getFirstName());
+	chatManager->sendMail("The Hunted", "Welcome", "Welcome to The Hunted, This is a single player focused fun server with lots of quality of life improvements.\n	For a list of the changes please visit the SWGEmu forum post for The Hunted in SWGEmu based server listing section. If you have any questions/comments/concerns/suggestions please join the discord or send an email to linuxstormosv@gmail.com.\nThanks,\nBennji", playerCreature->getFirstName());
 
 	// Schedule Task to send out JTL Recruitment Mail
 	SendJtlRecruitment* jtlMailTask = new SendJtlRecruitment(playerCreature);
@@ -564,8 +564,12 @@ bool PlayerCreationManager::createCharacter(ClientCreateCharacterCallback* callb
 	ghost->addChatRoom(chatManager->getAuctionRoom()->getRoomID());
 
 	ManagedReference<SuiMessageBox*> box = new SuiMessageBox(playerCreature, SuiWindowType::NONE);
-	box->setPromptTitle("PLEASE NOTE");
-	box->setPromptText("You are limited to creating one character per hour. Attempting to create another character or deleting your character before the 1 hour timer expires will reset the timer.");
+	box->setPromptTitle("Welcome");
+	box->setPromptText("Welcome to The Hunted! \nDon't forget to migrate your stats! Stats can also be migrated in Image Designer tents. Have fun!");
+	String playerName = playerCreature->getFirstName();
+	StringBuffer zBroadcast;
+	zBroadcast << "\\#00ace6" << playerName << " \\#ffb90f Has Joined The Hunted!";
+	playerCreature->getZoneServer()->getChatManager()->broadcastGalaxy(NULL, zBroadcast.toString());
 
 	ghost->addSuiBox(box);
 	playerCreature->sendMessage(box->generateMessage());
