@@ -38,7 +38,7 @@ ResourceSpawner::ResourceSpawner(ManagedReference<ZoneServer*> serv,
 
 	nameManager = processor->getNameManager();
 	objectManager = server->getObjectManager();
-	samplingMultiplier = 100; //should be 1 for normal use
+	samplingMultiplier = 10; //should be 1 for normal use
 
 	minimumPool = new MinimumPool(this);
 	fixedPool = new FixedPool(this);
