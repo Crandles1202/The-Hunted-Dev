@@ -11,7 +11,10 @@
 
 class RequestSetStatMigrationDataCommand : public QueueCommand {
 public:
-	RequestSetStatMigrationDataCommand(const String& name, ZoneProcessServer* server) : QueueCommand(name, server) {
+
+	RequestSetStatMigrationDataCommand(const String& name, ZoneProcessServer* server)
+		: QueueCommand(name, server) {
+
 	}
 
 	static uint32 getMaxAttribute(CreatureObject* creature, uint8 attribute) {
@@ -26,24 +29,20 @@ public:
 		return PlayerCreationManager::instance()->getTotalAttributeLimit(creature->getSpeciesName());
 	}
 
+
 	int doQueueCommand(CreatureObject* creature, const uint64& target, const UnicodeString& arguments) const {
+
 		if (!checkStateMask(creature))
 			return INVALIDSTATE;
 
 		if (!checkInvalidLocomotions(creature))
 			return INVALIDLOCOMOTION;
 
-		if (!creature->isPlayerCreature()) {
+		if (!creature->isPlayerCreature())
 			return GENERALERROR;
-		}
 
-		auto ghost = creature->getPlayerObject();
-
-		if (ghost == nullptr) {
-			return GENERALERROR;
-		}
-
-		bool privilegedPlayer = ghost->isPrivileged();
+		CreatureObject* player = cast<CreatureObject*>(creature);
+		PlayerObject* ghost = player->getPlayerObject();
 
 		ManagedReference<Facade*> facade = creature->getActiveSession(SessionFacadeType::MIGRATESTATS);
 		ManagedReference<MigrateStatsSession*> session = dynamic_cast<MigrateStatsSession*>(facade.get());
@@ -61,8 +60,8 @@ public:
 		for (int i = 0; tokenizer.hasMoreTokens() && i < 9; ++i) {
 			uint32 value = tokenizer.getIntToken();
 
-			if (value < getMinAttribute(creature, i) || value > getMaxAttribute(creature, i)) {
-				warning() << "Player: " << creature->getDisplayedName() << " ID: " << creature->getObjectID() <<  " --- Suspected stat migration hacking attempt.";
+			if (value < getMinAttribute(player, i) || value > getMaxAttribute(player, i)) {
+				creature->info("Suspected stat migration hacking attempt.");
 				return GENERALERROR;
 			}
 
@@ -70,32 +69,41 @@ public:
 			targetPointsTotal += value;
 		}
 
-		// Here we set the stat migration target attributes.
-		// NOTE: We aren't actually migrating the stats at this point.
-		if (targetPointsTotal == getTotalAttribPoints(creature)) {
+		//Here we set the stat migration target attributes.
+		//NOTE: We aren't actually migrating the stats at this point.
+		if (targetPointsTotal == getTotalAttribPoints(player)) {
 			for (int i = 0; i < 9; ++i) {
 				session->setAttributeToModify(i, targetAttributes[i]);
 			}
 		} else {
 			creature->error("targetPointsTotal = " + String::valueOf(targetPointsTotal));
-			creature->error("totalAttribPoints = " + String::valueOf(getTotalAttribPoints(creature)));
+			creature->error("totalAttribPoints = " + String::valueOf(getTotalAttribPoints(player)));
 			creature->error("Trying to set migratory stats without assigning all available points.");
 			return GENERALERROR;
 		}
 
-		// Player is in the tutorial zone and is allowed to migrate stats.
-		auto zone = creature->getZone();
+		//Player is in the tutorial zone and is allowed to migrate stats.
+		Zone* zone = creature->getZone();
+		ManagedReference<SceneObject*> obj = creature->getParentRecursively(SceneObjectType::SALONBUILDING);
 
-		if ((zone != nullptr && zone->getZoneName() == "tutorial") || privilegedPlayer) {
-			session->migrateStats();
+if (zone != nullptr && obj != nullptr) {
+    std::string zoneName = zone->getZoneName();
 
-			if (privilegedPlayer) {
-				creature->sendSystemMessage("Stat Migration Permitted due to Staff Privileges.");
-			}
-		}
+    if (zoneName == "tutorial" || zoneName == "tatooine" || zoneName == "corellia" || 
+        zoneName == "dantooine" || zoneName == "dathomir" || zoneName == "endor" ||
+        zoneName == "lok" || zoneName == "naboo" || zoneName == "rori" || 
+        zoneName == "talus" || zoneName == "yavin4") {
+        
+        player->clearBuffs(true, false); // remove buffs to prevent min/maxxing HAMs
+        session->migrateStats();
+    }
+}
 
-		return SUCCESS;
+return SUCCESS;
+	
+
 	}
+
 };
 
 #endif //REQUESTSETSTATMIGRATIONDATACOMMAND_H_

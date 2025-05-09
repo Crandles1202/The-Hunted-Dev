@@ -165,9 +165,10 @@ Core3 = {
 	},
 
 	------TRE config------
-	TrePath = "/home/swgemu/workspace/tre",
+	TrePath = "/tre",
 
 	TreFiles = {
+		"hunted_custom.tre",
 		"mtg_patch_023.tre",
 		"mtg_patch_022.tre",
 		"mtg_planets.tre",
