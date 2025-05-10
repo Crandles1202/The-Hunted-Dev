@@ -1029,7 +1029,7 @@ function myswg_vendor_convo_handler:getNextConversationScreen(conversationTempla
                     
 --DOCTOR
                     
-                elseif (optionLink == "buff1" and credits < 10000) then
+                elseif (optionLink == "enhanceCharacter" and credits < 10000) then
                     -- Bail if the player doesn’t have enough cash on hand.  
                     -- Plays a chat box message from the NPC as well as a system message.
                       nextConversationScreen = conversation:getScreen("insufficient_funds")
@@ -1043,7 +1043,7 @@ function myswg_vendor_convo_handler:getNextConversationScreen(conversationTempla
                     --giveItem(pInventory, "object/tangible/deed/vehicle_deed/speederbike_deed.iff", -1)
                     --createLoot(pInventory, "junk", 1, false)
                     
-                elseif (optionLink == "buff2" and credits < 20000) then
+  --              elseif (optionLink == "buff2" and credits < 20000) then
                     -- Bail if the player doesn’t have enough cash on hand.  
                     -- Plays a chat box message from the NPC as well as a system message.
                       nextConversationScreen = conversation:getScreen("insufficient_funds")
@@ -1054,7 +1054,7 @@ function myswg_vendor_convo_handler:getNextConversationScreen(conversationTempla
 
 										CreatureObject(conversingPlayer):enhanceCharacterDocBuff()
 
-                elseif (optionLink == "buff3" and credits < 30000) then
+    --            elseif (optionLink == "buff3" and credits < 30000) then
                     -- Bail if the player doesn’t have enough cash on hand.  
                     -- Plays a chat box message from the NPC as well as a system message.
                       nextConversationScreen = conversation:getScreen("insufficient_funds")
@@ -1065,7 +1065,7 @@ function myswg_vendor_convo_handler:getNextConversationScreen(conversationTempla
 
 										CreatureObject(conversingPlayer):enhanceCharacterDocBuffTHREE()
 
-                elseif (optionLink == "buff4" and credits < 10000) then
+   --             elseif (optionLink == "buff4" and credits < 10000) then
                     -- Bail if the player doesn’t have enough cash on hand.  
                     -- Plays a chat box message from the NPC as well as a system message.
                       nextConversationScreen = conversation:getScreen("insufficient_funds")
@@ -1077,7 +1077,7 @@ function myswg_vendor_convo_handler:getNextConversationScreen(conversationTempla
 	                  
 										CreatureObject(conversingPlayer):enhanceCharacterEntBuffONE()
 
-                elseif (optionLink == "buff5" and credits < 20000) then
+   --             elseif (optionLink == "buff5" and credits < 20000) then
                     -- Bail if the player doesn’t have enough cash on hand.  
                     -- Plays a chat box message from the NPC as well as a system message.
                       nextConversationScreen = conversation:getScreen("insufficient_funds")
