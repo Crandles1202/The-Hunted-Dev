@@ -57,7 +57,7 @@ float VisibilityManager::calculateVisibilityIncrease(CreatureObject* creature) {
 				continue;
 		}
 
-		if (!creature->isInRange(c, 32) || !CollisionManager::checkLineOfSight(creature, c))
+		if (!creature->isInRange(c, 16) || !CollisionManager::checkLineOfSight(creature, c))
 			continue;
 
 		if (creature->getFaction() == 0 || (c->getFaction() != factionImperial && c->getFaction() != factionRebel)) {
