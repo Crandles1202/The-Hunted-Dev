@@ -91,4 +91,4 @@ destroyMissionDifficultyRandomDistance = 0
 destroyMissionBaseReward = 15000
 destroyMissionDifficultyRewardFactor = 375
 destroyMissionRandomReward = 15000
-destroyMissionDifficultyRandomReward = 375
+destroyMissionDifficultyRandomReward = 15
