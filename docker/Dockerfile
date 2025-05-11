@@ -22,8 +22,8 @@ RUN set -xe; \
 #    clang cmake ninja-build wget git; \
 #    java -version;
 
-# ENV JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64
-# ENV PATH=${JAVA_HOME}/bin:${PATH}
+ ENV JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64
+ ENV PATH=${JAVA_HOME}/bin:${PATH}
 
 
 # Install build packages, using clang latest stable as /usr/bin/clang etc.
