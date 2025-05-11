@@ -28,7 +28,7 @@ class CuboidAreaShape extends AreaShape  {
 		width = 0.f;
 		height = 0.f;
 
-		Logger.setLoggingName("CuboidAreaShape");
+		//Logger.setLoggingName("CuboidAreaShape");
 	}
 
 	// Mutators
