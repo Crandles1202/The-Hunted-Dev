@@ -22,7 +22,7 @@ class SphereAreaShape extends AreaShape  {
 		radius = 0.f;
 		radius2 = 0.f;
 
-		Logger.setLoggingName("SphereAreaShape");
+		//Logger.setLoggingName("SphereAreaShape");
 	}
 
 	// Mutators
