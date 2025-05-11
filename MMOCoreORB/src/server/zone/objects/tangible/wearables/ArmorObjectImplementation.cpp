@@ -32,6 +32,10 @@ void ArmorObjectImplementation::loadTemplateData(SharedObjectTemplate* templateD
 	actionEncumbrance = armorTemplate->getActionEncumbrance();
 	mindEncumbrance = armorTemplate->getMindEncumbrance();
 
+	if (healthEncumbrance < 1) healthEncumbrance = 1;
+	if (actionEncumbrance < 1) actionEncumbrance = 1;
+	if (mindEncumbrance < 1) mindEncumbrance = 1;
+
 	rating = armorTemplate->getRating();
 
 	kinetic = armorTemplate->getKinetic();
@@ -70,165 +74,169 @@ void ArmorObjectImplementation::notifyLoadFromDatabase() {
 }
 
 void ArmorObjectImplementation::fillAttributeList(AttributeListMessage* alm, CreatureObject* object) {
-	// Codition
-	if (maxCondition > 0) {
-		StringBuffer cond;
-		cond << (maxCondition-(int)conditionDamage) << "/" << maxCondition;
+	WearableObjectImplementation::fillAttributeList(alm, object);
 
-		auto config = ConfigManager::instance();
+//	alm->insertAttribute("challenge_level", getLevel());
 
-		if (isForceNoTrade()) {
-			cond << config->getForceNoTradeMessage();
-		} else if (antiDecayKitObject != nullptr && antiDecayKitObject->isForceNoTrade()) {
-			cond << config->getForceNoTradeADKMessage();
-		} else if (isNoTrade() || containsNoTradeObjectRecursive()) {
-			cond << config->getNoTradeMessage();
-		}
+	//Armor Rating
+//	if (rating == LIGHT)
+//		alm->insertAttribute("armorrating", "@obj_attr_n:armor_pierce_light"); //Light
+//	else if (rating == MEDIUM)
+//		alm->insertAttribute("armorrating", "@obj_attr_n:armor_pierce_medium"); //Medium
+//	else if (rating == HEAVY)
+//		alm->insertAttribute("armorrating", "@obj_attr_n:armor_pierce_heavy"); //Heavy
+//	else
+//		alm->insertAttribute("armorrating", "@obj_attr_n:armor_pierce_none"); //None
 
-		alm->insertAttribute("condition", cond);
-	}
-
-	// Volume
-	alm->insertAttribute("volume", 1);
-
-	// Skill Mods
-	for (int i = 0; i < wearableSkillMods.size(); ++i) {
-		String key = wearableSkillMods.elementAt(i).getKey();
-		String statname = "cat_skill_mod_bonus.@stat_n:" + key;
-		int value = wearableSkillMods.get(key);
-
-		if (value > 0)
-			alm->insertAttribute(statname, value);
-	}
-
-	// Sockets Remaining
-	int remainingSockets = getRemainingSockets();
-
-	if (remainingSockets > 0)
-		alm->insertAttribute("sockets", remainingSockets);
-
-	// Armor Rating
-	if (rating == LIGHT)
-		alm->insertAttribute("armorrating", "@obj_attr_n:armor_pierce_light"); //Light
-	else if (rating == MEDIUM)
-		alm->insertAttribute("armorrating", "@obj_attr_n:armor_pierce_medium"); //Medium
-	else if (rating == HEAVY)
-		alm->insertAttribute("armorrating", "@obj_attr_n:armor_pierce_heavy"); //Heavy
-	else
-		alm->insertAttribute("armorrating", "@obj_attr_n:armor_pierce_none"); //None
+	int armorKinetic = getKinetic();
+	int armorEnergy = getEnergy();
+	int armorElectricity = getElectricity();
+	int armorStun = getStun();
+	int armorBlast = getBlast();
+	int armorHeat = getHeat();
+	int armorCold = getCold();
+	int armorAcid = getAcid();
+	int armorLightSaber = getLightSaber();
 
 	//Check for special protections
-	if ((isSpecial(SharedWeaponObjectTemplate::KINETIC) || isVulnerable(SharedWeaponObjectTemplate::KINETIC)) && getKinetic() >= 0.5) {
+	if (isSpecial(SharedWeaponObjectTemplate::KINETIC) && !isVulnerable(SharedWeaponObjectTemplate::KINETIC) && getKinetic() > 0) {
+		//if (getKinetic() > 50)	armorKinetic = 50;
 		StringBuffer txt;
-		txt << Math::getPrecision(getKinetic(),1) << "%";
-		alm->insertAttribute("cat_armor_special_protection.armor_eff_kinetic", txt.toString());
+		txt << Math::getPrecision(armorKinetic,1) << "%";
+		alm->insertAttribute("cat_armor_special_protection.armor_eff_kinetic",
+				txt.toString());
 	}
-
-	if ((isSpecial(SharedWeaponObjectTemplate::ENERGY) || isVulnerable(SharedWeaponObjectTemplate::ENERGY)) && getEnergy() >= 0.5) {
+	if (isSpecial(SharedWeaponObjectTemplate::ENERGY) && !isVulnerable(SharedWeaponObjectTemplate::ENERGY) && getEnergy() > 0) {
+		//if (getEnergy() > 50)	armorEnergy = 50;
 		StringBuffer txt;
-		txt << Math::getPrecision(getEnergy(),1) << "%";
-		alm->insertAttribute("cat_armor_special_protection.armor_eff_energy", txt.toString());
+		txt << Math::getPrecision(armorEnergy,1) << "%";
+		alm->insertAttribute("cat_armor_special_protection.armor_eff_energy",
+				txt.toString());
 	}
-
-	if ((isSpecial(SharedWeaponObjectTemplate::ELECTRICITY) || isVulnerable(SharedWeaponObjectTemplate::ELECTRICITY)) && getElectricity() >= 0.5) {
+	if (isSpecial(SharedWeaponObjectTemplate::ELECTRICITY) && !isVulnerable(SharedWeaponObjectTemplate::ELECTRICITY) && getElectricity() > 0) {
+		//if (getElectricity() > 50)	armorElectricity = 50;
 		StringBuffer txt;
-		txt << Math::getPrecision(getElectricity(),1) << "%";
+		txt << Math::getPrecision(armorElectricity,1) << "%";
 		alm->insertAttribute(
 				"cat_armor_special_protection.armor_eff_elemental_electrical",
 				txt.toString());
 	}
-
-	if ((isSpecial(SharedWeaponObjectTemplate::STUN) || isVulnerable(SharedWeaponObjectTemplate::STUN)) &&  getStun() >= 0.5) {
+	if (isSpecial(SharedWeaponObjectTemplate::STUN) && !isVulnerable(SharedWeaponObjectTemplate::STUN) &&  getStun() > 0) {
+		if (getStun() > 50)	armorStun = 50;
 		StringBuffer txt;
-		txt << Math::getPrecision(getStun(),1) << "%";
-		alm->insertAttribute("cat_armor_special_protection.armor_eff_stun", txt.toString());
+		txt << Math::getPrecision(armorStun,1) << "%";
+		alm->insertAttribute("cat_armor_special_protection.armor_eff_stun",
+				txt.toString());
 	}
-
-	if ((isSpecial(SharedWeaponObjectTemplate::BLAST) || isVulnerable(SharedWeaponObjectTemplate::BLAST)) && getBlast() >= 0.5) {
+	if (isSpecial(SharedWeaponObjectTemplate::BLAST) && !isVulnerable(SharedWeaponObjectTemplate::BLAST) && getBlast() > 0) {
+		//if (getBlast() > 50)	armorBlast = 50;
 		StringBuffer txt;
-		txt << Math::getPrecision(getBlast(),1) << "%";
-		alm->insertAttribute("cat_armor_special_protection.armor_eff_blast", txt.toString());
+		txt << Math::getPrecision(armorBlast,1) << "%";
+		alm->insertAttribute("cat_armor_special_protection.armor_eff_blast",
+				txt.toString());
 	}
-
-	if ((isSpecial(SharedWeaponObjectTemplate::HEAT) || isVulnerable(SharedWeaponObjectTemplate::HEAT)) && getHeat() >= 0.5) {
+	if (isSpecial(SharedWeaponObjectTemplate::HEAT) && !isVulnerable(SharedWeaponObjectTemplate::HEAT) && getHeat() > 0) {
+		//if (getHeat() > 50)	armorHeat = 50;
 		StringBuffer txt;
-		txt << Math::getPrecision(getHeat(),1) << "%";
-		alm->insertAttribute("cat_armor_special_protection.armor_eff_elemental_heat", txt.toString());
+		txt << Math::getPrecision(armorHeat,1) << "%";
+		alm->insertAttribute(
+				"cat_armor_special_protection.armor_eff_elemental_heat",
+				txt.toString());
 	}
-
-	if ((isSpecial(SharedWeaponObjectTemplate::COLD) || isVulnerable(SharedWeaponObjectTemplate::COLD)) && getCold() >= 0.5) {
+	if (isSpecial(SharedWeaponObjectTemplate::COLD) && !isVulnerable(SharedWeaponObjectTemplate::COLD) && getCold() > 0) {
+		//if (getCold() > 50)	armorCold = 50;
 		StringBuffer txt;
-		txt << Math::getPrecision(getCold(),1) << "%";
-		alm->insertAttribute("cat_armor_special_protection.armor_eff_elemental_cold", txt.toString());
+		txt << Math::getPrecision(armorCold,1) << "%";
+		alm->insertAttribute(
+				"cat_armor_special_protection.armor_eff_elemental_cold",
+				txt.toString());
 	}
-
-	if ((isSpecial(SharedWeaponObjectTemplate::ACID) || isVulnerable(SharedWeaponObjectTemplate::ACID)) && getAcid() >= 0.5) {
+	if (isSpecial(SharedWeaponObjectTemplate::ACID) && !isVulnerable(SharedWeaponObjectTemplate::ACID) && getAcid() > 0) {
+		//if (getAcid() > 50)	armorAcid = 50;
 		StringBuffer txt;
-		txt << Math::getPrecision(getAcid(),1) << "%";
-		alm->insertAttribute("cat_armor_special_protection.armor_eff_elemental_acid", txt.toString());
+		txt << Math::getPrecision(armorAcid,1) << "%";
+		alm->insertAttribute(
+				"cat_armor_special_protection.armor_eff_elemental_acid",
+				txt.toString());
 	}
+//	if ((isSpecial(SharedWeaponObjectTemplate::LIGHTSABER) && !isVulnerable(SharedWeaponObjectTemplate::LIGHTSABER) && getLightSaber() > 0) {
+//		//if (getLightSaber() > 25)	armorLightSaber = 25;
+//		StringBuffer txt;
+//		txt << Math::getPrecision(getLightSaber(),1) << "%";
+//		alm->insertAttribute(
+//				"cat_armor_special_protection.armor_eff_restraint",
+//				txt.toString());
+//	}
 
-	if ((isSpecial(SharedWeaponObjectTemplate::LIGHTSABER) || isVulnerable(SharedWeaponObjectTemplate::LIGHTSABER)) && getLightSaber() >= 0.5) {
+
+//Check for Effectiveness protections(Normal)
+	if (!isSpecial(SharedWeaponObjectTemplate::KINETIC) && !isVulnerable(SharedWeaponObjectTemplate::KINETIC) && getKinetic() > 0) {
+		//if (getKinetic() > 50)	armorKinetic = 50;
 		StringBuffer txt;
-		txt << Math::getPrecision(getLightSaber(),1) << "%";
-		alm->insertAttribute("cat_armor_special_protection.armor_eff_restraint", txt.toString());
+		txt << Math::getPrecision(armorKinetic,1) << "%";
+		alm->insertAttribute("cat_armor_effectiveness.armor_eff_kinetic",
+				txt.toString());
 	}
-
-	//Check for Effectiveness protections(Normal)
-	if (!isSpecial(SharedWeaponObjectTemplate::KINETIC) && (!isVulnerable(SharedWeaponObjectTemplate::KINETIC) && getKinetic() >= 0.5)) {
+	if (!isSpecial(SharedWeaponObjectTemplate::ENERGY) && !isVulnerable(SharedWeaponObjectTemplate::ENERGY) && getEnergy() > 0) {
+		//if (getEnergy() > 50)	armorEnergy = 50;
 		StringBuffer txt;
-		txt << Math::getPrecision(getKinetic(),1) << "%";
-		alm->insertAttribute("cat_armor_effectiveness.armor_eff_kinetic", txt.toString());
+		txt << Math::getPrecision(armorEnergy,1) << "%";
+		alm->insertAttribute("cat_armor_effectiveness.armor_eff_energy",
+				txt.toString());
 	}
-
-	if (!isSpecial(SharedWeaponObjectTemplate::ENERGY) && (!isVulnerable(SharedWeaponObjectTemplate::ENERGY) && getEnergy() >= 0.5)) {
+	if (!isSpecial(SharedWeaponObjectTemplate::ELECTRICITY) && !isVulnerable(SharedWeaponObjectTemplate::ELECTRICITY) && getElectricity() > 0) {
+		//if (getElectricity() > 50)	armorElectricity = 50;
 		StringBuffer txt;
-		txt << Math::getPrecision(getEnergy(),1) << "%";
-		alm->insertAttribute("cat_armor_effectiveness.armor_eff_energy", txt.toString());
+		txt << Math::getPrecision(armorElectricity,1) << "%";
+		alm->insertAttribute(
+				"cat_armor_effectiveness.armor_eff_elemental_electrical",
+				txt.toString());
 	}
-
-	if (!isSpecial(SharedWeaponObjectTemplate::ELECTRICITY) && (!isVulnerable(SharedWeaponObjectTemplate::ELECTRICITY) && getElectricity() >= 0.5)) {
+	if (!isSpecial(SharedWeaponObjectTemplate::STUN) && !isVulnerable(SharedWeaponObjectTemplate::STUN) && getStun() > 0) {
+		if (getStun() > 50)	armorStun = 50;
 		StringBuffer txt;
-		txt << Math::getPrecision(getElectricity(),1) << "%";
-		alm->insertAttribute("cat_armor_effectiveness.armor_eff_elemental_electrical", txt.toString());
-	}
-
-	if (!isSpecial(SharedWeaponObjectTemplate::STUN) && (!isVulnerable(SharedWeaponObjectTemplate::STUN) && getStun() >= 0.5)) {
-		StringBuffer txt;
-		txt << Math::getPrecision(getStun(),1) << "%";
+		txt << Math::getPrecision(armorStun,1) << "%";
 		alm->insertAttribute("cat_armor_effectiveness.armor_eff_stun",
 				txt.toString());
 	}
-
-	if (!isSpecial(SharedWeaponObjectTemplate::BLAST) && !isVulnerable(SharedWeaponObjectTemplate::BLAST) && getBlast() >= 0.5) {
+	if (!isSpecial(SharedWeaponObjectTemplate::BLAST) && !isVulnerable(SharedWeaponObjectTemplate::BLAST) && getBlast() > 0) {
+		//if (getBlast() > 50)	armorBlast = 50;
 		StringBuffer txt;
-		txt << Math::getPrecision(getBlast(),1) << "%";
-		alm->insertAttribute("cat_armor_effectiveness.armor_eff_blast", txt.toString());
+		txt << Math::getPrecision(armorBlast,1) << "%";
+		alm->insertAttribute("cat_armor_effectiveness.armor_eff_blast",
+				txt.toString());
 	}
-
-	if (!isSpecial(SharedWeaponObjectTemplate::HEAT) && !isVulnerable(SharedWeaponObjectTemplate::HEAT) && getHeat() >= 0.5) {
+	if (!isSpecial(SharedWeaponObjectTemplate::HEAT) && !isVulnerable(SharedWeaponObjectTemplate::HEAT) && getHeat() > 0) {
+		//if (getHeat() > 50)	armorHeat = 50;
 		StringBuffer txt;
-		txt << Math::getPrecision(getHeat(),1) << "%";
-		alm->insertAttribute("cat_armor_effectiveness.armor_eff_elemental_heat",txt.toString());
+		txt << Math::getPrecision(armorHeat,1) << "%";
+		alm->insertAttribute(
+				"cat_armor_effectiveness.armor_eff_elemental_heat",
+				txt.toString());
 	}
-
-	if (!isSpecial(SharedWeaponObjectTemplate::COLD) && (!isVulnerable(SharedWeaponObjectTemplate::COLD) && getCold() >= 0.5)) {
+	if (!isSpecial(SharedWeaponObjectTemplate::COLD) && !isVulnerable(SharedWeaponObjectTemplate::COLD) && getCold() > 0) {
+		//if (getCold() > 50)	armorCold = 50;
 		StringBuffer txt;
-		txt << Math::getPrecision(getCold(),1) << "%";
-		alm->insertAttribute("cat_armor_effectiveness.armor_eff_elemental_cold", txt.toString());
+		txt << Math::getPrecision(armorCold,1) << "%";
+		alm->insertAttribute(
+				"cat_armor_effectiveness.armor_eff_elemental_cold",
+				txt.toString());
 	}
-
-	if (!isSpecial(SharedWeaponObjectTemplate::ACID) && (!isVulnerable(SharedWeaponObjectTemplate::ACID) && getAcid() >= 0.5)) {
+	if (!isSpecial(SharedWeaponObjectTemplate::ACID) && !isVulnerable(SharedWeaponObjectTemplate::ACID) && getAcid() > 0) {
+		//if (getAcid() > 50)	armorAcid = 50;
 		StringBuffer txt;
-		txt << Math::getPrecision(getAcid(),1) << "%";
-		alm->insertAttribute("cat_armor_effectiveness.armor_eff_elemental_acid", txt.toString());
+		txt << Math::getPrecision(armorAcid,1) << "%";
+		alm->insertAttribute(
+				"cat_armor_effectiveness.armor_eff_elemental_acid",
+				txt.toString());
 	}
-
-	if (!isSpecial(SharedWeaponObjectTemplate::LIGHTSABER) && (!isVulnerable(SharedWeaponObjectTemplate::LIGHTSABER) && getLightSaber() >= 0.5)) {
-		StringBuffer txt;
-		txt << Math::getPrecision(getLightSaber(),1) << "%";
-		alm->insertAttribute("cat_armor_effectiveness.armor_eff_restraint", txt.toString());
-	}
+//	if (!isSpecial(SharedWeaponObjectTemplate::LIGHTSABER) && !isVulnerable(SharedWeaponObjectTemplate::LIGHTSABER) && getLightSaber() > 0) {
+//		//if (getLightSaber() > 25)	armorLightSaber = 25;
+//		StringBuffer txt;
+//		txt << Math::getPrecision(getLightSaber(),1) << "%";
+//		alm->insertAttribute("cat_armor_effectiveness.armor_eff_restraint",
+//				txt.toString());
+//	}
 
 	//Vulnerabilities
 	if (isVulnerable(SharedWeaponObjectTemplate::KINETIC) && getKinetic() < 0.5)
@@ -255,16 +263,23 @@ void ArmorObjectImplementation::fillAttributeList(AttributeListMessage* alm, Cre
 	if (isVulnerable(SharedWeaponObjectTemplate::ACID) && getAcid() < 0.5)
 		alm->insertAttribute("cat_armor_vulnerability.armor_eff_elemental_acid", "-");
 
-	if (isVulnerable(SharedWeaponObjectTemplate::LIGHTSABER) && getLightSaber() < 0.5)
-		alm->insertAttribute("cat_armor_vulnerability.armor_eff_restraint", "-");
+//	if (getLightSaber() <= 0 || isVulnerable(SharedWeaponObjectTemplate::LIGHTSABER))
+//		alm->insertAttribute("cat_armor_vulnerability.armor_eff_restraint", "-");
 
 	//Encumbrances
-	alm->insertAttribute("cat_armor_encumbrance.health", getHealthEncumbrance());
-	alm->insertAttribute("cat_armor_encumbrance.action", getActionEncumbrance());
-	alm->insertAttribute("cat_armor_encumbrance.mind", getMindEncumbrance());
 
-	alm->insertAttribute("crafter", craftersName);
-	alm->insertAttribute("serial_number", objectSerial);
+//	int healthenc = getHealthEncumbrance();
+//	if (healthenc < 1) healthenc = 1;
+//	int actionenc = getActionEncumbrance();
+//	if (actionenc < 1) actionenc = 1;
+//	int mindenc = getMindEncumbrance();
+//	if (mindenc < 1) mindenc = 1;
+//
+//	alm->insertAttribute("cat_armor_encumbrance.health", healthenc);
+//
+//	alm->insertAttribute("cat_armor_encumbrance.action", actionenc);
+//
+//	alm->insertAttribute("cat_armor_encumbrance.mind", mindenc);
 
 	//Anti Decay Kit
 	if(hasAntiDecayKit()){
@@ -273,6 +288,7 @@ void ArmorObjectImplementation::fillAttributeList(AttributeListMessage* alm, Cre
 
 	if (sliced)
 		alm->insertAttribute("arm_attr", "@obj_attr_n:hacked");
+
 }
 
 bool ArmorObjectImplementation::isVulnerable(int type) const {
@@ -295,8 +311,8 @@ float ArmorObjectImplementation::getTypeValue(int type, float value) const {
 		newValue *= effectivenessSlice;
 
 		if(sliced && effectivenessSlice > 1) {
-			if(newValue > 90)
-				newValue = 90;
+			if(newValue > 80)
+				newValue = 80;
 		} else {
 			if(newValue > 80)
 				newValue = 80;
@@ -331,6 +347,7 @@ int ArmorObjectImplementation::handleObjectMenuSelect(CreatureObject* player, by
 }
 
 void ArmorObjectImplementation::updateCraftingValues(CraftingValues* values, bool firstUpdate) {
+
 	WearableObjectImplementation::updateCraftingValues(values, firstUpdate);
 
 	/*
@@ -349,7 +366,8 @@ void ArmorObjectImplementation::updateCraftingValues(CraftingValues* values, boo
 	 */
 	//craftingValues->toString();
 
-	if (firstUpdate) {
+	if(firstUpdate) {
+
 		kinetic = 0;
 		energy = 0;
 		electricity = 0;
@@ -366,31 +384,23 @@ void ArmorObjectImplementation::updateCraftingValues(CraftingValues* values, boo
 
 		calculateSpecialProtection(values);
 
-		int armorRating = values->getCurrentValue("armor_rating");
-
-		if (armorRating != rating)
-			armorRating = rating;
-
-		setRating(armorRating);
+		setRating((int) values->getCurrentValue("armor_rating"));
 
 		setConditionDamage(0);
 	}
 
-	int healthEncum = values->getCurrentValue("armor_health_encumbrance");
-	setHealthEncumbrance((healthEncum < 0) ? 0 : healthEncum);
+	int healthenc = (int) values->getCurrentValue("armor_health_encumbrance");
+	if (healthenc < 1) healthenc = 1;
+	int actionenc = (int) values->getCurrentValue("armor_action_encumbrance");
+	if (actionenc < 1) actionenc = 1;
+	int mindenc = (int) values->getCurrentValue("armor_mind_encumbrance");
+	if (mindenc < 1) mindenc = 1;
 
-	int actionEncum = values->getCurrentValue("armor_action_encumbrance");
-	setActionEncumbrance((actionEncum < 0) ? 0 : actionEncum);
+	setHealthEncumbrance(healthenc);
+	setActionEncumbrance(actionenc);
+	setMindEncumbrance(mindenc);
 
-	int mindEncum = values->getCurrentValue("armor_mind_encumbrance");
-	setMindEncumbrance((mindEncum < 0) ? 0 : mindEncum);
-
-	int maxCond = values->getCurrentValue("armor_integrity");
-
-	if (maxCond < 0)
-		maxCond = values->getCurrentValue("hitpoints");
-
-	setMaxCondition(maxCond);
+	setMaxCondition((int) values->getCurrentValue("armor_integrity"));
 
 	baseProtection = values->getCurrentValue("armor_effectiveness");
 
@@ -399,6 +409,7 @@ void ArmorObjectImplementation::updateCraftingValues(CraftingValues* values, boo
 		specialProtection = values->getCurrentValue("armor_effectiveness");
 	else
 		specialProtection = values->getCurrentValue("armor_special_effectiveness");
+
 }
 
 void ArmorObjectImplementation::calculateSpecialProtection(CraftingValues* craftingValues) {
@@ -410,7 +421,7 @@ void ArmorObjectImplementation::calculateSpecialProtection(CraftingValues* craft
 		String subtitle = getStringType(type);
 		float value = craftingValues->getCurrentValue(subtitle);
 
-		if (value != AttributesMap::VALUENOTFOUND) {
+		if (value != ValuesMap::VALUENOTFOUND) {
 			specialResists |= type;
 			setProtectionValue(type, value);
 		}
