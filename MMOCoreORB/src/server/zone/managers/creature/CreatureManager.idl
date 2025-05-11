@@ -8,7 +8,7 @@ import server.zone.objects.creature.ai.Creature;
 import server.zone.managers.ZoneManager;
 import server.zone.managers.creature.CreatureTemplateManager;
 import server.zone.managers.creature.DnaManager;
-import server.zone.objects.area.SpawnArea;
+import server.zone.objects.region.SpawnArea;
 import system.util.Vector;
 import system.util.SynchronizedVector;
 include server.zone.managers.creature.SpawnAreaMap;
