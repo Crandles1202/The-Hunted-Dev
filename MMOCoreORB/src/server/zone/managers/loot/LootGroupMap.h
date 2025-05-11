@@ -64,10 +64,6 @@ public:
 		return groupTemplates.containsKey(group);
 	}
 
-	bool lootItemExists(const String& item) const {
-		return itemTemplates.containsKey(item);
-	}
-
 private:
 	static String currentFilename;
 
