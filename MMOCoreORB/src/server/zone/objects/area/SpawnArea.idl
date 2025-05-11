@@ -20,6 +20,7 @@ include engine.util.u3d.Vector3;
 class SpawnArea extends ActiveArea {
 	@dereferenced
 	@rawTemplate(value = "Reference<LairSpawn*>")
+
 	protected transient Vector possibleSpawns;
 
 	protected int totalWeighting;
@@ -40,11 +41,13 @@ class SpawnArea extends ActiveArea {
 
 	@dereferenced
 	@rawTemplate(value = "ManagedWeakReference<SpawnArea*>")
+
 	protected Vector noSpawnAreas;
 
 	protected int tier;
 
-	public final static int MINSPAWNINTERVAL = 100; //msec //vanilla is 2000
+	//msec //vanilla is 2000
+	public final static int MINSPAWNINTERVAL = 100; 
 
 	public SpawnArea() {
 		totalWeighting = 0;
