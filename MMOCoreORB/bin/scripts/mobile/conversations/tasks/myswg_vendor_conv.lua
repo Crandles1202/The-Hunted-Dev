@@ -29,7 +29,7 @@ myswg_vendor_conv:addScreen(myswg_vendor_first_screen);
 weaps1 = ConvoScreen:new {    
     id = "weaps1",
     leftDialog = "",
-    customDialogText = "Selling random loot weapons and high end weapons.",
+    customDialogText = "Selling random loot weapons.",
     stopConversation = "false",
     options = { 
 --        {"Proton Grenades (150damage, 4.4speed) - 100k", "option11"},
@@ -60,7 +60,7 @@ myswg_vendor_conv:addScreen(weaps1);
 armor1 = ConvoScreen:new {    
     id = "armor1",
     leftDialog = "",
-    customDialogText = "Selling Chitin Armor 65% kinetic, 25% base eff\n\nUbese armor with 80% kinetic and 50% base eff.\n\nComposite with 80%kinetic/electic and 65% base 0% stun",
+    customDialogText = "Selling Composite with 80%kinetic/electic and 65% base 0% stun",
     stopConversation = "false",
     options = { 
  --       {"Chitin Leggings - 25k", "option16"},
@@ -227,7 +227,7 @@ newbuff1 = ConvoScreen:new {
     stopConversation = "false",
     options = { 
 
-        {"100% Doctor Buffs 4hr - 10k", "buff1"},
+        {"2500 Doctor Buffs 2hr - 10k", "buff1"},
    --     {"200% Doctor Buffs 5hr - 20k", "buff2"},
    --     {"300% Doctor Buffs 6hr - 30k", "buff3"},
    --     {"200% Entertainer Buffs 4hr - 10k", "buff4"},
