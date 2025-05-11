@@ -7,7 +7,7 @@ if pgrep core3; then
     exit 123
 fi
 
-cd $HOME/workspace/Core3/MMOCoreORB/bin
+cd $HOME/workspace/The-Hunted-Dev/MMOCoreORB/bin
 
 if [ -f "screenlog.0" ]; then
     for i in 5 4 3 2 1
