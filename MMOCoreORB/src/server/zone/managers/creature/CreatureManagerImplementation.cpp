@@ -28,7 +28,7 @@
 #include "server/zone/objects/player/PlayerObject.h"
 #include "server/zone/objects/creature/ai/AiAgent.h"
 #include "server/zone/objects/creature/events/DespawnCreatureTask.h"
-#include "server/zone/objects/area/SpawnArea.h"
+#include "server/zone/objects/region/SpawnArea.h"
 #include "server/zone/managers/resource/ResourceManager.h"
 #include "server/zone/packets/chat/ChatSystemMessage.h"
 #include "server/zone/objects/tangible/threat/ThreatMap.h"

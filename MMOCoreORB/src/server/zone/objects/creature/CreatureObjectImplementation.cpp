@@ -2,7 +2,7 @@
  				Copyright <SWGEmu>
 		See file COPYING for copying conditions. */
 
-#include "server/zone/objects/area/SpawnArea.h"
+#include "server/zone/objects/region/SpawnArea.h"
 
 #include "server/zone/objects/creature/CreatureObject.h"
 #include "server/zone/objects/creature/ai/AiAgent.h"
