@@ -47,7 +47,8 @@ protected:
 	 * @param spawnType spawn type bitmask that must be fulfilled.
 	 * @return true if the spawn fulfills spawn type, distance and is free, false otherwise.
 	 */
-	bool fulfillsRequirements(NpcSpawnPoint* npc, const Vector3* position, const float minDistance, const float maxDistance, int spawnType) const {
+	bool fulfillsRequirements(NpcSpawnPoint* npc, const Vector3* position,
+			const float minDistance, const float maxDistance, int spawnType) const {
 		if (npc != nullptr) {
 			if (((npc->getSpawnType() & spawnType) == spawnType)) {
 				float squaredDistance = npc->getPosition()->squaredDistanceTo(*position);
@@ -91,7 +92,8 @@ public:
 	 * @param maxDistance maximum distance between the spawn point and the given position.
 	 * @return random spawn point matching the requirements or nullptr if none can be found.
 	 */
-	NpcSpawnPoint* getRandomNpcSpawnPoint(const Vector3* position, const int spawnType,	const float minDistance = 0.0, const float maxDistance = 100000.0) const {
+	NpcSpawnPoint* getRandomNpcSpawnPoint(const Vector3* position, const int spawnType,
+			const float minDistance = 0.0, const float maxDistance = 100000.0) const {
 		if (npcSpawnMap.size() == 0) {
 			return nullptr;
 		}
@@ -129,14 +131,6 @@ public:
 	 */
 	void addNpc(NpcSpawnPoint* npc) {
 		npcSpawnMap.emplace(npc);
-	}
-
-	/**
-	 * Remove a spawn point.
-	 * @param npc the npc spawn point to remove.
-	 */
-	void remove(NpcSpawnPoint* npc) {
-		npcSpawnMap.removeElement(npc);
 	}
 
 	/**

@@ -1,17 +1,16 @@
 tusken_observer = Creature:new {
-	objectName = "@mob/creature_names:tusken_observer",
+	objectName = "@mob/creature_names:tusken_warlord",
 	socialGroup = "tusken_raider",
 	faction = "tusken_raider",
-	mobType = MOB_NPC,
-	level = 227,
-	chanceHit = 19.75,
-	damageMin = 1270,
-	damageMax = 2250,
-	baseXp = 21630,
-	baseHAM = 208000,
-	baseHAMmax = 254000,
-	armor = 3,
-	resists = {185,185,135,200,10,130,145,180,-1},
+	level = 62,
+	chanceHit = 0.62,
+	damageMin = 455,
+	damageMax = 620,
+	baseXp = 6013,
+	baseHAM = 11000,
+	baseHAMmax = 14000,
+	armor = 1,
+	resists = {45,25,15,80,-1,40,-1,15,-1},
 	meatType = "",
 	meatAmount = 0,
 	hideType = "",
@@ -21,8 +20,8 @@ tusken_observer = Creature:new {
 	milk = 0,
 	tamingChance = 0,
 	ferocity = 0,
-	pvpBitmask = AGGRESSIVE + ENEMY + ATTACKABLE,
-	creatureBitmask = PACK + KILLER,
+	pvpBitmask = AGGRESSIVE + ATTACKABLE + ENEMY,
+	creatureBitmask = PACK + KILLER + STALKER,
 	optionsBitmask = AIENABLED,
 	diet = HERBIVORE,
 
@@ -30,21 +29,22 @@ tusken_observer = Creature:new {
 	lootGroups = {
 		{
 			groups = {
-				{group = "tusken_raider_tier_5", chance = 10000000}
+				{group = "junk", chance = 1500000},
+				{group = "tusken_common", chance = 3500000},
+				{group = "wearables_common", chance = 1000000},
+				{group = "wearables_uncommon", chance = 500000},
+				{group = "bone_armor", chance = 750000},
+				{group = "chitin_armor", chance = 750000},
+				{group = "armor_attachments", chance = 500000},
+				{group = "clothing_attachments", chance = 500000},
+				{group = "color_crystals", chance = 500000},
+				{group = "power_crystals", chance = 500000}
 			}
 		}
 	},
-
-	-- Primary and secondary weapon should be different types (rifle/carbine, carbine/pistol, rifle/unarmed, etc)
-	-- Unarmed should be put on secondary unless the mobile doesn't use weapons, in which case "unarmed" should be put primary and "none" as secondary
-	primaryWeapon = "tusken_ranged",
-	secondaryWeapon = "tusken_melee",
+	weapons = {"tusken_weapons"},
 	conversationTemplate = "",
-
-	-- primaryAttacks and secondaryAttacks should be separate skill groups specific to the weapon type listed in primaryWeapon and secondaryWeapon
-	-- Use merge() to merge groups in creatureskills.lua together. If a weapon is set to "none", set the attacks variable to empty brackets
-	primaryAttacks = merge(marksmanmaster,riflemanmaster),
-	secondaryAttacks = merge(brawlermaster,fencermaster)
+	attacks = merge(brawlernovice,marksmannovice,fencermaster,riflemanmaster)
 }
 
 CreatureTemplates:addCreatureTemplate(tusken_observer, "tusken_observer")

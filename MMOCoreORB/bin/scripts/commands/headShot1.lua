@@ -44,7 +44,7 @@
 HeadShot1Command = {
 	name = "headshot1",
 
-	damageMultiplier = 1.5,
+	damageMultiplier = 1.0,
 	speedMultiplier = 1.5,
 	healthCostMultiplier = 0.5,
 	actionCostMultiplier = 0.5,
@@ -58,7 +58,7 @@ HeadShot1Command = {
 
 	combatSpam = "headshot",
 	
-	weaponType = RIFLEWEAPON,
+	weaponType = RIFLEWEAPON + PISTOLWEAPON + CARBINEWEAPON,
 
 	range = -1
 }

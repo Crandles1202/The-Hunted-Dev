@@ -13,7 +13,7 @@
 class DotEffect : public Object {
 protected:
 	uint32 dotType;
-	Vector<String> defenderStateDefenseModifiers;
+	Vector<String> defenderStateDefenseModifers;
 	uint8 dotPool;
 	bool dotDamageofHit;
 	uint32 dotDuration;
@@ -42,7 +42,7 @@ public:
 
 	DotEffect(const DotEffect & effect) : Object() {
 		dotType = effect.dotType;
-		defenderStateDefenseModifiers = effect.defenderStateDefenseModifiers;
+		defenderStateDefenseModifers = effect.defenderStateDefenseModifers;
 		dotPool = effect.dotPool;
 		dotDamageofHit = effect.dotDamageofHit;
 		dotDuration = effect.dotDuration;
@@ -61,7 +61,7 @@ public:
 			return *this;
 
 		dotType = effect.dotType;
-		defenderStateDefenseModifiers = effect.defenderStateDefenseModifiers;
+		defenderStateDefenseModifers = effect.defenderStateDefenseModifers;
 		dotPool = effect.dotPool;
 		dotDamageofHit = effect.dotDamageofHit;
 		dotDuration = effect.dotDuration;
@@ -94,14 +94,14 @@ public:
 
 		LuaObject defMods = dot.getObjectField("defenderStateDefenseModifiers");
 		for(int i = 1;i <= defMods.getTableSize();++i){
-			defenderStateDefenseModifiers.add(defMods.getStringAt(i));
+			defenderStateDefenseModifers.add(defMods.getStringAt(i));
 		}
 
 		defMods.pop();
 	}
 
-	const Vector<String>& getDefenderStateDefenseModifiers() const {
-		return defenderStateDefenseModifiers;
+	const Vector<String>& getDefenderStateDefenseModifers() const {
+		return defenderStateDefenseModifers;
 	}
 
 	uint32 getDotDuration() const {
@@ -128,8 +128,9 @@ public:
 		return dotDamageofHit;
 	}
 
-	void setDefenderStateDefenseModifiers(const Vector<String>& defenderStateDefenseModifiers) {
-		this->defenderStateDefenseModifiers = defenderStateDefenseModifiers;
+	void setDefenderStateDefenseModifers(
+			const Vector<String>& defenderStateDefenseModifers) {
+		this->defenderStateDefenseModifers = defenderStateDefenseModifers;
 	}
 
 	void setDotDamageofHit(bool dotDamageofHit) {

@@ -2,7 +2,6 @@ crazed_geonosian_guard = Creature:new {
 	objectName = "@mob/creature_names:geonosian_crazed_guard",
 	randomNameType = NAME_GENERIC,
 	randomNameTag = true,
-	mobType = MOB_NPC,
 	socialGroup = "self",
 	faction = "",
 	level = 65,
@@ -40,17 +39,9 @@ crazed_geonosian_guard = Creature:new {
 			}
 		}
 	},
-
-	-- Primary and secondary weapon should be different types (rifle/carbine, carbine/pistol, rifle/unarmed, etc)
-	-- Unarmed should be put on secondary unless the mobile doesn't use weapons, in which case "unarmed" should be put primary and "none" as secondary
-	primaryWeapon = "geonosian_weapons",
-	secondaryWeapon = "unarmed",
+	weapons = {"geonosian_weapons"},
 	conversationTemplate = "",
-	
-	-- primaryAttacks and secondaryAttacks should be separate skill groups specific to the weapon type listed in primaryWeapon and secondaryWeapon
-	-- Use merge() to merge groups in creatureskills.lua together. If a weapon is set to "none", set the attacks variable to empty brackets
-	primaryAttacks = merge(brawlermaster,marksmanmaster,pistoleermaster,riflemanmaster),
-	secondaryAttacks = { }
+	attacks = merge(brawlermaster,marksmanmaster,pistoleermaster,riflemanmaster)
 }
 
 CreatureTemplates:addCreatureTemplate(crazed_geonosian_guard, "crazed_geonosian_guard")

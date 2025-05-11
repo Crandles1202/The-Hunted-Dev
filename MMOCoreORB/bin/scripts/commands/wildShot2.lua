@@ -44,7 +44,7 @@
 WildShot2Command = {
         name = "wildshot2",
 
-	damageMultiplier = 3.0,
+	damageMultiplier = 2.0,
 	speedMultiplier = 2.0,
 	healthCostMultiplier = 2.0,
 	actionCostMultiplier = 1.25,
@@ -73,7 +73,7 @@ WildShot2Command = {
 
 	poolsToDamage = RANDOM_ATTRIBUTE,
 	
-	weaponType = CARBINEWEAPON,
+	weaponType = RIFLEWEAPON + PISTOLWEAPON + CARBINEWEAPON,
 
 	range = -1
 }

@@ -44,7 +44,7 @@
 PolearmSweep1Command = {
 	name = "polearmsweep1",
 
-	damageMultiplier = 2.0,
+	damageMultiplier = 1.5,
 	speedMultiplier = 1.5,
 	accuracyBonus = 10,
 	
@@ -68,7 +68,7 @@ PolearmSweep1Command = {
 
 	combatSpam = "backcracker",
 	
-	weaponType = POLEARMWEAPON,
+	weaponType = TWOHANDMELEEWEAPON + ONEHANDMELEEWEAPON + POLEARMWEAPON,
 
 	range = -1
 }

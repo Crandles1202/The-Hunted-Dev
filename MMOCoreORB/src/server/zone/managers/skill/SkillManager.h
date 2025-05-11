@@ -6,10 +6,17 @@
 #ifndef SKILLMANAGER_H_
 #define SKILLMANAGER_H_
 
+#include "engine/lua/Lua.h"
 #include "server/zone/objects/player/variables/Ability.h"
 #include "server/zone/objects/creature/variables/Skill.h"
 
 class PerformanceManager;
+
+namespace server {
+namespace zone {
+	class ZoneServer;
+}
+}
 
 namespace server {
 namespace zone {
@@ -46,13 +53,11 @@ class SkillManager : public Singleton<SkillManager>, public Logger, public Objec
 	HashTable<String, Reference<Ability*> > abilityMap;
 	HashTable<uint32, Reference<Skill*> > skillMap;
 
+	ManagedReference<ZoneServer*> zoneServer;
+
 	Reference<Skill*> rootNode;
 
 	VectorMap<String, int> defaultXpLimits;
-
-	VectorMap<uint32, int> droidProgramSizes;
-
-	SortedVector<String> droidCommands;
 
 	bool apprenticeshipEnabled;
 
@@ -75,14 +80,11 @@ public:
 	void addAbilities(PlayerObject* ghost, const Vector<String>& abilityNames, bool notifyClient = true);
 	void removeAbilities(PlayerObject* ghost, const Vector<String>& abilityNames, bool notifyClient = true);
 
-	void addDroidCommand(PlayerObject* ghost, const String& abilityName);
-	void removeDroidCommands(PlayerObject* ghost);
-
 	bool awardSkill(const String& skillName, CreatureObject* creature, bool notifyClient = true, bool awardRequiredSkills = false, bool noXpRequired = false);
 	void awardDraftSchematics(Skill* skill, PlayerObject* ghost, bool notifyClient = true);
 
-	bool surrenderSkill(const String& skillName, CreatureObject* creature, bool notifyClient = true, bool verifyFrs = true, bool allowPilot = false);
-	void surrenderAllSkills(CreatureObject* creature, bool notifyClient = true, bool removeForceProgression = true, bool removePilot = false);
+	bool surrenderSkill(const String& skillName, CreatureObject* creature, bool notifyClient = true, bool verifyFrs = true);
+	void surrenderAllSkills(CreatureObject* creature, bool notifyClient = true, bool removeForceProgression = true);
 
 	/**
 	 * Checks if the player can learn the skill (fulfills skill prerequisites, enough skill points and enough XP).
@@ -112,7 +114,11 @@ public:
 
 	bool villageKnightPrereqsMet(CreatureObject* creature, const String& skillToDrop);
 
+	bool jediPrereqsMet(CreatureObject* creature, const String& skillToDrop);
+
 	int getForceSensitiveSkillCount(CreatureObject* creature, bool includeNoviceMasterBoxes);
+
+	int getJediSkillCount(CreatureObject* creature, bool includeNoviceMasterBoxes);
 
 	void updateXpLimits(PlayerObject* ghost);
 
@@ -137,12 +143,6 @@ public:
 	}
 
 	void removeSkillRelatedMissions(CreatureObject* creature, Skill* skill);
-
-	int getDroidProgramSize(uint32 programHash) {
-		return droidProgramSizes.get(programHash);
-	}
-
-	void getPlayerDroidCommands(PlayerObject* ghost, Vector<String>& playerDroidCommands);
 };
 
 }

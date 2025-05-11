@@ -9,11 +9,7 @@ import system.util.SortedVector;
 import engine.log.Logger;
 include server.zone.packets.scene.AttributeListMessage;
 import server.zone.objects.creature.CreatureObject;
-import server.zone.objects.tangible.tool.repair.RepairTool;
-import server.zone.objects.area.ActiveArea;
-import server.zone.objects.tangible.threat.ThreatMap;
-import engine.util.u3d.Vector3;
-
+include server.zone.objects.area.ActiveArea;
 include templates.params.OptionBitmask;
 include templates.params.ObserverEventType;
 import server.zone.objects.factorycrate.FactoryCrate;
@@ -23,14 +19,12 @@ include server.zone.objects.scene.variables.DeltaVector;
 include server.zone.objects.manufactureschematic.craftingvalues.CraftingValues;
 include templates.SharedObjectTemplate;
 include system.util.VectorMap;
+import server.zone.objects.tangible.threat.ThreatMap;
 include server.zone.objects.scene.variables.AutoDeltaSet;
 include server.zone.objects.scene.variables.StringId;
 include system.thread.atomic.AtomicInteger;
-include server.zone.TreeEntry;
-include server.zone.objects.cell.CellObject;
 
 @json
-@mock
 class TangibleObject extends SceneObject {
 	protected boolean targetable;
 
@@ -43,7 +37,6 @@ class TangibleObject extends SceneObject {
 	protected int futureFactionStatus;
 
 	protected boolean invisible;
-	protected transient boolean inNoCombatArea;
 
 	@dereferenced
 	protected VectorMap<string, string> luaStringData;
@@ -51,7 +44,6 @@ class TangibleObject extends SceneObject {
 	@dereferenced
 	protected CustomizationVariables customizationVariables;
 
-	protected int unmitigatedDamage;
 	protected float conditionDamage;
 	protected int maxCondition;
 	protected int useCount;
@@ -71,7 +63,6 @@ class TangibleObject extends SceneObject {
 
 	protected byte objectVisible;
 	protected string craftersName;
-	protected unsigned long craftersID;
 
 	protected int junkDealerNeeded;
 	protected int junkValue;
@@ -92,11 +83,6 @@ class TangibleObject extends SceneObject {
 
 	protected SceneObject antiDecayKitObject;
 
-	protected boolean insurable;
-
-	protected boolean jediRobe;
-	protected boolean unionRing;
-
 	/**
 	 * TangibleObject constructor, used to initialized the object
 	 * @pre { templateData is a valid SharedTangibleObjectTemplate LuaObject that contains the necessary values to initialize CreatureObject }
@@ -111,10 +97,6 @@ class TangibleObject extends SceneObject {
 		invisible = false;
 
 		antiDecayKitObject = null;
-
-		insurable = true;
-		jediRobe = false;
-		unionRing = false;
 
 		luaStringData.setAllowOverwriteInsertPlan();
 	}
@@ -131,14 +113,12 @@ class TangibleObject extends SceneObject {
 		complexity = 100.f;
 
 		volume = 1;
-		craftersID = 0;
 
 		objectVisible = 1;
 
 		useCount = 1;
 
 		conditionDamage = 0;
-		unmitigatedDamage = 0;
 
 		sliceable = false;
 		sliced = false;
@@ -154,33 +134,37 @@ class TangibleObject extends SceneObject {
 	 * @param targetObject The targeted object containing the SkillModMap which will be affected.
 	 */
 	@read
-	@arg1preLocked
 	public abstract native void addTemplateSkillMods(TangibleObject targetObject);
+
+	@read
+	public abstract void applySkillModsTo(CreatureObject creature) {
+
+	}
+
+	@dirty
+	public abstract void removeSkillModsFrom(CreatureObject creature) {
+
+	}
+
+	public abstract void addSkillMod(final int skillType, final string skillMod, int value, boolean notifyClient = true) {
+
+	}
+
+	public abstract void removeSkillMod(final int skillType, final string skillMod, int value, boolean notifyClient = true) {
+
+	}
+
+	public abstract void removeAllSkillModsOfType(final int skillType, boolean notifyClient = true) {
+
+	}
 
 	/**
 	 * Removes this object's skill mod map from the target object's skill mod map
 	 * @param targetObject the targeted object containing the SkillModMap which will be affected.
 	 */
+	@local
 	@read
-	@arg1preLocked
 	public abstract native void removeTemplateSkillMods(TangibleObject tangibleObject);
-
-	@read
-	public abstract void applySkillModsTo(CreatureObject creature) {
-	}
-
-	@dirty
-	public abstract void removeSkillModsFrom(CreatureObject creature) {
-	}
-
-	public abstract void addSkillMod(final int skillType, final string skillMod, int value, boolean notifyClient = true) {
-	}
-
-	public abstract void removeSkillMod(final int skillType, final string skillMod, int value, boolean notifyClient = true) {
-	}
-
-	public abstract void removeAllSkillModsOfType(final int skillType, boolean notifyClient = true) {
-	}
 
 	@read
 	@local
@@ -245,14 +229,6 @@ class TangibleObject extends SceneObject {
 	@dirty
 	public native void sendTo(SceneObject player, boolean doClose, boolean forceLoadContainer = true);
 
-	@local
-	public native void notifyInsert(TreeEntry entry);
-
-	@dirty
-	@local
-	@dereferenced
-	public native abstract Vector3 getWorldPosition();
-
 	/**
 	 * Calls the appropriate UI Listener Function
 	 * @pre { this object is locked, object is locked }
@@ -270,9 +246,6 @@ class TangibleObject extends SceneObject {
 	 * @param value value from packet
 	 */
 	public native abstract void synchronizedUIStopListen(CreatureObject player, int value);
-
-	@preLocked
-	public native abstract void removeOutOfRangeObjects();
 
 	/**
 	 * Sets the active defender
@@ -385,7 +358,6 @@ class TangibleObject extends SceneObject {
 	 * @post { }
 	 * @return returns true if the creature object can attack this
 	 */
-	@mock
 	@dirty
 	public native abstract boolean isAttackableBy(CreatureObject object);
 
@@ -400,12 +372,7 @@ class TangibleObject extends SceneObject {
 	 * @return returns true if its aggressive
 	 */
 	@dirty
-	public abstract boolean isAggressiveTo(TangibleObject object) {
-		return false;
-	}
-
-	@dirty
-	public abstract boolean isAggressive(TangibleObject object) {
+	public abstract boolean isAggressiveTo(CreatureObject object) {
 		return false;
 	}
 
@@ -553,16 +520,6 @@ class TangibleObject extends SceneObject {
 	}
 
 	@read
-	public int getUnmitigatedDamage() {
-		return unmitigatedDamage;
-	}
-
-	@preLocked
-	public native void addUnmitigatedDamage(float damage) {
-		unmitigatedDamage += (int)damage;
-	}
-
-	@read
 	public int getVolume() {
 		return volume;
 	}
@@ -591,10 +548,8 @@ class TangibleObject extends SceneObject {
 			clearOptionBit(OptionBitmask.YELLOW, notifyClient);
 	}
 
-	@mock
-	@dirty
 	@read
-	public abstract int getLevel() {
+	public int getLevel() {
 		return level;
 	}
 
@@ -624,11 +579,6 @@ class TangibleObject extends SceneObject {
 		return defenderList;
 	}
 
-	@read
-	public boolean hasDefenders() {
-		return defenderList.size() > 0;
-	}
-
 	@local
 	@read
 	public final AutoDeltaSet<int> getVisibleComponents() {
@@ -643,9 +593,8 @@ class TangibleObject extends SceneObject {
 		return null;
 	}
 
-	@mock
 	@read
-	public native abstract boolean isDestroyed() {
+	public boolean isDestroyed() {
 		return conditionDamage >= maxCondition;
 	}
 
@@ -721,25 +670,6 @@ class TangibleObject extends SceneObject {
 		sliced = slice;
 	}
 
-	@read
-	public boolean isInsurable() {
-		return insurable;
-	}
-
-	@read
-	public boolean isJediRobe() {
-		return jediRobe;
-	}
-
-	@read
-	public boolean isUnionRing() {
-		return unionRing;
-	}
-
-	public void setUnionRing(boolean val) {
-		unionRing = val;
-	}
-
 	public void setCustomizationString(final string vars) {
 		customizationVariables.parseFromClientString(vars);
 	}
@@ -754,18 +684,9 @@ class TangibleObject extends SceneObject {
 		craftersName = name;
 	}
 
-	public void setCraftersID(unsigned long crafterOID) {
-		craftersID = crafterOID;
-	}
-
 	@dirty
 	public abstract string getCraftersName() {
 		return craftersName;
-	}
-
-	@read
-	public unsigned long getCraftersID() {
-		return craftersID;
 	}
 
 	public void setJunkDealerNeeded(int jdNeeded) {
@@ -797,29 +718,20 @@ class TangibleObject extends SceneObject {
 		return objectSerial;
 	}
 
-	@mock
 	@local
 	@preLocked
-	public abstract native ThreatMap getThreatMap();
+	public native ThreatMap getThreatMap();
 
 	/*
 	 * Creates a factory crate for this object, can insert this object or a clone
 	 */
 	@reference
-	public native FactoryCrate createFactoryCrate(int maxSize, string type, boolean insertSelf = false);
+	public native FactoryCrate createFactoryCrate(int maxSize, boolean insertSelf = false);
 
 	@dirty
 	public native boolean canRepair(CreatureObject player);
 
-	/**
-	* Repair this object with the given tool. If null, this method will
-	* search the player's inventory for an approriate tool (used by the
-	* radial menu repair option)
-	* @param player The player who's performing the repair. Must own this item.
-	* @param repairTool the repairTool with which to perform the repair. If
-	* null, players inventory will be searched for a valid tool
-	*/
-	public native void repair(CreatureObject player, RepairTool repairTool = null);
+	public native void repair(CreatureObject player);
 
 	@dirty
 	public abstract string repairAttempt(int repairChance) {
@@ -856,11 +768,6 @@ class TangibleObject extends SceneObject {
 	public native void addActiveArea(ActiveArea area);
 
 	public void dropActiveArea(ActiveArea area) {
-		if (area.isNoCombatArea()) {
-			inNoCombatArea = false;
-			broadcastPvpStatusBitmask();
-		}
-
 		synchronized (super.getContainerLock()) {
 			activeAreas.drop(area);
 		}
@@ -888,16 +795,6 @@ class TangibleObject extends SceneObject {
 		return false;
 	}
 
-	@read
-	public boolean isInNoCombatArea() {
-		return inNoCombatArea;
-	}
-
-	@preLocked
-	public void setInNoCombatArea(boolean val) {
-		inNoCombatArea = val;
-	}
-
 	@local
 	@dirty
 	public SortedVector<ActiveArea> getActiveAreas() {
@@ -922,16 +819,6 @@ class TangibleObject extends SceneObject {
 			}
 		}
 
-		return null;
-	}
-
-	@dirty
-	public abstract CellObject getCell(int idx) {
-		return null;
-	}
-
-	@dirty
-	public abstract CellObject getCell(final string name) {
 		return null;
 	}
 
@@ -1030,13 +917,5 @@ class TangibleObject extends SceneObject {
 
 	@dirty
 	public native boolean isInNavMesh();
-
-	@dirty
-	public native boolean isVendor();
-
-	@dirty
-	public native abstract boolean isInvulnerable();
-
-	@dirty
-	public native abstract boolean isDestroying();
 }
+

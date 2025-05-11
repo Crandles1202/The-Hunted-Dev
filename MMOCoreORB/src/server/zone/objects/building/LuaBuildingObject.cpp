@@ -29,8 +29,6 @@ Luna<LuaBuildingObject>::RegType LuaBuildingObject::Register[] = {
 		{ "getServerObjectCRC", &LuaSceneObject::getServerObjectCRC },
 		{ "getFaction", &LuaTangibleObject::getFaction },
 		{ "grantPermission", &LuaBuildingObject::grantPermission },
-		{ "revokeAllPermissions", &LuaBuildingObject::revokeAllPermissions },
-		{ "setOwnerID", &LuaBuildingObject::setOwnerID },
 		{ "broadcastSpecificCellPermissions", &LuaBuildingObject::broadcastSpecificCellPermissions },
 		{ "spawnChildCreature", &LuaBuildingObject::spawnChildCreature },
 		{ "spawnChildSceneObject", &LuaBuildingObject::spawnChildSceneObject },
@@ -108,7 +106,7 @@ int LuaBuildingObject::grantPermission(lua_State* L) {
 
 	int i = 0;
 
-	if (list == "ADMIN" || list == "BAN" || list == "ENTRY" || list == "QUEST") {
+	if (list == "ADMIN" || list == "BAN" || list == "ENTRY") {
 		realObject->grantPermission(list, playerid);
 		i = 1;
 	}
@@ -116,24 +114,6 @@ int LuaBuildingObject::grantPermission(lua_State* L) {
 	lua_pushnumber(L, i);
 
 	return 1;
-}
-
-int LuaBuildingObject::revokeAllPermissions(lua_State* L) {
-	Locker lock(realObject);
-
-	realObject->revokeAllPermissions();
-
-	return 0;
-}
-
-int LuaBuildingObject::setOwnerID(lua_State* L) {
-	uint64 playerID = lua_tointeger(L, -1);
-
-	Locker lock(realObject);
-
-	realObject->setOwner(playerID);
-
-	return 0;
 }
 
 int LuaBuildingObject::broadcastSpecificCellPermissions(lua_State* L) {

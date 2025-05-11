@@ -2,8 +2,8 @@ krayt_dragon_adolescent = Creature:new {
 	objectName = "@mob/creature_names:krayt_dragon_adolescent",
 	socialGroup = "krayt",
 	faction = "",
-	mobType = MOB_CARNIVORE,
-	level = 336,
+	level = 90,
+	elite = 1.25,
 	chanceHit = 30,
 	damageMin = 2270,
 	damageMax = 4250,
@@ -25,34 +25,28 @@ krayt_dragon_adolescent = Creature:new {
 	creatureBitmask = PACK + KILLER + STALKER,
 	optionsBitmask = AIENABLED,
 	diet = CARNIVORE,
-	scale = 0.85,
 
 	templates = {"object/mobile/krayt_dragon_hue.iff"},
 	hues = { 16, 17, 18, 19, 20, 21, 22, 23 },
-
+	scale = 0.7;
 	lootGroups = {
 		{
-			groups = {
+	        groups = {
 				{group = "krayt_tissue_rare", chance = 2000000},
 				{group = "krayt_dragon_common", chance = 2500000},
 				{group = "krayt_pearls", chance = 1500000},
 				{group = "armor_all", chance = 2000000},
 				{group = "weapons_all", chance = 2000000},
 			},
-			lootChance = 8000000
+			lootChance = 4000000
 		}
 	},
-
-	-- Primary and secondary weapon should be different types (rifle/carbine, carbine/pistol, rifle/unarmed, etc)
-	-- Unarmed should be put on secondary unless the mobile doesn't use weapons, in which case "unarmed" should be put primary and "none" as secondary
-	primaryWeapon = "unarmed",
-	secondaryWeapon = "none",
+	weapons = {},
 	conversationTemplate = "",
-
-	-- primaryAttacks and secondaryAttacks should be separate skill groups specific to the weapon type listed in primaryWeapon and secondaryWeapon
-	-- Use merge() to merge groups in creatureskills.lua together. If a weapon is set to "none", set the attacks variable to empty brackets
-	primaryAttacks = { {"creatureareacombo",""}, {"creatureareaknockdown",""} },
-	secondaryAttacks = { }
+	attacks = {
+		{"creatureareacombo",""},
+		{"creatureareaknockdown",""}
+	}
 }
 
 CreatureTemplates:addCreatureTemplate(krayt_dragon_adolescent, "krayt_dragon_adolescent")

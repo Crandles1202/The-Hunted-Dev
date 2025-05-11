@@ -103,13 +103,13 @@ void SurveySessionImplementation::startSurvey(const String& resname) {
 	}
 
 	//Get actual cost based upon player's Focus
-	int mindCost = 100 - (int)(surveyer->getHAM(CreatureAttribute::FOCUS)/15.f);
-
-	if (surveyer->getHAM(CreatureAttribute::MIND) < mindCost) {
-		surveyer->setPosture(CreaturePosture::UPRIGHT, true);
-		surveyer->sendSystemMessage("@error_message:survey_mind"); //You are exhausted. You nee to clear your head before you can survey again.
-		return;
-	}
+//	int mindCost = (100 - (int)(surveyer->getHAM(CreatureAttribute::FOCUS)/15.f)) / 2;
+//
+//	if (surveyer->getHAM(CreatureAttribute::MIND) < mindCost) {
+//		surveyer->setPosture(CreaturePosture::UPRIGHT, true);
+//		surveyer->sendSystemMessage("@error_message:survey_mind"); //You are exhausted. You nee to clear your head before you can survey again.
+//		return;
+//	}
 
 	ManagedReference<ResourceSpawn*> spawn = resourceManager->getResourceSpawn(resname);
 	if (spawn == nullptr) {
@@ -192,13 +192,13 @@ void SurveySessionImplementation::startSample(const String& resname) {
 	}
 
 	//Get actual cost based upon player's Quickness
-	int actionCost = 124 - (int)(surveyer->getHAM(CreatureAttribute::QUICKNESS)/12.5f);
-
-	if (surveyer->getHAM(CreatureAttribute::ACTION) < actionCost) {
-		surveyer->setPosture(CreaturePosture::UPRIGHT, true);
-		surveyer->sendSystemMessage("@error_message:sample_mind"); //You are exhausted. You need to clear your head before you can sample again.
-		return;
-	}
+//	int actionCost = (124 - (int)(surveyer->getHAM(CreatureAttribute::QUICKNESS)/12.5f)) / 2;
+//
+//	if (surveyer->getHAM(CreatureAttribute::ACTION) < actionCost) {
+//		surveyer->setPosture(CreaturePosture::UPRIGHT, true);
+//		surveyer->sendSystemMessage("@error_message:sample_mind"); //You are exhausted. You need to clear your head before you can sample again.
+//		return;
+//	}
 
 	if (resourceSpawn->getSurveyToolType() != activeSurveyTool->getToolType() && !(activeSurveyTool->getToolType() == SurveyTool::INORGANIC && resourceSpawn->isType("inorganic"))) {
 		StringIdChatParameter message("@survey:wrong_tool"); // %TO resources cannot be located with this tool
@@ -228,27 +228,12 @@ void SurveySessionImplementation::startSample(const String& resname) {
 	message.setTO(lastResourceSampleName);
 	surveyer->sendSystemMessage(message);
 
-	if (!doGamble && richSampleLocation.getPosition() == Vector3(0, 0, 0) && System::random(50) == 7) {
 
-		if (ghost->hasSuiBoxWindowType(SuiWindowType::SURVEY_TOOL_CONCENTRATED_MINIGAME)) {
-			ghost->removeSuiBoxType(SuiWindowType::SURVEY_TOOL_CONCENTRATED_MINIGAME);
-		}
 
-		if (ghost->hasSuiBoxWindowType(SuiWindowType::SURVEY_TOOL_CONCENTRATED_MINIGAME2)) {
-			ghost->removeSuiBoxType(SuiWindowType::SURVEY_TOOL_CONCENTRATED_MINIGAME2);
-		}
+	if (!lastResourceSampleName.isEmpty())
+		resourceManager->sendSample(surveyer, lastResourceSampleName,
+		activeSurveyTool->getSampleAnimation());
 
-		if (System::random(1) == 1)
-			surveyCnodeMinigameSui();
-		else
-			surveyGnodeMinigameSui();
-
-	} else {
-
-		if (!lastResourceSampleName.isEmpty())
-			resourceManager->sendSample(surveyer, lastResourceSampleName,
-					activeSurveyTool->getSampleAnimation());
-	}
 }
 
 void SurveySessionImplementation::surveyCnodeMinigameSui() {
@@ -290,27 +275,32 @@ void SurveySessionImplementation::surveyCnodeMinigame(int value) {
 	}
 
 	richSampleLocation = Coordinate(surveyer->getPositionX(), surveyer->getPositionZ(), surveyer->getPositionY());
-	richSampleLocation.randomizePosition(100.f, 50.f);
+	richSampleLocation.randomizePosition(50);
+
+	ManagedReference<WaypointObject*> newwaypoint = nullptr;
 
 	// Get previous survey waypoint
 	ManagedReference<WaypointObject*> waypoint = ghost->getSurveyWaypoint();
 
 	// Create new waypoint
 	if (waypoint == nullptr)
-		waypoint = ( surveyer->getZoneServer()->createObject(0xc456e788, 1)).castTo<WaypointObject*>();
+		newwaypoint = ( surveyer->getZoneServer()->createObject(0xc456e788, 1)).castTo<WaypointObject*>();
+	else {
+		ghost->removeWaypoint(waypoint->getObjectID(), true, false);
+		newwaypoint = waypoint.get();
+	}
 
-	Locker locker(waypoint);
+	Locker locker(newwaypoint);
 
 	// Update new waypoint
-	waypoint->setCustomObjectName(UnicodeString("Resource Survey"), false);
-	waypoint->setPlanetCRC(surveyer->getZone()->getZoneCRC());
-	waypoint->setPosition(richSampleLocation.getPositionX(), 0, richSampleLocation.getPositionY());
-	waypoint->setColor(WaypointObject::COLOR_BLUE);
-	waypoint->setSpecialTypeID(WaypointObject::SPECIALTYPE_RESOURCE);
-	waypoint->setActive(true);
+	newwaypoint->setCustomObjectName(UnicodeString("Resource Survey"), false);
+	newwaypoint->setPlanetCRC(surveyer->getZone()->getZoneCRC());
+	newwaypoint->setPosition(richSampleLocation.getPositionX(), 0, richSampleLocation.getPositionY());
+	newwaypoint->setColor(WaypointObject::COLOR_BLUE);
+	newwaypoint->setSpecialTypeID(WaypointObject::SPECIALTYPE_RESOURCE);
+	newwaypoint->setActive(true);
 
-	ghost->addWaypoint(waypoint, true, true);
-
+	ghost->addWaypoint(newwaypoint, false, true); // Should second argument be true, and waypoints with the same name thus remove their old version?
 	surveyer->sendSystemMessage("@survey:node_waypoint");
 
 	// Player must be kneeling to sample
@@ -351,7 +341,7 @@ void SurveySessionImplementation::surveyGnodeMinigame(int value) {
 			return;
 		}
 
-		surveyer->inflictDamage(surveyer, CreatureAttribute::ACTION, 300, false, true);
+		surveyer->inflictDamage(surveyer, CreatureAttribute::ACTION, 150, false, true);
 		doGamble = true;
 	}
 
@@ -377,9 +367,9 @@ void SurveySessionImplementation::rescheduleSample() {
 	// Add sampletask
 	if (sampleTask == nullptr)
 		sampleTask = new SampleTask(surveyer, activeSurveyTool.get());
-
+//sample timer
 	if (surveyer->getPendingTask("sample") == nullptr)
-		surveyer->addPendingTask("sample", sampleTask, 25000);
+		surveyer->addPendingTask("sample", sampleTask, 10000);
 }
 
 void SurveySessionImplementation::rescheduleSampleResults(const ResourceSpawner* resourceSpawner, float density, const String& resname) {

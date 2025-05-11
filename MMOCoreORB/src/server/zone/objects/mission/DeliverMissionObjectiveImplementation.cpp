@@ -118,7 +118,7 @@ bool DeliverMissionObjectiveImplementation::activateWithResult() {
 		return false;
 	}
 
-	missionManager->allocateMissionNpcs(targetSpawnPoint, destinationSpawnPoint, zone, creatureManager);
+	missionManager->allocateMissionNpcs(targetSpawnPoint, destinationSpawnPoint, terrainManager, creatureManager);
 
 	targetSpawn = targetSpawnPoint->getNpc();
 	destinationSpawn = destinationSpawnPoint->getNpc();

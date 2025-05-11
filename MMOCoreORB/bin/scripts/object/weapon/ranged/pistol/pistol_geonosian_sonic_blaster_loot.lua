@@ -42,28 +42,27 @@
 
 
 object_weapon_ranged_pistol_pistol_geonosian_sonic_blaster_loot = object_weapon_ranged_pistol_shared_pistol_geonosian_sonic_blaster_loot:new {
-	playerRaces = {
-		"object/creature/player/bothan_male.iff",
-		"object/creature/player/bothan_female.iff",
-		"object/creature/player/human_male.iff",
-		"object/creature/player/human_female.iff",
-		"object/creature/player/ithorian_male.iff",
-		"object/creature/player/ithorian_female.iff",
-		"object/creature/player/moncal_male.iff",
-		"object/creature/player/moncal_female.iff",
-		"object/creature/player/rodian_male.iff",
-		"object/creature/player/rodian_female.iff",
-		"object/creature/player/sullustan_male.iff",
-		"object/creature/player/sullustan_female.iff",
-		"object/creature/player/trandoshan_male.iff",
-		"object/creature/player/trandoshan_female.iff",
-		"object/creature/player/twilek_male.iff",
-		"object/creature/player/twilek_female.iff",
-		"object/creature/player/wookiee_male.iff",
-		"object/creature/player/wookiee_female.iff",
-		"object/creature/player/zabrak_male.iff",
-		"object/creature/player/zabrak_female.iff"
-	},
+
+	playerRaces = { "object/creature/player/bothan_male.iff",
+				"object/creature/player/bothan_female.iff",
+				"object/creature/player/human_male.iff",
+				"object/creature/player/human_female.iff",
+				"object/creature/player/ithorian_male.iff",
+				"object/creature/player/ithorian_female.iff",
+				"object/creature/player/moncal_male.iff",
+				"object/creature/player/moncal_female.iff",
+				"object/creature/player/rodian_male.iff",
+				"object/creature/player/rodian_female.iff",
+				"object/creature/player/sullustan_male.iff",
+				"object/creature/player/sullustan_female.iff",
+				"object/creature/player/trandoshan_male.iff",
+				"object/creature/player/trandoshan_female.iff",
+				"object/creature/player/twilek_male.iff",
+				"object/creature/player/twilek_female.iff",
+				"object/creature/player/wookiee_male.iff",
+				"object/creature/player/wookiee_female.iff",
+				"object/creature/player/zabrak_male.iff",
+				"object/creature/player/zabrak_female.iff" },
 
 	-- RANGEDATTACK, MELEEATTACK, FORCEATTACK, TRAPATTACK, GRENADEATTACK, HEAVYACIDBEAMATTACK,
 	-- HEAVYLIGHTNINGBEAMATTACK, HEAVYPARTICLEBEAMATTACK, HEAVYROCKETLAUNCHERATTACK, HEAVYLAUNCHERATTACK
@@ -101,35 +100,35 @@ object_weapon_ranged_pistol_pistol_geonosian_sonic_blaster_loot = object_weapon_
 
 
 	-- The values below are the default values.  To be used for blue frog objects primarily
-	healthAttackCost = 18,
-	actionAttackCost = 43,
-	mindAttackCost = 17,
+	healthAttackCost = 15,
+	actionAttackCost = 40,
+	mindAttackCost = 15,
 	forceCost = 0,
 
-	pointBlankAccuracy = 0,
 	pointBlankRange = 0,
+	pointBlankAccuracy = 0,
 
-	idealRange = 15,
-	idealAccuracy = 15,
+	idealRange = 7,
+	idealAccuracy = 25,
 
-	maxRange = 45,
-	maxRangeAccuracy = 5,
+	maxRange = 64,
+	maxRangeAccuracy = -70,
 
-	minDamage = 18,
-	maxDamage = 88,
+	minDamage = 95,
+	maxDamage = 115,
 
-	attackSpeed = 4,
+	attackSpeed = 3.5,
 
-	woundsRatio = 12,
+	woundsRatio = 22,
 
-	numberExperimentalProperties = {1, 1, 2, 2, 2, 2, 2, 2, 2, 1, 1, 1, 2, 2, 2},
-	experimentalProperties = {"XX", "XX", "CD", "OQ", "CD", "OQ", "CD", "OQ", "CD", "OQ", "CD", "OQ", "CD", "OQ", "CD", "OQ", "XX", "XX", "XX", "CD", "OQ", "CD", "OQ", "CD", "OQ"},
+	numberExperimentalProperties = {1, 1, 2, 2, 2, 2, 2, 2, 1, 1, 1, 2, 2, 2, 2},
+	experimentalProperties = {"XX", "XX", "CD", "OQ", "CD", "OQ", "CD", "OQ", "CD", "OQ", "CD", "OQ", "CD", "OQ", "XX", "XX", "XX", "CD", "OQ", "CD", "OQ", "CD", "OQ", "CD", "OQ"},
 	experimentalWeights = {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
-	experimentalGroupTitles = {"null", "null", "expDamage", "expDamage", "expDamage", "expDamage", "expEffeciency", "exp_durability", "expRange", "null", "null", "null", "expEffeciency", "expEffeciency", "expEffeciency"},
+	experimentalGroupTitles = {"null", "null", "expDamage", "expDamage", "expDamage", "expDamage", "expEffeciency", "exp_durability", "null", "null", "null", "expRange", "expEffeciency", "expEffeciency", "expEffeciency"},
 	experimentalSubGroupTitles = {"null", "null", "mindamage", "maxdamage", "attackspeed", "woundchance", "roundsused", "hitpoints", "zerorangemod", "maxrangemod", "midrange", "midrangemod", "attackhealthcost", "attackactioncost", "attackmindcost"},
-	experimentalMin = {0, 0, 33, 65, 5.6, 8, 15, 500, 18, -90, 15, 10, 36, 46, 22},
-	experimentalMax = {0, 0, 98, 191, 3.3, 16, 60, 1250, 18, -90, 15, 35, 14, 21, 8},
-	experimentalPrecision = {0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+	experimentalMin = {0, 0, 49, 56, 4.8, 15, 30, 750, -45, -95, 7, 18, 20, 58, 20},
+	experimentalMax = {0, 0, 91, 104, 3.3, 27, 30, 1500, -15, -65, 7, 35, 10, 31, 10},
+	experimentalPrecision = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
 	experimentalCombineType = {0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
 }
 

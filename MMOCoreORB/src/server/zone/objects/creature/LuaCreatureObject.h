@@ -50,17 +50,14 @@ namespace creature {
 		int getTargetID(lua_State* L);
 		int clearCombatState(lua_State* L);
 		int getHAM(lua_State* L);
-		int getBaseHAM(lua_State* L);
 		int getMaxHAM(lua_State* L);
 		int inflictDamage(lua_State* L);
 		//int playEffect(lua_State* L);
 		int isFeigningDeath(lua_State* L);
 		int hasState(lua_State* L);
 		int setState(lua_State* L);
-		int clearState(lua_State* L);
 		int setPosture(lua_State* L);
 		int setMoodString(lua_State* L);
-		int getMoodString(lua_State* L);
 		int getPosture(lua_State* L);
 		int hasSkill(lua_State* L);
 		int removeSkill(lua_State* L);
@@ -116,34 +113,21 @@ namespace creature {
 		int healDamage(lua_State* L);
 		int getGroupID(lua_State* L);
 		int enhanceCharacter(lua_State* L);
+		int enhanceCharacterDocBuff(lua_State* L);
+		int enhanceCharacterDocBuffTHREE(lua_State* L);
+		int enhanceCharacterEntBuffONE(lua_State* L);
+		int enhanceCharacterEntBuffTWO(lua_State* L);
+//		int isjediovert(lua_State* L);
 		int setWounds(lua_State* L);
 		int setShockWounds(lua_State* L);
 		int getForceSensitiveSkillCount(lua_State* L);
 		int villageKnightPrereqsMet(lua_State* L);
 		int getDamageDealerList(lua_State* L);
 		int getHealingThreatList(lua_State* L);
-		int getAllThreatsList(lua_State* L);
-		int dropFromThreatMap(lua_State* L);
 		int getSkillMod(lua_State* L);
 		int getGender(lua_State* L);
 		int isRidingMount(lua_State* L);
 		int dismount(lua_State* L);
-		int setAppearance(lua_State* L);
-		int getWeaponType(lua_State* L);
-		int attemptPeace(lua_State* L);
-		int forcePeace(lua_State* L);
-		int isPilotingShip(lua_State* L);
-		int storePets(lua_State* L);
-
-		// JTL
-		int isRebelPilot(lua_State* L);
-		int isImperialPilot(lua_State* L);
-		int isNeutralPilot(lua_State* L);
-		int hasCertifiedShip(lua_State* L);
-		int abortQuestMission(lua_State* L);
-		int removeQuestMission(lua_State* L);
-		int addSpaceMissionObject(lua_State* L);
-		int removeSpaceMissionObject(lua_State* L);
 	private:
 		// The pointer to the 'real object' defined in object.cc
 		CreatureObject* realObject;

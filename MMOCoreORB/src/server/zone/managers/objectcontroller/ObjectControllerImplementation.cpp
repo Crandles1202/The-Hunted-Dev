@@ -16,15 +16,15 @@ void ObjectControllerImplementation::loadCommands() {
 	configManager = new CommandConfigManager(server);
 	queueCommands = new CommandList();
 
-	info(true) << "Loading Queue Commands...";
-
+	info("loading queue commands...", true);
 	configManager->registerSpecialCommands(queueCommands);
 	configManager->loadSlashCommandsFile();
 
-	info(true) << "Loaded " << queueCommands->size() << " total commands";
+	StringBuffer infoMsg;
+	infoMsg << "loaded " << queueCommands->size() << " commands";
+	info(infoMsg.toString(), true);
 
 	adminLog.setLoggingName("AdminCommands");
-
 	StringBuffer fileName;
 	fileName << "log/admin/admin.log";
 	adminLog.setFileLogger(fileName.toString(), true);
@@ -68,7 +68,8 @@ bool ObjectControllerImplementation::transferObject(SceneObject* objectToTransfe
 	return true;
 }
 
-float ObjectControllerImplementation::activateCommand(CreatureObject* object, unsigned int actionCRC, unsigned int actionCount, uint64 targetID, const UnicodeString& arguments) const {
+float ObjectControllerImplementation::activateCommand(CreatureObject* object, unsigned int actionCRC,
+		unsigned int actionCount, uint64 targetID, const UnicodeString& arguments) const {
 	// Pre: object is wlocked
 	// Post: object is wlocked
 
@@ -82,7 +83,10 @@ float ObjectControllerImplementation::activateCommand(CreatureObject* object, un
 		return 0.f;
 	}
 
-	float commandTime = queueCommand->getCommandDuration(object, arguments);
+	/*StringBuffer infoMsg;
+	infoMsg << "activating queue command 0x" << hex << actionCRC << " " << queueCommand->getQueueCommandName() << " arguments='" << arguments.toString() << "'";
+	object->info(infoMsg.toString(), true);*/
+
 	const String& characterAbility = queueCommand->getCharacterAbility();
 
 	if (characterAbility.length() > 1) {
@@ -113,11 +117,12 @@ float ObjectControllerImplementation::activateCommand(CreatureObject* object, un
 
 	if (queueCommand->requiresAdmin()) {
 		try {
-			if (object->isPlayerCreature()) {
-				Reference<PlayerObject*> ghost = object->getSlottedObject("ghost").castTo<PlayerObject*>();
+			if(object->isPlayerCreature()) {
+				Reference<PlayerObject*> ghost =  object->getSlottedObject("ghost").castTo<PlayerObject*>();
 
 				if (ghost == nullptr || !ghost->hasGodMode() || !ghost->hasAbility(queueCommand->getQueueCommandName())) {
-					adminLog.warning() << object->getDisplayedName() << " attempted to use the '/" << queueCommand->getQueueCommandName() << "' command without permissions";
+					adminLog.warning() << object->getDisplayedName() << " attempted to use the '/" << queueCommand->getQueueCommandName()
+							<< "' command without permissions";
 
 					object->sendSystemMessage("@error_message:insufficient_permissions");
 					object->clearQueueAction(actionCount, 0, 2);
@@ -135,7 +140,7 @@ float ObjectControllerImplementation::activateCommand(CreatureObject* object, un
 	}
 
 	/// Add Skillmods if any
-	for (int i = 0; i < queueCommand->getSkillModSize(); ++i) {
+	for(int i = 0; i < queueCommand->getSkillModSize(); ++i) {
 		String skillMod;
 		int value = queueCommand->getSkillMod(i, skillMod);
 		object->addSkillMod(SkillModManager::ABILITYBONUS, skillMod, value, false);
@@ -144,25 +149,21 @@ float ObjectControllerImplementation::activateCommand(CreatureObject* object, un
 	int errorNumber = queueCommand->doQueueCommand(object, targetID, arguments);
 
 	/// Remove Skillmods if any
-	for (int i = 0; i < queueCommand->getSkillModSize(); ++i) {
+	for(int i = 0; i < queueCommand->getSkillModSize(); ++i) {
 		String skillMod;
 		int value = queueCommand->getSkillMod(i, skillMod);
 		object->addSkillMod(SkillModManager::ABILITYBONUS, skillMod, -value, false);
 	}
 
 	//onFail onComplete must clear the action from client queue
-	if (errorNumber != QueueCommand::SUCCESS) {
+	if (errorNumber != QueueCommand::SUCCESS)
 		queueCommand->onFail(actionCount, object, errorNumber);
-		return 0;
-	} else {
-		if (queueCommand->getDefaultPriority() != QueueCommand::IMMEDIATE) {
-			durationTime = commandTime;
-		}
-
+	else {
+		if (queueCommand->getDefaultPriority() != QueueCommand::IMMEDIATE)
+			durationTime = queueCommand->getCommandDuration(object, arguments);
 
 		queueCommand->onComplete(actionCount, object, durationTime);
 	}
-
 
 	return durationTime;
 }
@@ -195,5 +196,6 @@ void ObjectControllerImplementation::logAdminCommand(SceneObject* object, const 
 		name = "(null)";
 	}
 
-	adminLog.info() << object->getDisplayedName() << " used '/" << queueCommand->getQueueCommandName() << "' on " << name << " with params '" << arguments.toString() << "'";
+	adminLog.info() << object->getDisplayedName() << " used '/" << queueCommand->getQueueCommandName()
+								<< "' on " << name << " with params '" << arguments.toString() << "'";
 }

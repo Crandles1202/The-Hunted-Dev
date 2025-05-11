@@ -90,15 +90,9 @@ public:
 				resetStatus();
 
 				int ferocity = creature->getFerocity();
-				int aggroChance = System::random(20 - ferocity);
 
-				if (aggroChance == 0 && creature->isAiAgent()) {
-					AiAgent* agent = creature->asAiAgent();
-
-					if (agent != nullptr) {
-						Locker aLock(agent);
-						agent->addDefender(player);
-					}
+				if (System::random(20 - ferocity) == 0) {
+					CombatManager::instance()->startCombat(creature,player,true);
 				}
 			}
 
@@ -169,15 +163,10 @@ public:
 		creature->setCreatureLink(player);
 		creature->setFaction(player->getFaction());
 
-		uint32 playerPvpStatusBitmask = player->getPvpStatusBitmask();
-
-		if (playerPvpStatusBitmask & ObjectFlag::PLAYER) {
-			playerPvpStatusBitmask &= ~ObjectFlag::PLAYER;
-
-			creature->setPvpStatusBitmask(playerPvpStatusBitmask, false);
-		} else {
-			creature->setPvpStatusBitmask(playerPvpStatusBitmask, false);
-		}
+		if (player->getPvpStatusBitmask() & CreatureFlag::PLAYER)
+			creature->setPvpStatusBitmask(player->getPvpStatusBitmask() - CreatureFlag::PLAYER, false);
+		else
+			creature->setPvpStatusBitmask(player->getPvpStatusBitmask(), false);
 
 		creature->setBaby(false);
 
@@ -206,23 +195,15 @@ public:
 			}
 
 			agent->setLairTemplateCRC(0);
-
-			agent->setCreatureBitmask(ObjectFlag::PET);
-			agent->setAITemplate();
-			agent->clearPatrolPoints();
+			agent->setFollowObject(player);
+			agent->storeFollowObject();
 
 			agent->setHomeLocation(player->getPositionX(), player->getPositionZ(), player->getPositionY(), parent);
 			agent->setNextStepPosition(player->getPositionX(), player->getPositionZ(), player->getPositionY(), parent);
+			agent->clearPatrolPoints();
 
-			controlDevice->setLastCommand(PetManager::FOLLOW);
-			controlDevice->setLastCommander(player);
-
-			agent->eraseBlackboard("restingTime");
-			agent->setPosture(CreaturePosture::UPRIGHT, true, true);
-
-			agent->setFollowObject(player);
-			agent->storeFollowObject();
-			agent->setMovementState(AiAgent::FOLLOWING);
+			agent->setCreatureBitmask(CreatureFlag::PET);
+			agent->activateLoad("");
 		}
 
 		creature->getZone()->broadcastObject(creature, true);
@@ -249,11 +230,10 @@ public:
 			return;
 
 		creature->setPvpStatusBitmask(originalMask, true);
-
-		creature->removeObjectFlag(ObjectFlag::STATIONARY);
-		creature->setAITemplate();
-
-		creature->setMovementState(AiAgent::FOLLOWING);
+		if (creature->isAiAgent()) {
+			AiAgent* agent = cast<AiAgent*>(creature.get());
+			agent->activateLoad("");
+		}
 	}
 };
 

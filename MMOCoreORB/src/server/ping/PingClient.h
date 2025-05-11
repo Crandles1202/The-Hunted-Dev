@@ -12,7 +12,6 @@ public:
 	PingClient(DatagramServiceThread* serv, Socket* sock, SocketAddress& addr) : BaseClientProxy(sock, addr) {
 		setLoggingName("PingClient " + ip);
 		setLogging(false);
-		setLogLevel(Logger::FATAL);
 
 		init(serv);
 	}

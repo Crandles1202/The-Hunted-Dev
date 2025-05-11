@@ -42,7 +42,7 @@ void PingServer::handleMessage(ServiceClient* client, Packet* message) {
 	try {
 
 		if (lclient->isAvailable() && (message->size() == 4)) {
-			lclient->resetNetStatusTimeout();
+			lclient->updateNetStatus();
 
 			Packet* mess = message->clone();
 

@@ -11,7 +11,9 @@
 class TransferForceCommand : public CombatQueueCommand {
 public:
 
-	TransferForceCommand(const String& name, ZoneProcessServer* server) : CombatQueueCommand(name, server) {
+	TransferForceCommand(const String& name, ZoneProcessServer* server)
+		: CombatQueueCommand(name, server) {
+
 	}
 
 	int doQueueCommand(CreatureObject* creature, const uint64& target, const UnicodeString& arguments) const {
@@ -31,22 +33,10 @@ public:
 		if (object == nullptr || !object->isPlayerCreature())
 			return INVALIDTARGET;
 
-		CreatureObject* targetCreature = cast<CreatureObject*>(object.get());
+		CreatureObject* targetCreature = cast<CreatureObject*>( object.get());
 
 		if (targetCreature == nullptr || targetCreature->isDead() || targetCreature->isIncapacitated())
 			return INVALIDTARGET;
-
-		if (!CollisionManager::checkLineOfSight(creature, targetCreature)) {
-			creature->sendSystemMessage("@combat_effects:cansee_fail");//You cannot see your target.
-			return GENERALERROR;
-		}
-
-		if (!checkDistance(creature, targetCreature, range))
-			return TOOFAR;
-
-		if (!playerEntryCheck(creature, targetCreature)) {
-			return GENERALERROR;
-		}
 
 		Locker clocker(targetCreature, creature);
 
@@ -58,6 +48,14 @@ public:
 
 		if (targetGhost == playerGhost)
 			return GENERALERROR;
+
+		if (!CollisionManager::checkLineOfSight(creature, targetCreature)) {
+			creature->sendSystemMessage("@cbt_spam:los_fail");// You lost sight of your target.
+			return GENERALERROR;
+		}
+
+		if (!checkDistance(creature, targetCreature, range))
+			return TOOFAR;
 
 		int transfer = System::random(75) + minDamage; //Value set in command lua
 
@@ -95,9 +93,6 @@ public:
 		CombatManager::instance()->broadcastCombatSpam(creature, targetCreature, nullptr, forceTransfer, "cbt_spam", combatSpam, 0);
 
 		VisibilityManager::instance()->increaseVisibility(creature, visMod);
-
-		if (ConfigManager::instance()->useCovertOvertSystem())
-			checkForTef(creature, targetCreature);
 
 		return SUCCESS;
 	}

@@ -271,18 +271,39 @@ public:
 		int manipulationMod = 0;
 		float frsModifier = 0;
 
-		if (councilType == FrsManager::COUNCIL_LIGHT) {
-			manipulationMod = creature->getSkillMod("force_manipulation_light");
-			frsModifier = frsLightExtraForceCostModifier;
-		} else if (councilType == FrsManager::COUNCIL_DARK) {
-			manipulationMod = creature->getSkillMod("force_manipulation_dark");
-			frsModifier = frsDarkExtraForceCostModifier;
+//		if (councilType == FrsManager::COUNCIL_LIGHT) {
+//			manipulationMod = creature->getSkillMod("force_manipulation_light");
+//			frsModifier = frsLightExtraForceCostModifier;
+//		} else if (councilType == FrsManager::COUNCIL_DARK) {
+//			manipulationMod = creature->getSkillMod("force_manipulation_dark");
+//			frsModifier = frsDarkExtraForceCostModifier;
+//		}
+//
+//		if (manipulationMod == 0 || frsModifier == 0)
+//			return val;
+
+		float newval = val;
+
+		//put wearing armor force cost increase here?
+		for (int i = 0; i < creature->getSlottedObjectsSize(); ++i) {
+			SceneObject* item = creature->getSlottedObject(i);
+			if (item != nullptr && item->isArmorObject()){
+				newval *= 1.1;
+			}
 		}
 
-		if (manipulationMod == 0 || frsModifier == 0)
-			return val;
+//		bool jarmor = false;
+//		for (int i = 0; i < creature->getSlottedObjectsSize(); ++i) {
+//			SceneObject* item = creature->getSlottedObject(i);
+//			if (item != nullptr && item->isArmorObject()){
+//				jarmor = true;
+//			}
+//		}
+//		if (jarmor == true) newval *= 1.5;
 
-		return val + ((float)manipulationMod * frsModifier);
+		return newval;
+
+		//return val + ((float)manipulationMod * frsModifier);
 	}
 
 	void doForceCost(CreatureObject* creature) const {
@@ -290,6 +311,10 @@ public:
 		ManagedReference<PlayerObject*> playerObject = creature->getPlayerObject();
 		playerObject->setForcePower(playerObject->getForcePower() - getFrsModifiedForceCost(creature));
 		VisibilityManager::instance()->increaseVisibility(creature, visMod);
+
+//		Locker olocker(creature, creature);
+//		playerObject->updateLastCombatActionTimestamp(false, false, true);
+
 	}
 
 	void setForceCost(int fc) {

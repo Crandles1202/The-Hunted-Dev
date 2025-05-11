@@ -44,7 +44,7 @@
 PolearmActionHit1Command = {
         name = "polearmactionhit1",
 
-	damageMultiplier = 1.0,
+	damageMultiplier = 1.5,
 	speedMultiplier = 1.5,
 	healthCostMultiplier = 1.0,
 	actionCostMultiplier = 0.5,
@@ -68,7 +68,7 @@ PolearmActionHit1Command = {
 	  )
 	},
 	
-	weaponType = POLEARMWEAPON,
+	weaponType = TWOHANDMELEEWEAPON + ONEHANDMELEEWEAPON + POLEARMWEAPON,
 
 	poolsToDamage = ACTION_ATTRIBUTE,
 

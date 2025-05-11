@@ -165,30 +165,6 @@ endor = {
 }
 
 -----------------
---    Kashyyyk_hunting
------------------
-kashyyyk_hunting = {
-
-	defaultWeather = 0, -- Sunny
-
-	averageWeatherDuration = 3600, -- In seconds
-
-	weatherStability = 70, -- Range 0 - 100, Higher = Less weather changes, Overall better weather
-}
-
------------------
---    Kashyyyk_main
------------------
-kashyyyk_main = {
-
-	defaultWeather = 0, -- Sunny
-
-	averageWeatherDuration = 3600, -- In seconds
-
-	weatherStability = 70, -- Range 0 - 100, Higher = Less weather changes, Overall better weather
-}
-
------------------
 --     Lok
 -----------------
 lok = {
@@ -202,18 +178,6 @@ lok = {
 	hasDamagingSandstorms = 0,
 
 	sandstormDamage = 50, -- 30 = Annoying, 50 = deadly
-}
-
------------------
---    Mustafar
------------------
-mustafar = {
-
-	defaultWeather = 0, -- Sunny
-
-	averageWeatherDuration = 3600, -- In seconds
-
-	weatherStability = 70, -- Range 0 - 100, Higher = Less weather changes, Overall better weather
 }
 
 -----------------
@@ -263,4 +227,9 @@ yavin4 = {
 
 	weatherStability = 70, -- Range 0 - 100, Higher = Less weather changes, Overall better weather
 }
+
+
+
+
+
 

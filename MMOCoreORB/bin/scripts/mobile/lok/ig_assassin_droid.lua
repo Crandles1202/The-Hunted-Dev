@@ -2,7 +2,6 @@ ig_assassin_droid = Creature:new {
 	objectName = "@mob/creature_names:ig_assassin_droid",
 	socialGroup = "",
 	faction = "",
-	mobType = MOB_ANDROID,
 	level = 21,
 	chanceHit = 0.33,
 	damageMin = 220,
@@ -30,7 +29,11 @@ ig_assassin_droid = Creature:new {
 	lootGroups = {
 	     {
 			groups = {
-				{group = "lok_droid_tier_1", chance = 10000000}
+				{group = "junk", chance = 6500000},
+				{group = "nyms_common", chance = 1000000},
+				{group = "pistols", chance = 1000000},
+				{group = "carbines", chance = 1000000},
+				{group = "tailor_components", chance = 500000}
 			}
 		}
 	},

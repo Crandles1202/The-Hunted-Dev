@@ -2,7 +2,6 @@ fbase_rebel_command_security_guard_hard = Creature:new {
 	objectName = "@mob/creature_names:fbase_rebel_command_security_guard_hard",
 	randomNameType = NAME_GENERIC,
 	randomNameTag = true,
-	mobType = MOB_NPC,
 	socialGroup = "rebel",
 	faction = "rebel",
 	level = 50,
@@ -38,22 +37,20 @@ fbase_rebel_command_security_guard_hard = Creature:new {
 	lootGroups = {
 		{
 			groups = {
-				{group = "rebel_tier_2", chance = 10000000}
+				{group = "color_crystals", chance = 200000},
+				{group = "junk", chance = 6000000},
+				{group = "weapons_all", chance = 1250000},
+				{group = "armor_all", chance = 1250000},
+				{group = "clothing_attachments", chance = 150000},
+				{group = "armor_attachments", chance = 150000},
+				{group = "wearables_all", chance = 1000000}
 			}
 		}
 	},
-
-	-- Primary and secondary weapon should be different types (rifle/carbine, carbine/pistol, rifle/unarmed, etc)
-	-- Unarmed should be put on secondary unless the mobile doesn't use weapons, in which case "unarmed" should be put primary and "none" as secondary
-	primaryWeapon = "rebel_carbine",
-	secondaryWeapon = "rebel_pistol",
+	weapons = {"rebel_weapons_light"},
 	conversationTemplate = "",
 	reactionStf = "@npc_reaction/military",
-
-	-- primaryAttacks and secondaryAttacks should be separate skill groups specific to the weapon type listed in primaryWeapon and secondaryWeapon
-	-- Use merge() to merge groups in creatureskills.lua together. If a weapon is set to "none", set the attacks variable to empty brackets
-	primaryAttacks = merge(carbineermaster,marksmanmaster),
-	secondaryAttacks = merge(pistoleermaster,marksmanmaster)
+	attacks = merge(marksmanmaster,brawlermaster,pistoleermid)
 }
 
 CreatureTemplates:addCreatureTemplate(fbase_rebel_command_security_guard_hard, "fbase_rebel_command_security_guard_hard")

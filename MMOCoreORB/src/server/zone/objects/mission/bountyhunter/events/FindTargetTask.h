@@ -9,7 +9,6 @@
 #include "server/zone/objects/mission/BountyMissionObjective.h"
 #include "server/zone/managers/creature/CreatureTemplateManager.h"
 #include "server/zone/managers/player/PlayerManager.h"
-#include "server/zone/managers/mission/MissionManager.h"
 #include "server/zone/Zone.h"
 
 namespace server {
@@ -30,7 +29,7 @@ class FindTargetTask : public Task, public Logger {
 	int trackingsLeft;
 	String zoneName;
 
-	enum states { Init, DroidSent, Searching, Tracking, Completed };
+	enum states { Init, DroidSent, Searching, Tracking, Completed};
 
 	states state;
 
@@ -117,10 +116,6 @@ class FindTargetTask : public Task, public Logger {
 	}
 
 	bool findAndTrackSuccess(CreatureObject* player, BountyMissionObjective* objective) {
-		if (player == nullptr || objective == nullptr) {
-			return false;
-		}
-
 		Locker locker(player);
 
 		if (objective->getPlayerOwner() == nullptr) {
@@ -133,25 +128,6 @@ class FindTargetTask : public Task, public Logger {
 			player->sendSystemMessage("@mission/mission_generic:target_located_" + objective->getTargetZoneName());
 		} else {
 			if (objective->getTargetZoneName() == zoneName) {
-				if (ConfigManager::instance()->getBool("Core3.MissionManager.AnonymousBountyTerminals", false)) {
-					ManagedReference<MissionObject*> mission = objective->getMissionObject().get();
-
-					ZoneServer* zoneServer = player->getZoneServer();
-
-					if (zoneServer != nullptr) {
-						MissionManager* missionManager = zoneServer->getMissionManager();
-						uint64 targetId = mission->getTargetObjectId();
-
-						if (missionManager != nullptr && missionManager->hasPlayerBountyTargetInList(targetId)) {
-							ManagedReference<CreatureObject*> target = zoneServer->getObject(targetId).castTo<CreatureObject*>();
-
-							if (target != nullptr) {
-								String sysMsg = "Analyzing biological signature... Target: " + target->getFirstName() + " " + target->getLastName();
-								player->sendSystemMessage(sysMsg);
-							}
-						}
-					}
-				}
 				StringIdChatParameter message("@mission/mission_generic:assassin_target_location");
 				message.setDI(getDistanceToTarget(player, objective));
 				message.setTO("mission/mission_generic", getDirectionToTarget(player, objective));

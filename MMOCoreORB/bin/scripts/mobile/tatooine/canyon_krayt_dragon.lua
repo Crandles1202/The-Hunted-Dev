@@ -2,8 +2,8 @@ canyon_krayt_dragon = Creature:new {
 	objectName = "@mob/creature_names:canyon_krayt_dragon",
 	socialGroup = "krayt",
 	faction = "",
-	mobType = MOB_CARNIVORE,
 	level = 275,
+	elite = 1.5,
 	chanceHit = 27.25,
 	damageMin = 1520,
 	damageMax = 2750,
@@ -25,34 +25,28 @@ canyon_krayt_dragon = Creature:new {
 	creatureBitmask = PACK + KILLER + STALKER,
 	optionsBitmask = AIENABLED,
 	diet = CARNIVORE,
-	scale = 0.75,
 
 	templates = {"object/mobile/canyon_krayt_dragon.iff"},
 	hues = { 8, 9, 10, 11, 12, 13, 14, 15 },
-
+	scale = 0.9;
 	lootGroups = {
 		{
-			groups = {
-				{group = "krayt_dragon_common", chance = 3000000},
-				{group = "krayt_pearls", chance = 1500000},
+	        groups = {
+				{group = "krayt_dragon_common", chance = 2500000},
 				{group = "krayt_tissue_uncommon", chance = 2000000},
-				{group = "armor_all", chance = 1750000},
-				{group = "weapons_all", chance = 1750000},
+				{group = "krayt_pearls", chance = 1500000},
+				{group = "armor_all", chance = 2000000},
+				{group = "weapons_all", chance = 2000000},
 			},
-			lootChance = 7000000
+			lootChance = 5000000
 		}
 	},
-
-	-- Primary and secondary weapon should be different types (rifle/carbine, carbine/pistol, rifle/unarmed, etc)
-	-- Unarmed should be put on secondary unless the mobile doesn't use weapons, in which case "unarmed" should be put primary and "none" as secondary
-	primaryWeapon = "unarmed",
-	secondaryWeapon = "none",
+	weapons = {},
 	conversationTemplate = "",
-
-	-- primaryAttacks and secondaryAttacks should be separate skill groups specific to the weapon type listed in primaryWeapon and secondaryWeapon
-	-- Use merge() to merge groups in creatureskills.lua together. If a weapon is set to "none", set the attacks variable to empty brackets
-	primaryAttacks = { {"creatureareaattack","stateAccuracyBonus=50"}, {"stunattack","stateAccuracyBonus=50"} },
-	secondaryAttacks = { }
+	attacks = {
+		{"creatureareaattack","stateAccuracyBonus=50"},
+		{"stunattack","stateAccuracyBonus=50"}
+	}
 }
 
 CreatureTemplates:addCreatureTemplate(canyon_krayt_dragon, "canyon_krayt_dragon")

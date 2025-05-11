@@ -11,15 +11,21 @@
 class ChannelForceCommand : public QueueCommand {
 public:
 
-	ChannelForceCommand(const String& name, ZoneProcessServer* server) : QueueCommand(name, server) {
+	ChannelForceCommand(const String& name, ZoneProcessServer* server)
+: QueueCommand(name, server) {
+
 	}
 
 	int doQueueCommand(CreatureObject* creature, const uint64& target, const UnicodeString& arguments) const {
+
 		if (!checkStateMask(creature))
 			return INVALIDSTATE;
 
 		if (!checkInvalidLocomotions(creature))
 			return INVALIDLOCOMOTION;
+
+		if (creature->hasAttackDelay())
+			return GENERALERROR;
 
 		if (isWearingArmor(creature)) {
 			return NOJEDIARMOR;
@@ -28,6 +34,23 @@ public:
 		// Bonus is in between 250-350.
 		int forceRandom = System::random(100);
 		int forceBonus = 250 + (forceRandom);
+
+		//put wearing armor force cost increase here?
+		for (int i = 0; i < creature->getSlottedObjectsSize(); ++i) {
+			SceneObject* item = creature->getSlottedObject(i);
+			if (item != nullptr && item->isArmorObject()){
+				forceBonus *= .85;
+			}
+		}
+
+//		bool jarmor = false;
+//		for (int i = 0; i < creature->getSlottedObjectsSize(); ++i) {
+//			SceneObject* item = creature->getSlottedObject(i);
+//			if (item != nullptr && item->isArmorObject()){
+//				jarmor = true;
+//			}
+//		}
+//		if (jarmor == true) forceBonus *= .5;
 
 		ManagedReference<PlayerObject*> playerObject = creature->getPlayerObject();
 		if (playerObject == nullptr)
@@ -65,14 +88,12 @@ public:
 		// Setup buffs.
 		uint32 buffCRC = STRING_HASHCODE("channelforcebuff");
 		Reference<Buff*> buff = creature->getBuff(buffCRC);
-
 		int duration = ChannelForceBuff::FORCE_CHANNEL_DURATION_SECONDS;
-
 		if (buff == nullptr) {
 			buff = new ChannelForceBuff(creature, buffCRC, duration);
-
+			
 			Locker locker(buff);
-
+			
 			buff->setAttributeModifier(CreatureAttribute::HEALTH, -forceBonus);
 			buff->setAttributeModifier(CreatureAttribute::ACTION, -forceBonus);
 			buff->setAttributeModifier(CreatureAttribute::MIND, -forceBonus);
@@ -81,18 +102,19 @@ public:
 		} else {
 			Locker locker(buff, creature);
 
-			buff->setAttributeModifier(CreatureAttribute::HEALTH, buff->getAttributeModifierValue(CreatureAttribute::HEALTH) - forceBonus);
-			buff->setAttributeModifier(CreatureAttribute::ACTION, buff->getAttributeModifierValue(CreatureAttribute::ACTION) - forceBonus);
-			buff->setAttributeModifier(CreatureAttribute::MIND, buff->getAttributeModifierValue(CreatureAttribute::MIND) - forceBonus);
-
+			buff->setAttributeModifier(CreatureAttribute::HEALTH,
+									   buff->getAttributeModifierValue(CreatureAttribute::HEALTH)-forceBonus);
+			buff->setAttributeModifier(CreatureAttribute::ACTION,
+									   buff->getAttributeModifierValue(CreatureAttribute::ACTION)-forceBonus);
+			buff->setAttributeModifier(CreatureAttribute::MIND,
+									   buff->getAttributeModifierValue(CreatureAttribute::MIND)-forceBonus);
+			
 			creature->addMaxHAM(CreatureAttribute::HEALTH, -forceBonus);
 			creature->addMaxHAM(CreatureAttribute::ACTION, -forceBonus);
 			creature->addMaxHAM(CreatureAttribute::MIND, -forceBonus);
-
+			
 			creature->renewBuff(buffCRC, duration);
-
 			Reference<ChannelForceBuff*> channelBuff = buff.castTo<ChannelForceBuff*>();
-
 			if (channelBuff != nullptr)
 				channelBuff->activateRegenTick();
 		}

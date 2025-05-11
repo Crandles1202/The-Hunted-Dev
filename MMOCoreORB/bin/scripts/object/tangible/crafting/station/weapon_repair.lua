@@ -51,7 +51,13 @@ object_tangible_crafting_station_weapon_repair = object_tangible_crafting_statio
 	boostSkillMod = "weapon_repair",
 
 	stationType = 7,
-	useCount = 5,
+	
+	--quality = 100,
+	--exp_quality = 100, 
+	--quality = 100;
+	--effectiveness = 90,
+	--complexityLevel = 90,
+
 	numberExperimentalProperties = {1, 1, 1, 1},
 	experimentalProperties = {"XX", "XX", "UT", "CD"},
 	experimentalWeights = {1, 1, 1, 1},
@@ -61,5 +67,6 @@ object_tangible_crafting_station_weapon_repair = object_tangible_crafting_statio
 	experimentalMax = {0, 0, 1000, 100},
 	experimentalCombineType = {0, 0, 4, 1},
 	experimentalPrecision = {0, 0, 0, 0},
+	experimentalCombineType = {1, 1, 1, 1},
 }
 ObjectTemplates:addTemplate(object_tangible_crafting_station_weapon_repair, "object/tangible/crafting/station/weapon_repair.iff")

@@ -59,52 +59,31 @@ enum class TrxCode {
 	ADMINCOMMAND,               // From an admin command
 	ADKAPPLY,                   // Apply and ADK to item
 	ADKREMOVE,                  // Remove ADK from item
-	APPLYATTACHMENT,            // Apply Attachment to item
 	AUCTIONADDSALE,             // addSaleItem()
 	AUCTIONBID,                 // Auction Bid Escrow
 	AUCTIONEXPIRED,             // Never retrieved and expired
 	AUCTIONRETRIEVE,            // retrieveItem()
-	CAMPPLACED,                 // Camp Placed
 	CHARACTERBUILDER,           // Character Builder
-	CHARACTERDELETE,            // Delete Character
 	CITYINCOMETAX,              // City income taxes
 	CITYSALESTAX,               // City Sales taxes
 	CITYTREASURY,               // City Treasury
-	COMBATSTATS,                // Combat Stats
 	CRAFTINGSESSION,            // Crafting Session
-	CREDITCHIP,             	// Space CreditChip Looted
-	CREDITCHIPCLAIM,            // Space CreditChip Claimed
-	DATABASECOMMIT,             // Database Commit
-	DESTROYSTRUCTURE,           // Structure destroyed by system (maintenance etc)
-	EXPERIENCE,                 // Player experience change
 	EXTRACTCRATE,               // Extract item from crate
 	FACTORYOPERATION,           // Factory operations
-	FISHING,                    // Fishing Loot
 	FORAGED,                    // Foraged items
 	HARVESTED,                  // Harvested items
 	IMAGEDESIGN,                // Image Design Fees
 	INSTANTBUY,                 // Instant Buy
 	LOTTERYDROID,               // Lottery Droid
 	LUASCRIPT,                  // LUA Script
-	LUALOOT,                    // Loot from LUA Scripts
-	MINED,                      // Resouces mined by installations
-	MISSIONCOMPLETE,            // Mission Completed Summary
 	NPCLOOTCLAIM,               // NPC Loot Claimed
 	PERMISSIONLIST,             // Permission List changes
 	PLAYERMISCACTION,           // Misc player action
 	PLAYERTIP,                  // sui Tip
 	PLAYERTRADE,                // Player Trade
-	PLAYERDIED,                 // Player Died
-	PLAYERLINKDEAD,             // Player Link Dead
-	PLAYERLOGGINGOUT,           // Player Logging Out
-	PLAYEROFFLINE,              // Player Offline
-	PLAYERONLINE,               // Player Online
 	RECYCLED,                   // Recycled Items
 	SERVERDESTROYOBJECT,        // /serverDestroyObject command
-	SHIPDEEDPURCHASE,           // Purchase of a ship deed from chassis dealer
-	SHIPREDEED,                 // ReDeeding a ship from datapad
 	SLICECONTAINER,             // Slicing session on a container
-	SPACELOOTSOLD,              // Selling of space loot to chassis dealer
 	STRUCTUREDEED,              // Structure deed trxs
 	TRANSFERITEMMISC,           // /transferitemmisc command
 	TRANSFERSTRUCT,             // Transfer Structure
@@ -140,8 +119,6 @@ class TransactionLog {
 	bool mCommitted = false;
 	bool mAborted = false;
 	bool mExportRelated = false;
-	bool mLogged = false;
-	int mMaxDepth = 4;
 	StringBuffer mError;
 	Vector3 mWorldPosition;
 	String mZoneName;
@@ -172,9 +149,7 @@ public:
 
 	TransactionLog(TrxCode code, SceneObject* dst, CAPTURE_CALLER_DECLARE)
 		: TransactionLog((SceneObject*)nullptr, dst, (SceneObject*)nullptr, code, false, file, function, line) {
-			if (!isStat(code)) {
-				mAutoCommit = false;
-			}
+			mAutoCommit = false;
 	}
 
 	TransactionLog(SceneObject* src, TrxCode code, uint amount, bool isCash = true, CAPTURE_CALLER_DECLARE)
@@ -193,27 +168,6 @@ public:
 
 	TransactionLog(const TransactionLog& rhs) {
 		*this = rhs;
-	}
-
-	TransactionLog newChild() {
-		TransactionLog child;
-
-		// Copy limited properties from parent
-		child.mEnabled = mEnabled;
-		child.mDebug = mDebug;
-		child.mExportRelated = mExportRelated;
-		child.mWorldPosition = mWorldPosition;
-		child.mWorldPositionContext = mWorldPositionContext;
-		child.mZoneName = mZoneName;
-		child.mContext = mContext;
-		child.mTransaction["trxId"] = getNewTrxID();
-		child.mTransaction["trxGroup"] = getTrxGroup();
-		child.mTransaction["code"] = mTransaction["code"];
-		child.mTransaction["src"] = mTransaction["src"];
-		child.mTransaction["dst"] = mTransaction["dst"];
-		child.mTransaction["subject"] = mTransaction["subject"];
-
-		return child;
 	}
 
 	TransactionLog& operator=(const TransactionLog& rhs) {
@@ -313,8 +267,6 @@ public:
 
 	void setSubject(SceneObject* subject, bool exportSubject = false);
 
-	void setExperience(const String& xpType, int xpAdd, int xpTotal);
-
 	bool getAutoCommit() const {
 		return mAutoCommit;
 	}
@@ -327,26 +279,11 @@ public:
 		return mDebug;
 	}
 
-	bool isAborted() const {
-		return mAborted;
-	}
-
 	bool isVerbose() const {
 		return getVerbose();
 	}
 
-	void setMaxDepth(int maxDepth) {
-		mMaxDepth = maxDepth;
-	}
-
-	int getMaxDepth() const {
-		return mMaxDepth;
-	}
-
 	const String getTrxID() const {
-		if (!isEnabled())
-			return "disabled";
-
 		return String(mTransaction["trxId"].get<std::string>());
 	}
 
@@ -374,9 +311,6 @@ public:
 	void exportRelated();
 
 private:
-	TransactionLog() {
-	};
-
 	static AtomicInteger exportBacklog;
 
 	void catchAndLog(const char* functioName, Function<void()> function);
@@ -418,28 +352,4 @@ private:
 	void writeLog();
 
 	static const String trxCodeToString(TrxCode code);
-
-	static bool isStat(TrxCode code) {
-		switch (code) {
-			case TrxCode::COMBATSTATS:
-			case TrxCode::CORPSEEXPIRATION:
-			case TrxCode::CRAFTINGSESSION:
-			case TrxCode::DATABASECOMMIT:
-			case TrxCode::EXPERIENCE:
-			case TrxCode::JABBASPALACE:
-			case TrxCode::NEWBIETUTORIAL:
-			case TrxCode::PLAYERDIED:
-			case TrxCode::PLAYERLINKDEAD:
-			case TrxCode::PLAYERLOGGINGOUT:
-			case TrxCode::PLAYEROFFLINE:
-			case TrxCode::PLAYERONLINE:
-			case TrxCode::POISYSTEM:
-			case TrxCode::SKILLTRAININGSYSTEM:
-			case TrxCode::TESTACCOUNT:
-				return true;
-
-			default:
-				return false;
-		}
-	}
 };

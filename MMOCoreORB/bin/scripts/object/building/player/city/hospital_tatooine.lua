@@ -50,9 +50,9 @@ object_building_player_city_hospital_tatooine = object_building_player_city_shar
 	planetMapCategory = "medicalcenter",
 	cityRankRequired = 3,
 	abilityRequired = "place_hospital",
-	groundZoneComponent = "StructureZoneComponent",
+	zoneComponent = "StructureZoneComponent",
 	skillMods = {
-		{"private_medical_rating", 100},
+		{"private_medical_rating", 120},
 		{"private_med_wound_health", 100},
 		{"private_med_wound_action", 100},
 		{"private_safe_logout", 1},

@@ -44,7 +44,7 @@
 HeadShot2Command = {
         name = "headshot2",
 
-	damageMultiplier = 2.50,
+	damageMultiplier = 1.25,
 	speedMultiplier = 1.5,
 	healthCostMultiplier = 0.5,
 	actionCostMultiplier = 0.5,
@@ -58,7 +58,7 @@ HeadShot2Command = {
 
 	combatSpam = "expertheadshot",
 	
-	weaponType = RIFLEWEAPON,
+	weaponType = RIFLEWEAPON + PISTOLWEAPON + CARBINEWEAPON,
 
 	range = -1
 

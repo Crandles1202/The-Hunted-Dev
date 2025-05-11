@@ -44,7 +44,7 @@
 StunAttackCommand = {
 	name = "stunattack",
 	combatSpam = "attack",
-	animation = "creature_attack_special_2", 
+	animation = "",--animation = "creature_attack_special_2", 
 	animType = GENERATE_INTENSITY,
 	stateEffects = {
 	  StateEffect( 

@@ -28,7 +28,7 @@ public:
 
 		Locker _clocker(player, creature);
 
-		if (!creature->isInRange(player, 7.f) || creature->isDead()) {
+		if (!creature->isInRange(player, 5.f) || creature->isDead()) {
 			updateMilkState(CreatureManager::NOTMILKED);
 			player->sendSystemMessage("@skl_use:milk_too_far"); // The creature has moved too far away to continue milking it.
 			return;
@@ -82,7 +82,6 @@ public:
 				this->reschedule(10000);
 			} else {
 				updateMilkState(CreatureManager::NOTMILKED);
-				clearStationary();
 				_clocker.release();
 				CombatManager::instance()->startCombat(creature, player, true);
 			}
@@ -93,7 +92,6 @@ public:
 				giveMilkToPlayer();
 			} else {
 				updateMilkState(CreatureManager::NOTMILKED);
-				clearStationary();
 				_clocker.release();
 				CombatManager::instance()->startCombat(creature, player, true);
 			}
@@ -120,31 +118,25 @@ public:
 
 		float density = resourceSpawn->getDensityAt(player->getZone()->getZoneName(), player->getPositionX(), player->getPositionY());
 
-		if (density > 0.80f) {
-			quantityExtracted = int(quantityExtracted * 1.25f);
-		} else if (density > 0.60f) {
-			quantityExtracted = int(quantityExtracted * 1.00f);
-		} else if (density > 0.40f) {
-			quantityExtracted = int(quantityExtracted * 0.75f);
-		} else {
-			quantityExtracted = int(quantityExtracted * 0.50f);
-		}
+//		if (density > 0.80f) {
+//			quantityExtracted = int(quantityExtracted * 1.25f);
+//		} else if (density > 0.60f) {
+//			quantityExtracted = int(quantityExtracted * 1.00f);
+//		} else if (density > 0.40f) {
+//			quantityExtracted = int(quantityExtracted * 0.75f);
+//		} else {
+//			quantityExtracted = int(quantityExtracted * 0.50f);
+//		}
 
 		TransactionLog trx(TrxCode::HARVESTED, player, resourceSpawn);
-		resourceManager->harvestResourceToPlayer(trx, player, resourceSpawn, quantityExtracted);
+		resourceManager->harvestResourceToPlayer(trx, player, resourceSpawn, quantityExtracted * 5);
 
 		updateMilkState(CreatureManager::ALREADYMILKED);
-	}
-
-	void clearStationary() {
-		creature->removeObjectFlag(ObjectFlag::STATIONARY);
-		creature->setAITemplate();
 	}
 
 	void updateMilkState(const short milkState) {
 		Locker clocker(creature);
 		creature->setMilkState(milkState);
-		clearStationary();
 	}
 };
 

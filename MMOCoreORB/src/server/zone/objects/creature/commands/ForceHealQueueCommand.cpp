@@ -8,10 +8,11 @@
 #include "server/zone/managers/stringid/StringIdManager.h"
 #include "server/zone/managers/collision/CollisionManager.h"
 #include "server/zone/managers/frs/FrsManager.h"
-#include "server/zone/objects/player/FactionStatus.h"
+#include "server/zone/objects/building/BuildingObject.h"
+#include "server/zone/managers/player/PlayerManager.h"
 
 ForceHealQueueCommand::ForceHealQueueCommand(const String& name, ZoneProcessServer* server) : JediQueueCommand(name, server) {
-	speed = 3;
+	speed = 3;//had it at 2 not sure if working//force heal timer here
 	allowedTarget = TARGET_AUTO;
 
 	forceCost = 0;
@@ -52,8 +53,59 @@ int ForceHealQueueCommand::runCommand(CreatureObject* creature, CreatureObject* 
 		return GENERALERROR;
 
 	int currentForce = playerObject->getForcePower();
-	int totalCost = forceCost;
+	int totalCost = forceCost; // 0;
 	bool healPerformed = false;
+
+//increase heal amount with frs
+	float newhealAmount = healAmount;
+	float newhealWoundAmount = healWoundAmount;
+
+	float frsheal = (creature->getSkillMod("force_manipulation_dark") + creature->getSkillMod("force_manipulation_light") * 0.5);
+
+	if (frsheal > 0) {
+		newhealAmount *= 1.f + (frsheal / 100.f);
+		newhealWoundAmount *= 1.f + (frsheal / 100.f);
+	}
+
+	for (int i = 0; i < creature->getSlottedObjectsSize(); ++i) {
+		SceneObject* item = creature->getSlottedObject(i);
+		if (item != nullptr && item->isArmorObject()){
+			newhealAmount *= .85;
+			newhealWoundAmount *= .85;
+		}
+	}
+
+//	bool jarmor = false;
+//	for (int i = 0; i < creature->getSlottedObjectsSize(); ++i) {
+//		SceneObject* item = creature->getSlottedObject(i);
+//		if (item != nullptr && item->isArmorObject()){
+//			jarmor = true;
+//		}
+//	}
+//	if (jarmor == true) {
+//		newhealAmount *= .5;
+//		newhealWoundAmount *= .5;
+//	}
+
+//reduce healing force cost based on number of force healing boxes the jedi has? NOT FINISHED
+//	const SkillList* skillList = creature->getSkillList();
+//
+//	int fullTrees = 0;
+//	int totalJediPoints = 0;
+//
+//	for (int i = 0; i < skillList->size(); ++i) {
+//		Skill* skill = skillList->get(i);
+//
+//		String skillName = skill->getSkillName();
+//		if (skillName.contains("force_discipline_healing_") &&
+//			(skillName.indexOf("0") != -1 || skillName.contains("novice") || skillName.contains("master") )) {
+//			totalJediPoints += skill->getSkillPointsRequired();
+//
+//			if (skillName.indexOf("4") != -1) {
+//				fullTrees++;
+//			}
+//		}
+//	}
 
 	// Attribute Wound Healing
 	for (int i = 0; i < 3; i++) {
@@ -64,8 +116,8 @@ int ForceHealQueueCommand::runCommand(CreatureObject* creature, CreatureObject* 
 					uint8 attrib = (i * 3) + j;
 					int woundAmount = targetCreature->getWounds(attrib);
 
-					if (healWoundAmount > 0 && woundAmount > healWoundAmount)
-						woundAmount = healWoundAmount;
+					if (newhealWoundAmount > 0 && woundAmount > newhealWoundAmount)
+						woundAmount = newhealWoundAmount;
 
 					totalCost += woundAmount * forceCostMultiplier;
 
@@ -79,6 +131,9 @@ int ForceHealQueueCommand::runCommand(CreatureObject* creature, CreatureObject* 
 						targetCreature->healWound(creature, attrib, woundAmount, true);
 						healPerformed = true;
 						sendHealMessage(creature, targetCreature, HEAL_WOUNDS, attrib, woundAmount);
+
+//						PlayerManager* playerManager = server->getZoneServer()->getPlayerManager();
+//						playerManager->awardExperience(creature, "jedi_general", woundAmount, true, 1.0, false);
 					}
 				}
 			}
@@ -95,8 +150,8 @@ int ForceHealQueueCommand::runCommand(CreatureObject* creature, CreatureObject* 
 				int maxHam = targetCreature->getMaxHAM(attrib) - targetCreature->getWounds(attrib);
 				int amtToHeal = maxHam - curHam;
 
-				if (healAmount > 0 && amtToHeal > healAmount)
-					amtToHeal = healAmount;
+				if (newhealAmount > 0 && amtToHeal > newhealAmount)
+					amtToHeal = newhealAmount;
 
 				totalCost += amtToHeal * forceCostMultiplier;
 
@@ -107,9 +162,15 @@ int ForceHealQueueCommand::runCommand(CreatureObject* creature, CreatureObject* 
 				}
 
 				if (amtToHeal > 0) {
+
 					targetCreature->healDamage(creature, attrib, amtToHeal, true);
 					healPerformed = true;
 					sendHealMessage(creature, targetCreature, HEAL_DAMAGE, attrib, amtToHeal);
+
+//					PlayerManager* playerManager = server->getZoneServer()->getPlayerManager();
+//					playerManager->awardExperience(creature, "jedi_general", amtToHeal / 5, true, 1.0, false);
+
+					//awardXp(creature, "jedi_general", amtToHeal * 2);
 				}
 			}
 		}
@@ -134,6 +195,8 @@ int ForceHealQueueCommand::runCommand(CreatureObject* creature, CreatureObject* 
 			targetCreature->addShockWounds(-battleFatigue, true, false);
 			sendHealMessage(creature, targetCreature, HEAL_FATIGUE, 0, battleFatigue);
 			healPerformed = true;
+//			PlayerManager* playerManager = server->getZoneServer()->getPlayerManager();
+//			playerManager->awardExperience(creature, "jedi_general", battleFatigue / 2, true, 1.0, false);
 		}
 	}
 
@@ -153,6 +216,8 @@ int ForceHealQueueCommand::runCommand(CreatureObject* creature, CreatureObject* 
 					totalCost = newTotal;
 					healPerformed = true;
 					healedStates++;
+//					PlayerManager* playerManager = server->getZoneServer()->getPlayerManager();
+//					playerManager->awardExperience(creature, "jedi_general", 25, true, 1.0, false);
 				}
 			}
 		}
@@ -178,6 +243,9 @@ int ForceHealQueueCommand::runCommand(CreatureObject* creature, CreatureObject* 
 			sendHealMessage(creature, targetCreature, HEAL_BLEEDING, 0, 0);
 		}
 
+//		PlayerManager* playerManager = server->getZoneServer()->getPlayerManager();
+//		playerManager->awardExperience(creature, "jedi_general", 25, true, 1.0, false);
+
 		healPerformed = true;
 	}
 
@@ -197,6 +265,9 @@ int ForceHealQueueCommand::runCommand(CreatureObject* creature, CreatureObject* 
 		} else {
 			sendHealMessage(creature, targetCreature, HEAL_POISON, 0, 0);
 		}
+
+//		PlayerManager* playerManager = server->getZoneServer()->getPlayerManager();
+//		playerManager->awardExperience(creature, "jedi_general", 25, true, 1.0, false);
 
 		healPerformed = true;
 	}
@@ -218,6 +289,9 @@ int ForceHealQueueCommand::runCommand(CreatureObject* creature, CreatureObject* 
 			sendHealMessage(creature, targetCreature, HEAL_DISEASE, 0, 0);
 		}
 
+//		PlayerManager* playerManager = server->getZoneServer()->getPlayerManager();
+//		playerManager->awardExperience(creature, "jedi_general", 25, true, 1.0, false);
+
 		healPerformed = true;
 	}
 
@@ -238,10 +312,31 @@ int ForceHealQueueCommand::runCommand(CreatureObject* creature, CreatureObject* 
 			sendHealMessage(creature, targetCreature, HEAL_FIRE, 0, 0);
 		}
 
+//		PlayerManager* playerManager = server->getZoneServer()->getPlayerManager();
+//		playerManager->awardExperience(creature, "jedi_general", 25, true, 1.0, false);
+
 		healPerformed = true;
 	}
 
 	bool selfHeal = creature->getObjectID() == targetCreature->getObjectID();
+
+	//put wearing armor force cost increase here?
+
+	for (int i = 0; i < creature->getSlottedObjectsSize(); ++i) {
+		SceneObject* item = creature->getSlottedObject(i);
+		if (item != nullptr && item->isArmorObject()){
+			totalCost *= 1.1;
+		}
+	}
+
+	//if (jarmor == true) totalCost *= 1.5;
+
+	//	//frs reduced heal force cost
+	float frscost = (creature->getSkillMod("force_manipulation_dark") + creature->getSkillMod("force_manipulation_light") * 0.5);
+
+	if (frscost > 0) {
+		totalCost *= 1.f - (frscost / 100.f);
+	}
 
 	if (healPerformed) {
 		if (selfHeal)
@@ -254,13 +349,13 @@ int ForceHealQueueCommand::runCommand(CreatureObject* creature, CreatureObject* 
 			creature->error("Did not have enough force to pay for the healing he did. Total cost of command: " + String::valueOf(totalCost) + ", player's current force: " + String::valueOf(currentForce));
 		} else {
 			playerObject->setForcePower(currentForce - totalCost);
+
+			PlayerManager* playerManager = server->getZoneServer()->getPlayerManager();
+			playerManager->awardExperience(creature, "jedi_general", totalCost, true, 1.0, false);
+
 		}
 
 		VisibilityManager::instance()->increaseVisibility(creature, visMod);
-
-		if (!selfHeal)
-			checkForTef(creature, targetCreature);
-
 		return SUCCESS;
 	} else {
 		if (selfHeal) {
@@ -397,8 +492,32 @@ int ForceHealQueueCommand::runCommandWithTarget(CreatureObject* creature, Creatu
 		return GENERALERROR;
 	}
 
-	if (!playerEntryCheck(creature, targetCreature)) {
-		return GENERALERROR;
+	if (creature->isPlayerCreature() && targetCreature->getParentID() != 0 && creature->getParentID() != targetCreature->getParentID()) {
+		Reference<CellObject*> targetCell = targetCreature->getParent().get().castTo<CellObject*>();
+
+		if (targetCell != nullptr) {
+			if (!targetCreature->isPlayerCreature()) {
+				auto perms = targetCell->getContainerPermissions();
+
+				if (!perms->hasInheritPermissionsFromParent()) {
+					if (!targetCell->checkContainerPermission(creature, ContainerPermissions::WALKIN)) {
+						creature->sendSystemMessage("@combat_effects:cansee_fail"); // You cannot see your target.
+						return GENERALERROR;
+					}
+				}
+			}
+
+			ManagedReference<SceneObject*> parentSceneObject = targetCell->getParent().get();
+
+			if (parentSceneObject != nullptr) {
+				BuildingObject* buildingObject = parentSceneObject->asBuildingObject();
+
+				if (buildingObject != nullptr && !buildingObject->isAllowedEntry(creature)) {
+					creature->sendSystemMessage("@combat_effects:cansee_fail"); // You cannot see your target.
+					return GENERALERROR;
+				}
+			}
+		}
 	}
 
 	return runCommand(creature, targetCreature);

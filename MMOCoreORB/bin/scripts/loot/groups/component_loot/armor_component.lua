@@ -5,15 +5,20 @@ armor_component = {
 	minimumLevel = 0,
 	maximumLevel = 0,
 	lootItems = {
-		{itemTemplate = "armor_segment_bone", weight = 1111112},
-		{itemTemplate = "armor_segment_chitin", weight = 1111111},
-		{itemTemplate = "armor_segment_composite", weight = 1111111},
-		{itemTemplate = "armor_segment_kashyyykian_black_mtn", weight = 1111111},
-		{itemTemplate = "armor_segment_kashyyykian_ceremonial", weight = 1111111},
-		{itemTemplate = "armor_segment_kashyyykian_hunting", weight = 1111111},
-		{itemTemplate = "armor_segment_padded", weight = 1111111},
-		{itemTemplate = "armor_segment_ubese", weight = 1111111},
-		{itemTemplate = "armor_segment_zam", weight = 1111111}
+		{itemTemplate = "armorcomponent1", weight = 1000000},--bone
+		{itemTemplate = "armorcomponent5", weight = 1000000},--mabari
+		{itemTemplate = "armorcomponent2", weight = 1000000},--chitin
+		{itemTemplate = "armorcomponent4", weight = 1000000},--ubese
+		{itemTemplate = "armorcomponent3", weight = 1000000},--padded
+		{itemTemplate = "armorcomponent6", weight = 1000000},--comp 500000
+		{itemTemplate = "armorcomponent7", weight = 500000},--
+		{itemTemplate = "armorcomponent8", weight = 500000},--
+		{itemTemplate = "armorcomponent9", weight = 500000},--
+		{itemTemplate = "armorcomponent10", weight = 500000},--
+		{itemTemplate = "armorcomponent11", weight = 500000},--
+		{itemTemplate = "armorcomponent12", weight = 500000},--
+		{itemTemplate = "armorcomponent13", weight = 500000},--
+		{itemTemplate = "armorcomponent14", weight = 500000},--
 	},
 }
 

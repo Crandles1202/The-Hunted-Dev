@@ -2,10 +2,10 @@ nightsister_elder = Creature:new {
 	objectName = "@mob/creature_names:nightsister_elder",
 	randomNameType = NAME_GENERIC,
 	randomNameTag = true,
-	mobType = MOB_NPC,
 	socialGroup = "nightsister",
 	faction = "nightsister",
 	level = 278,
+	elite = 1.5,
 	chanceHit = 27.25,
 	damageMin = 1520,
 	damageMax = 2750,
@@ -32,21 +32,23 @@ nightsister_elder = Creature:new {
 	lootGroups = {
 		{
 			groups = {
-				{group = "nightsister_tier_5", chance = 10000000}
+				{group = "power_crystals", chance = 800000},
+				{group = "nightsister_common", chance = 1200000},
+				{group = "junk", chance = 1000000},
+				{group = "armor_attachments", chance = 500000},
+				{group = "clothing_attachments", chance = 500000},
+				{group = "pistols", chance = 800000},
+				{group = "rifles", chance = 800000},
+				{group = "carbines", chance = 900000},
+				{group = "melee_weapons", chance = 2000000},
+				{group = "wearables_scarce", chance = 500000},
+				{group = "holocron_3", chance = 1000000}
 			}
 		}
 	},
-
-	-- Primary and secondary weapon should be different types (rifle/carbine, carbine/pistol, rifle/unarmed, etc)
-	-- Unarmed should be put on secondary unless the mobile doesn't use weapons, in which case "unarmed" should be put primary and "none" as secondary
-	primaryWeapon = "force_sword",
-	secondaryWeapon = "force_sword_ranged",
+	weapons = {"mixed_force_weapons"},
 	conversationTemplate = "",
-
-	-- primaryAttacks and secondaryAttacks should be separate skill groups specific to the weapon type listed in primaryWeapon and secondaryWeapon
-	-- Use merge() to merge groups in creatureskills.lua together. If a weapon is set to "none", set the attacks variable to empty brackets
-	primaryAttacks = merge(tkamaster,swordsmanmaster,fencermaster,pikemanmaster,brawlermaster,forcepowermaster),
-	secondaryAttacks = forcepowermaster
+	attacks = merge(tkamaster,swordsmanmaster,fencermaster,pikemanmaster,brawlermaster,forcepowermaster)
 }
 
 CreatureTemplates:addCreatureTemplate(nightsister_elder, "nightsister_elder")

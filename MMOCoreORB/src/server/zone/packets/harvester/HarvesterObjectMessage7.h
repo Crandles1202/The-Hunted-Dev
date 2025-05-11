@@ -28,7 +28,7 @@ public:
 
 
 		/*insertLong(hino->getActiveResourceID());
-		insertByte(hino->isActive());
+		insertByte(hino->isOperating());
 		insertFloat(hino->getActualRate());
 		insertFloat(hino->getSpecRate());
 		insertFloat(hino->getTotalHopperQuantity());
@@ -37,7 +37,7 @@ public:
 		insertInt(hino->getHopperSize());*/
 
 		insertLong(hino->getActiveResourceSpawnID());
-		insertByte(hino->isActive());
+		insertByte(hino->isOperating());
 		insertInt((int)hino->getExtractionRate()); // Extraction Rate Displayed
 		insertFloat(hino->getExtractionRate()); // Extract Rate Max
 

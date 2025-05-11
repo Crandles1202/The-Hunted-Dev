@@ -207,10 +207,9 @@ void ResourceManagerImplementation::sendResourceListForSurvey(CreatureObject* pl
 }
 
 ResourceContainer* ResourceManagerImplementation::harvestResource(CreatureObject* player, const String& type, const int quantity) {
-	return resourceSpawner->harvestResource(player, type, quantity);
+	return resourceSpawner->harvestResource(player, type, (quantity * 1.5));
 }
 bool ResourceManagerImplementation::harvestResourceToPlayer(TransactionLog& trx, CreatureObject* player, ResourceSpawn* resourceSpawn, const int quantity) {
-	trx.addState("resourceID", resourceSpawn->getObjectID());
 	trx.addState("resourceType", resourceSpawn->getType());
 	trx.addState("resourceName", resourceSpawn->getName());
 	trx.addState("resourceQuantity", quantity);
@@ -355,11 +354,6 @@ void ResourceManagerImplementation::removePowerFromPlayer(CreatureObject* player
 
 		if (containerPower > power) {
 			uint32 consumedUnits = (uint64) power / modifier;
-
-			if (consumedUnits < 1) {
-				consumedUnits = 1;
-			}
-
 			rcno->setQuantity(quantity - consumedUnits);
 
 			ResourceContainerObjectDeltaMessage3* drcno3 = new ResourceContainerObjectDeltaMessage3(rcno);

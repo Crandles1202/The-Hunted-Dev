@@ -205,7 +205,4 @@ class DraftSchematic extends IntangibleObject {
 
 	@dirty
 	public native int getFactoryCrateSize();
-
-	@dirty
-	public native string getFactoryCrateType();
 }

@@ -44,7 +44,7 @@
 Melee2hHeadHit1Command = {
 	name = "melee2hheadhit1",
 
-	damageMultiplier = 1.5,
+	damageMultiplier = 2.0,
 	speedMultiplier = 1.25,
 	healthCostMultiplier = 0.5,
 	actionCostMultiplier = 1.0,
@@ -53,7 +53,7 @@ Melee2hHeadHit1Command = {
 
 	poolsToDamage = MIND_ATTRIBUTE,
 	
-	weaponType = TWOHANDMELEEWEAPON,
+	weaponType = TWOHANDMELEEWEAPON + ONEHANDMELEEWEAPON + POLEARMWEAPON,
 
 	animation = "combo_2d", 
 	animType = GENERATE_INTENSITY,

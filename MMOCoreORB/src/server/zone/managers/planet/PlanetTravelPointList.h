@@ -43,32 +43,28 @@ public:
 #ifdef PLATFORM_WIN
 		char* incomingAllowed = (char*) _malloca(totalPoints);
 #else
-		Vector<bool> incomingAllowed;
+		bool incomingAllowed[totalPoints];
 #endif
 		int insertionPoints = totalPoints;
 
 		for (int i = 0; i < totalPoints; ++i) {
 			Reference<PlanetTravelPoint*> ptp = VectorMap<String, Reference<PlanetTravelPoint*> >::get(i);
-
-			bool incoming = ptp->isIncomingAllowed();
-			incomingAllowed.add(incoming);
-
-			if (!incoming) {
+			incomingAllowed[i] = ptp->isIncomingAllowed();
+			if (!incomingAllowed[i])
 				insertionPoints--;
-			}
 		}
 
 		message->insertInt(insertionPoints);
 
 		for (int i = 0; i < totalPoints; ++i) {
-			if (incomingAllowed.get(i))
+			if (incomingAllowed[i])
 				message->insertAscii(VectorMap<String, Reference<PlanetTravelPoint*> >::get(i)->getPointName());
 		}
 
 		message->insertInt(insertionPoints);
 
 		for (int i = 0; i < totalPoints; ++i) {
-			if (incomingAllowed.get(i)) {
+			if (incomingAllowed[i]) {
 				Reference<PlanetTravelPoint*> ptp = VectorMap<String, Reference<PlanetTravelPoint*> >::get(i);
 				message->insertFloat(ptp->getArrivalPositionX());
 				message->insertFloat(ptp->getArrivalPositionZ());
@@ -79,7 +75,7 @@ public:
 		message->insertInt(insertionPoints);
 
 		for (int i = 0; i < totalPoints; ++i){
-			if (incomingAllowed.get(i)) {
+			if (incomingAllowed[i]) {
 				Reference<PlanetTravelPoint*> ptp = VectorMap<String, Reference<PlanetTravelPoint*> >::get(i);
 				ManagedReference<CreatureObject*> shuttle = ptp->getShuttle();
 				if(shuttle == nullptr){
@@ -104,7 +100,7 @@ public:
 		message->insertInt(insertionPoints);
 
 		for (int i = 0; i < totalPoints; ++i) {
-			if (incomingAllowed.get(i))
+			if (incomingAllowed[i])
 				message->insertByte((byte) VectorMap<String, Reference<PlanetTravelPoint*> >::get(i)->isInterplanetary());
 		}
 

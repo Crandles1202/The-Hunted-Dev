@@ -9,7 +9,6 @@
 #include "FactionMap.h"
 #include "server/zone/objects/player/PlayerObject.h"
 #include "templates/manager/TemplateManager.h"
-#include "server/zone/managers/player/PlayerManager.h"
 
 FactionManager::FactionManager() {
 	setLoggingName("FactionManager");
@@ -18,8 +17,7 @@ FactionManager::FactionManager() {
 }
 
 void FactionManager::loadData() {
-	loadLuaConfig("scripts/managers/faction_manager.lua");
-	loadLuaConfig("scripts/custom_scripts/managers/faction_manager.lua");
+	loadLuaConfig();
 	loadFactionRanks();
 }
 
@@ -41,8 +39,8 @@ void FactionManager::loadFactionRanks() {
 	info("loaded " + String::valueOf(factionRanks.getCount()) + " ranks", true);
 }
 
-void FactionManager::loadLuaConfig(String file) {
-	info("Loading config file: " + file, true);
+void FactionManager::loadLuaConfig() {
+	info("Loading config file.", true);
 
 	FactionMap* fMap = getFactionMap();
 
@@ -50,7 +48,7 @@ void FactionManager::loadLuaConfig(String file) {
 	lua->init();
 
 	//Load the faction manager lua file.
-	lua->runFile(file);
+	lua->runFile("scripts/managers/faction_manager.lua");
 
 	LuaObject luaObject = lua->getGlobalObject("factionList");
 
@@ -89,11 +87,13 @@ FactionMap* FactionManager::getFactionMap() {
 }
 
 void FactionManager::awardFactionStanding(CreatureObject* player, const String& factionName, int level) {
-	if (player == nullptr || !factionMap.contains(factionName)) {
+	if (player == nullptr)
 		return;
-	}
 
 	ManagedReference<PlayerObject*> ghost = player->getPlayerObject();
+
+	if (!factionMap.contains(factionName))
+		return;
 
 	const Faction& faction = factionMap.get(factionName);
 	const SortedVector<String>* enemies = faction.getEnemies();
@@ -104,8 +104,29 @@ void FactionManager::awardFactionStanding(CreatureObject* player, const String& 
 
 	float gain = level * faction.getAdjustFactor();
 	float lose = gain * 2;
-	bool gcw = false;
 
+	ghost->decreaseFactionStanding(factionName, lose);
+
+	//Lose faction standing to allies of the creature.
+	for (int i = 0; i < allies->size(); ++i) {
+		const String& ally = allies->get(i);
+
+		if ((ally == "rebel" || ally == "imperial")) {
+			continue;
+		}
+
+		if (!factionMap.contains(ally))
+			continue;
+
+		const Faction& allyFaction = factionMap.get(ally);
+
+		if (!allyFaction.isPlayerAllowed())
+			continue;
+
+		ghost->decreaseFactionStanding(ally, lose);
+	}
+
+	bool gcw = false;
 	if (factionName == "rebel" || factionName == "imperial") {
 		gcw = true;
 	}
@@ -128,112 +149,8 @@ void FactionManager::awardFactionStanding(CreatureObject* player, const String& 
 
 		ghost->increaseFactionStanding(enemy, gain);
 	}
-
-	ghost->decreaseFactionStanding(factionName, lose);
-
-	//Lose faction standing to allies of the creature.
-	for (int i = 0; i < allies->size(); ++i) {
-		const String& ally = allies->get(i);
-
-		if ((ally == "rebel" || ally == "imperial")) {
-			continue;
-		}
-
-		if (!factionMap.contains(ally))
-			continue;
-
-		const Faction& allyFaction = factionMap.get(ally);
-
-		if (!allyFaction.isPlayerAllowed())
-			continue;
-
-		ghost->decreaseFactionStanding(ally, lose);
-	}
 }
 
-void FactionManager::awardSpaceFactionPoints(CreatureObject* player, uint32 shipTypeHash, const String& factionName, uint32 shipLevel, int totalShipmates, int imperialReward, int rebelReward) {
-	if (player == nullptr || !factionMap.contains(factionName)) {
-		return;
-	}
-
-	auto ghost = player->getPlayerObject();
-
-	if (ghost == nullptr) {
-		return;
-	}
-
-	const Faction& faction = factionMap.get(factionName);
-
-	if (!faction.isPlayerAllowed()) {
-		return;
-	}
-
-	float gain = 0.f;
-	float loss = 0.f;
-
-	if (imperialReward > 0) {
-		gain = imperialReward;
-		loss = rebelReward;
-	} else {
-		gain = rebelReward;
-		loss = imperialReward;
-	}
-
-	// info(true) << "awardSpaceFactionPoints -- Player Tier: " << pilotTier << " ShipLevel: " << shipLevel << " Gain: " << gain << " Loss: " << loss;
-
-	bool gcw = false;
-
-	if (factionName == "rebel" || factionName == "imperial") {
-		gcw = true;
-	}
-
-	const SortedVector<String>* enemies = faction.getEnemies();
-	const SortedVector<String>* allies = faction.getAllies();
-
-	// Gain faction standing to enemies of the creature.
-	for (int i = 0; i < enemies->size(); ++i) {
-		const String& enemy = enemies->get(i);
-
-		if ((enemy == "rebel" || enemy == "imperial") && !gcw) {
-			continue;
-		}
-
-		if (!factionMap.contains(enemy)) {
-			continue;
-		}
-
-		const Faction& enemyFaction = factionMap.get(enemy);
-
-		if (!enemyFaction.isPlayerAllowed()) {
-			continue;
-		}
-
-		ghost->increaseFactionStanding(enemy, gain);
-	}
-
-	ghost->decreaseFactionStanding(factionName, loss);
-
-	// Lose faction standing to allies of the creature.
-	for (int i = 0; i < allies->size(); ++i) {
-		const String& ally = allies->get(i);
-
-		if ((ally == "rebel" || ally == "imperial")) {
-			continue;
-		}
-
-		if (!factionMap.contains(ally)) {
-			continue;
-		}
-
-		const Faction& allyFaction = factionMap.get(ally);
-
-		if (!allyFaction.isPlayerAllowed()) {
-			continue;
-		}
-
-		ghost->decreaseFactionStanding(ally, loss);
-	}
-}
 
 void FactionManager::awardPvpFactionPoints(TangibleObject* killer, CreatureObject* destructedObject) {
 	if (killer->isPlayerCreature() && destructedObject->isPlayerCreature()) {
@@ -316,22 +233,4 @@ bool FactionManager::isAlly(const String& faction1, const String& faction2) {
 	Faction* faction = factionMap.getFaction(faction1);
 
 	return faction->getAllies()->contains(faction2);
-}
-
-uint32 FactionManager::getSpaceFactionBySquadron(int spaceSquadron, int tier) {
-	uint32 factionHash = 0;
-
-	if (spaceSquadron == PlayerManager::CORSEC_SQUADRON) {
-		factionHash = STRING_HASHCODE("corsec");
-	} else if (spaceSquadron == PlayerManager::RSF_SQUADRON) {
-		factionHash = STRING_HASHCODE("rsf");
-	} else if (spaceSquadron == PlayerManager::SMUGGLER_SQUADRON) {
-		factionHash = STRING_HASHCODE("smuggler");
-	} else if (spaceSquadron == PlayerManager::BLACK_EPSILON_SQUADRON || spaceSquadron == PlayerManager::STORM_SQUADRON || spaceSquadron == PlayerManager::INQUISITION_SQUADRON) {
-		factionHash = STRING_HASHCODE("imperial");
-	} else if (spaceSquadron == PlayerManager::CRIMSON_PHOENIX_SQUADRON || spaceSquadron == PlayerManager::VORTEX_SQUADRON || spaceSquadron == PlayerManager::HAVOC_SQUADRON) {
-		factionHash = STRING_HASHCODE("rebel");
-	}
-
-	return factionHash;
 }

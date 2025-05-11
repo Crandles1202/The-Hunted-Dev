@@ -51,8 +51,9 @@ function SpawnMobiles.isPrefixFree(pSceneObject, prefix)
 end
 
 function SpawnMobiles.isValidMobile(pMobile)
-	return pMobile ~= nil and SceneObject(pMobile):isAiAgent()
+	return pMobile ~= nil and pMobile ~= -1
 end
+
 
 -- Get the spawn point parameters for the specified spawn point generation.
 -- @param pSceneObject pointer to the scene object that the spawn is related to.
@@ -131,10 +132,10 @@ function SpawnMobiles.spawnMobileObjects(pSceneObject, prefix, mobileList, spawn
 		end
 
 		if (spawnedObject ~= nil) then
-			if (mobileList[spawnNumber]["setNotAttackable"]) then
-				AiAgent(spawnedObject):setNoAiAggro()
-			end
+			AiAgent(spawnedObject):setNoAiAggro()
+		end
 
+		if (spawnedObject ~= nil) then
 			spawnedObjects[spawnNumber] = spawnedObject
 		else
 			spawnedObjects[spawnNumber] = -1

@@ -11,14 +11,14 @@
 #include "engine/util/json_utils.h"
 
 namespace server {
-namespace zone {
-namespace objects {
-namespace creature {
-class CreatureObject;
+	namespace zone {
+		namespace objects {
+			namespace creature {
+				class CreatureObject;
+			}
+		}
+	}
 }
-} // namespace objects
-} // namespace zone
-} // namespace server
 
 using namespace server::zone::objects::creature;
 
@@ -36,16 +36,6 @@ public:
 
 	GroupMember(CreatureObject* obj) {
 		creature = obj;
-	}
-
-	GroupMember& operator=(const GroupMember& obj) {
-		if (this == &obj) {
-			return *this;
-		}
-
-		creature = obj.creature;
-
-		return *this;
 	}
 
 	bool operator==(const GroupMember& member) const {
@@ -96,6 +86,8 @@ public:
 
 		return true;
 	}
+
 };
+
 
 #endif /* GROUPMEMBER_H_ */

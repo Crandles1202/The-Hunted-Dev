@@ -2,7 +2,7 @@
 #include "Zone.h"
 #include "ZoneClientThread.h"
 
-#include "server/zone/packets/zone/ClientIdMessage.h"
+#include "server/zone/packets/zone/ClientIDMessage.h"
 #include "client/zone/managers/objectcontroller/ObjectController.h"
 #include "client/zone/managers/object/ObjectManager.h"
 
@@ -55,7 +55,7 @@ void Zone::run() {
 
 		startTime.updateToCurrentTime();
 
-		BaseMessage* acc = new ClientIdMessage(accountID, sessionID);
+		BaseMessage* acc = new ClientIDMessage(accountID, sessionID);
 		client->sendMessage(acc);
 
 		client->getClient()->info("sent client id message");
@@ -119,7 +119,13 @@ void Zone::sceneStarted() {
 	client->getClient()->info("zone started in " + String::valueOf(startTime.miliDifference()) + "ms", true);
 }
 
-void Zone::follow(const String& name) {
+void Zone::follow(const String& name) {//
+
+//	client->getClient()->error("follow is disabled in mySWG");
+//
+//	return;
+
+
 	SceneObject* object = objectManager->getObject(name);
 
 	if (object == nullptr) {

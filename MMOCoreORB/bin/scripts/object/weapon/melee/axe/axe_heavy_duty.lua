@@ -42,28 +42,27 @@
 
 
 object_weapon_melee_axe_axe_heavy_duty = object_weapon_melee_axe_shared_axe_heavy_duty:new {
-	playerRaces = {
-		"object/creature/player/bothan_male.iff",
-		"object/creature/player/bothan_female.iff",
-		"object/creature/player/human_male.iff",
-		"object/creature/player/human_female.iff",
-		"object/creature/player/ithorian_male.iff",
-		"object/creature/player/ithorian_female.iff",
-		"object/creature/player/moncal_male.iff",
-		"object/creature/player/moncal_female.iff",
-		"object/creature/player/rodian_male.iff",
-		"object/creature/player/rodian_female.iff",
-		"object/creature/player/sullustan_male.iff",
-		"object/creature/player/sullustan_female.iff",
-		"object/creature/player/trandoshan_male.iff",
-		"object/creature/player/trandoshan_female.iff",
-		"object/creature/player/twilek_male.iff",
-		"object/creature/player/twilek_female.iff",
-		"object/creature/player/wookiee_male.iff",
-		"object/creature/player/wookiee_female.iff",
-		"object/creature/player/zabrak_male.iff",
-		"object/creature/player/zabrak_female.iff"
-	},
+
+	playerRaces = { "object/creature/player/bothan_male.iff",
+				"object/creature/player/bothan_female.iff",
+				"object/creature/player/human_male.iff",
+				"object/creature/player/human_female.iff",
+				"object/creature/player/ithorian_male.iff",
+				"object/creature/player/ithorian_female.iff",
+				"object/creature/player/moncal_male.iff",
+				"object/creature/player/moncal_female.iff",
+				"object/creature/player/rodian_male.iff",
+				"object/creature/player/rodian_female.iff",
+				"object/creature/player/sullustan_male.iff",
+				"object/creature/player/sullustan_female.iff",
+				"object/creature/player/trandoshan_male.iff",
+				"object/creature/player/trandoshan_female.iff",
+				"object/creature/player/twilek_male.iff",
+				"object/creature/player/twilek_female.iff",
+				"object/creature/player/wookiee_male.iff",
+				"object/creature/player/wookiee_female.iff",
+				"object/creature/player/zabrak_male.iff",
+				"object/creature/player/zabrak_female.iff" },
 
 	-- RANGEDATTACK, MELEEATTACK, FORCEATTACK, TRAPATTACK, GRENADEATTACK, HEAVYACIDBEAMATTACK,
 	-- HEAVYLIGHTNINGBEAMATTACK, HEAVYPARTICLEBEAMATTACK, HEAVYROCKETLAUNCHERATTACK, HEAVYLAUNCHERATTACK
@@ -115,10 +114,10 @@ object_weapon_melee_axe_axe_heavy_duty = object_weapon_melee_axe_shared_axe_heav
 	maxRange = 5,
 	maxRangeAccuracy = 0,
 
-	minDamage = 35,
-	maxDamage = 140,
+	minDamage = 25,
+	maxDamage = 98,
 
-	attackSpeed = 5,
+	attackSpeed = 6.5,
 
 	woundsRatio = 15,
 

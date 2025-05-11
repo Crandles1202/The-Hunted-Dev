@@ -7,14 +7,14 @@
 
 #include "server/zone/objects/scene/SceneObject.h"
 #include "server/zone/managers/objectcontroller/ObjectController.h"
-#include "templates/params/creature/PlayerArrangement.h"
 
 class MountCommand : public QueueCommand {
 	Vector<uint32> restrictedBuffCRCs;
 	uint32 gallopCRC;
 public:
 
-	MountCommand(const String& name, ZoneProcessServer* server) : QueueCommand(name, server) {
+	MountCommand(const String& name, ZoneProcessServer* server)
+		: QueueCommand(name, server) {
 		gallopCRC = STRING_HASHCODE("gallop");
 
 		restrictedBuffCRCs.add(STRING_HASHCODE("burstrun"));
@@ -22,6 +22,7 @@ public:
 		restrictedBuffCRCs.add(BuffCRC::JEDI_FORCE_RUN_1);
 		restrictedBuffCRCs.add(BuffCRC::JEDI_FORCE_RUN_2);
 		restrictedBuffCRCs.add(BuffCRC::JEDI_FORCE_RUN_3);
+
 	}
 
 	int doQueueCommand(CreatureObject* creature, const uint64& target, const UnicodeString& arguments) const {
@@ -62,7 +63,7 @@ public:
 		if (vehicle->getCreatureLinkID() != creature->getObjectID())
 			return GENERALERROR;
 
-		if (!vehicle->isInRange(creature, 5) || !CollisionManager::checkLineOfSight(vehicle, creature))
+		if (!vehicle->isInRange(creature, 5))
 			return GENERALERROR;
 
 		if (creature->getParent() != nullptr || vehicle->getParent() != nullptr)
@@ -73,7 +74,10 @@ public:
 			return GENERALERROR;
 		}
 
-		if (vehicle->isIncapacitated() || vehicle->isDead())
+		if (vehicle->isIncapacitated())
+			return GENERALERROR;
+
+		if (vehicle->isDead())
 			return GENERALERROR;
 
 		if (vehicle->getPosture() == CreaturePosture::LYINGDOWN || vehicle->getPosture() == CreaturePosture::SITTING) {
@@ -82,7 +86,7 @@ public:
 
 		vehicle->setState(CreatureState::MOUNTEDCREATURE);
 
-		if (!vehicle->transferObject(creature, PlayerArrangement::RIDER, true)) {
+		if (!vehicle->transferObject(creature, 4, true)) {
 			vehicle->error("could not add creature");
 			vehicle->clearState(CreatureState::MOUNTEDCREATURE);
 
@@ -159,6 +163,9 @@ public:
 		if(vehicle->getSpeedMultiplierMod() != 0)
 			newSpeed *= vehicle->getSpeedMultiplierMod();
 
+//		if(vehicle->getSpeedMultiplierMod() != 0)
+//			newSpeed *= vehicle->getSpeedMultiplierMod() * 5;
+
 		// Add our change to the buffer history
 		changeBuffer->add(SpeedModChange(newSpeed / creature->getRunSpeed()));
 
@@ -170,7 +177,7 @@ public:
 			newTurn += creature->getSkillMod("force_vehicle_control");
 		}
 
-		creature->setRunSpeed(newSpeed);
+		creature->setRunSpeed(newSpeed);//not affecting vehicles
 		creature->setTurnScale(newTurn, true);
 		creature->setAccelerationMultiplierMod(newAccel, true);
 		creature->addMountedCombatSlow();

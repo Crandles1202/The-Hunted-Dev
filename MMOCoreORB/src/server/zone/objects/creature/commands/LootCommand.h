@@ -26,73 +26,84 @@ public:
 	}
 
 	int doQueueCommand(CreatureObject* creature, const uint64& target, const UnicodeString& arguments) const {
+
 		if (!checkStateMask(creature))
 			return INVALIDSTATE;
 
 		if (!checkInvalidLocomotions(creature))
 			return INVALIDLOCOMOTION;
 
-		ZoneServer* zoneServer = server->getZoneServer();
+		ManagedReference<AiAgent*> ai = server->getZoneServer()->getObject(target).castTo<AiAgent*>();
 
-		if (zoneServer == nullptr)
-			return GENERALERROR;
-
-		ManagedReference<SceneObject*> targetObject = zoneServer->getObject(target);
-
-		if (targetObject == nullptr || !targetObject->isAiAgent())
+		if (ai == nullptr)
 			return INVALIDTARGET;
 
-		AiAgent* agent = targetObject.castTo<AiAgent*>();
+		Locker locker(ai, creature);
 
-		if (agent == nullptr)
-			return INVALIDTARGET;
-
-		Locker locker(agent, creature);
-
-		if (!agent->isDead() || creature->isDead())
+		if (!ai->isDead() || creature->isDead())
 			return GENERALERROR;
 
-		if (!checkDistance(agent, creature, 16)) {
+		if (!checkDistance(ai, creature, 32)) {
 			creature->sendSystemMessage("@error_message:target_out_of_range"); //"Your target is out of range for this action."
 			return GENERALERROR;
 		}
 
 		bool lootAll = arguments.toString().beginsWith("all");
 
-		// Get the corpse's inventory.
-		SceneObject* lootContainer = agent->getSlottedObject("inventory");
-
-		if (lootContainer == nullptr) {
-			return GENERALERROR;
-		}
-
-		PlayerManager* playerManager = zoneServer->getPlayerManager();
-
-		if (playerManager == nullptr)
+		//Get the corpse's inventory.
+		SceneObject* lootContainer = ai->getSlottedObject("inventory");
+		if (lootContainer == nullptr)
 			return GENERALERROR;
 
-		const ContainerPermissions* permissions = lootContainer->getContainerPermissions();
+		//Determine the loot rights.
+		bool looterIsOwner = (lootContainer->getContainerPermissions()->getOwnerID() == creature->getObjectID());
+		bool groupIsOwner = (lootContainer->getContainerPermissions()->getOwnerID() == creature->getGroupID());
 
-		if (permissions == nullptr)
-			return GENERALERROR;
-
-		// Determine the loot rights.
-		uint64 ownerID = permissions->getOwnerID();
-
-		bool looterIsOwner = (ownerID == creature->getObjectID());
-		bool groupIsOwner = (ownerID == creature->getGroupID());
-
-		// Allow player to loot the corpse if they own it.
+		//Allow player to loot the corpse if they own it.
 		if (looterIsOwner) {
 			if (lootAll) {
-				playerManager->lootAll(creature, agent);
+				PlayerManager* playerManager = server->getZoneServer()->getPlayerManager();
+				playerManager->lootAll(creature, ai);
+
+
+				Zone* zone = creature->getZone();
+
+				SortedVector<QuadTreeEntry*> closeObjects;
+				CloseObjectsVector* closeObjectsVector = (CloseObjectsVector*) creature->getCloseObjects();
+				if (closeObjectsVector == nullptr) {
+					zone->getInRangeObjects(creature->getWorldPositionX(), creature->getWorldPositionY(), 32, &closeObjects, true);
+				} else {
+					closeObjectsVector->safeCopyReceiversTo(closeObjects, CloseObjectsVector::CREOTYPE);
+				}
+
+				for (int i = 0; i < closeObjects.size(); ++i) {
+					SceneObject* obj = static_cast<SceneObject*>(closeObjects.get(i));
+
+					if (obj == nullptr)
+						continue;
+
+					if (obj->getObjectID() == creature->getObjectID())
+						continue;
+
+					CreatureObject* c = obj->asCreatureObject();
+
+					if (c == nullptr || c->isPlayerCreature() || !c->isDead())
+						continue;
+
+					if (!creature->isInRange(c, 32))//distance
+						continue;
+
+					playerManager->lootAll(creature, c);
+
+				}
+
 			} else {
 				//Check if the corpse's inventory contains any items.
 				if (lootContainer->getContainerObjectsSize() < 1) {
   					creature->sendSystemMessage("@error_message:corpse_empty"); //"You find nothing else of value on the selected corpse."
-  					playerManager->rescheduleCorpseDestruction(creature, agent);
+  					creature->getZoneServer()->getPlayerManager()->rescheduleCorpseDestruction(creature, ai);
   				} else {
-					agent->notifyObservers(ObserverEventType::LOOTCREATURE, creature, 0);
+					ai->notifyObservers(ObserverEventType::LOOTCREATURE, creature, 0);
 					lootContainer->openContainerTo(creature);
 				}
 			}
@@ -100,51 +111,47 @@ public:
 			return SUCCESS;
 		}
 
-		// If player and their group don't own the corpse, pick up any owned items left on corpse due to full inventory, then fail.
+		//If player and their group don't own the corpse, pick up any owned items left on corpse due to full inventory, then fail.
 		if (!groupIsOwner) {
-			int pickupResult = pickupOwnedItems(agent, creature, lootContainer);
+			int pickupResult = pickupOwnedItems(ai, creature, lootContainer);
 			if (pickupResult < 2) { //Player didn't pickup an item nor is one available for them.
 				StringIdChatParameter noPermission("error_message","no_corpse_permission"); //"You do not have permission to access this corpse."
 				creature->sendSystemMessage(noPermission);
 				return GENERALERROR;
 			} else if (pickupResult == PICKEDANDEMPTY) {
-				playerManager->rescheduleCorpseDestruction(creature, agent);
+				creature->getZoneServer()->getPlayerManager()->rescheduleCorpseDestruction(creature, ai);
 				return SUCCESS;
 			}
 
 			return SUCCESS;
 		}
 
-		// If looter's group is the owner, attempt to pick up any owned items, then process group loot rule.
-		int pickupResult = pickupOwnedItems(agent, creature, lootContainer);
-
+		//If looter's group is the owner, attempt to pick up any owned items, then process group loot rule.
+		int pickupResult = pickupOwnedItems(ai, creature, lootContainer);
 		switch (pickupResult) {
 		case NOPICKUPITEMS: //No items available for anyone to pickup.
 			break;
 		case ITEMFOROTHER: //No items available for looter to pickup, but one is available for someone else.
-			agent->notifyObservers(ObserverEventType::LOOTCREATURE, creature, 0);
+			ai->notifyObservers(ObserverEventType::LOOTCREATURE, creature, 0);
 			lootContainer->openContainerTo(creature);
 			return SUCCESS;
 		case PICKEDANDREMAINING: //An item was available for the looter, there are items remaining.
 			return SUCCESS;
 		case PICKEDANDEMPTY: //An item was available for the looter, there are NO items remaining.
-			playerManager->rescheduleCorpseDestruction(creature, agent);
+			creature->getZoneServer()->getPlayerManager()->rescheduleCorpseDestruction(creature, ai);
 			return SUCCESS;
 		default:
 			break;
 		}
 
 		ManagedReference<GroupObject*> group = creature->getGroup();
-
 		if (group == nullptr)
 			return GENERALERROR;
 
-		GroupLootTask* task = new GroupLootTask(group, creature, agent, lootAll);
-
-		if (task != nullptr)
-			task->execute();
-
+		GroupLootTask* task = new GroupLootTask(group, creature, ai, lootAll);
+		task->execute();
 		return SUCCESS;
+
 	}
 
 	int pickupOwnedItems(AiAgent* ai, CreatureObject* creature, SceneObject* lootContainer) const {
@@ -162,16 +169,12 @@ public:
 		if (totalItems < 1) return NOPICKUPITEMS;
 
 		ContainerPermissions* contPerms = lootContainer->getContainerPermissionsForUpdate();
-		if (contPerms == nullptr) {
-			return NOPICKUPITEMS;
-		}
+		if (contPerms == nullptr) return NOPICKUPITEMS;
 
 		SceneObject* playerInventory = creature->getSlottedObject("inventory");
-		if (playerInventory == nullptr) {
-			return NOPICKUPITEMS;
-		}
+		if (playerInventory == nullptr) return NOPICKUPITEMS;
 
-		// Check each loot item to see if the player owns it.
+		//Check each loot item to see if the player owns it.
 		for (int i = totalItems - 1; i >= 0; --i) {
 			SceneObject* object = lootContainer->getContainerObject(i);
 			if (object == nullptr) continue;
@@ -183,7 +186,7 @@ public:
 			uint64 itemOwnerID = itemPerms->getOwnerID();
 			if (itemOwnerID == creature->getObjectID()) {
 
-				// Attempt to transfer the item to the player.
+				//Attempt to transfer the item to the player.
 				attemptedPickup = true;
 				if (playerInventory->isContainerFullRecursive()) {
 					StringIdChatParameter full("group", "you_are_full"); //"Your Inventory is full."
@@ -222,5 +225,7 @@ public:
 
 		return NOPICKUPITEMS;
 	}
+
 };
+
 #endif //LOOTCOMMAND_H_

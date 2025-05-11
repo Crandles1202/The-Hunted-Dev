@@ -44,9 +44,11 @@
 SniperShotCommand = {
 	name = "snipershot",
 
-	minDamage = 135,
-	maxDamage = 135,
-	speed = 1.0,
+--	minDamage = 135,
+--	maxDamage = 135,
+--	speed = 1.0,
+	damageMultiplier = .75,
+	speedMultiplier = 2.0,
 	healthCostMultiplier = 0.5,
 	actionCostMultiplier = 0.5,
 	mindCostMultiplier = 2.0,
@@ -58,7 +60,7 @@ SniperShotCommand = {
 
 	combatSpam = "snipershot",
 
-	weaponType = RIFLEWEAPON,
+	weaponType = RIFLEWEAPON + PISTOLWEAPON + CARBINEWEAPON,
 
 	range = -1
 }

@@ -10,7 +10,7 @@
 
 #include "engine/engine.h"
 #include "server/zone/objects/creature/ai/variables/CreatureAttackMap.h"
-#include "templates/params/creature/ObjectFlag.h"
+#include "templates/params/creature/CreatureFlag.h"
 #include "templates/tangible/SharedWeaponObjectTemplate.h"
 #include "server/zone/managers/loot/lootgroup/LootGroupCollection.h"
 
@@ -51,21 +51,11 @@ protected:
 	int meatAmount;
 
 	String objectName;
-
 	uint32 planetMapCategory;
-	String mapCategoryName;
-
-	uint32 planetMapSubCategory;
-	String mapSubCategoryName;
-
 	int randomNameType;
 	bool randomNameTag;
 	String socialGroup;
 	String faction;
-	int mobType;
-	String healerType;
-
-	bool tauntable;
 
 	int level;
 
@@ -74,9 +64,9 @@ protected:
 	int damageMax;
 	float specialDamageMult;
 	int range;
-	float attackSpeed;
 
 	float scale;
+	float elite;
 
 	int baseXp;
 	int baseHAM;
@@ -86,7 +76,6 @@ protected:
 	unsigned int pvpBitmask;
 	unsigned int creatureBitmask;
 	unsigned int diet;
-	int lightsaberColor;
 
 	Vector<int> hues;
 
@@ -94,16 +83,11 @@ protected:
 
 	LootGroupCollection lootgroups;
 
-	String primaryWeapon;
-	String secondaryWeapon;
-	String thrownWeapon;
+	Vector<String> weapons;
 
-	CreatureAttackMap* primaryAttacks;
-	CreatureAttackMap* secondaryAttacks;
-
+	CreatureAttackMap* attacks;
 	uint32 conversationTemplate;
 	uint32 optionsBitmask;
-	uint64 customAiMap;
 
 	String patrolPathTemplate;
 
@@ -190,27 +174,23 @@ public:
 	}
 
 	inline bool isStalker() const {
-		return creatureBitmask & ObjectFlag::STALKER;
+		return creatureBitmask & CreatureFlag::STALKER;
 	}
 
 	inline bool isBaby() const {
-		return creatureBitmask & ObjectFlag::BABY;
+		return creatureBitmask & CreatureFlag::BABY;
 	}
 
 	inline bool isKiller() const {
-		return creatureBitmask & ObjectFlag::KILLER;
-	}
-
-	inline bool isHealer() const {
-		return creatureBitmask & ObjectFlag::HEALER;
+		return creatureBitmask & CreatureFlag::KILLER;
 	}
 
 	inline bool isPack() const {
-		return creatureBitmask & ObjectFlag::PACK;
+		return creatureBitmask & CreatureFlag::PACK;
 	}
 
 	inline bool isHerd() const {
-		return creatureBitmask & ObjectFlag::HERD;
+		return creatureBitmask & CreatureFlag::HERD;
 	}
 
 	inline float getTame() const {
@@ -269,24 +249,8 @@ public:
 		return planetMapCategory;
 	}
 
-	inline String getPlanetMapCategoryName() const {
-		return mapCategoryName;
-	}
-
-	inline uint32 getPlanetMapSubCategory() const {
-		return planetMapSubCategory;
-	}
-
-	inline String getPlanetMapSubCategoryName() const {
-		return mapSubCategoryName;
-	}
-
 	inline int getRandomNameType() const {
 		return randomNameType;
-	}
-
-	inline int getMobType() const {
-		return mobType;
 	}
 
 	inline bool getRandomNameTag() const {
@@ -302,11 +266,7 @@ public:
 	}
 
 	inline uint32 getOptionsBitmask() const {
-		return optionsBitmask;
-	}
-
-	inline uint64 getCustomAiMap() {
-		return customAiMap;
+		return optionsBitmask; // also this
 	}
 
 	inline const String& getFaction() const {
@@ -324,6 +284,14 @@ public:
 	inline float getScale() const {
 		return scale;
 	}
+	
+	inline float getElite() const {
+		return elite;
+	}
+	
+	void setElite(float e) {
+		elite = e;
+	}
 
 	inline int getDamageMin() const {
 		return damageMin;
@@ -331,10 +299,6 @@ public:
 
 	inline int getDamageMax() const {
 		return damageMax;
-	}
-
-	inline float getAttackSpeed() const {
-		return attackSpeed;
 	}
 
 	inline float getSpecialDamageMult() const {
@@ -375,7 +339,9 @@ public:
 	}
 
 	inline uint32 getPvpBitmask() const {
-		return pvpBitmask;
+//	uint32 newpvpBitmask = pvpBitmask;
+//	if (newpvpBitmask == 0) newpvpBitmask = 1;
+		return pvpBitmask;//changing this works
 	}
 
 	inline uint32 getCreatureBitmask() const {
@@ -386,14 +352,6 @@ public:
 		return diet;
 	}
 
-	inline bool isTauntable() const {
-		return tauntable;
-	}
-
-	inline int getLightsaberColor() const {
-		return lightsaberColor;
-	}
-
 	inline const Vector<String>& getTemplates() const {
 		return templates;
 	}
@@ -402,24 +360,12 @@ public:
 		return &lootgroups;
 	}
 
-	inline const String& getPrimaryWeapon() const {
-		return primaryWeapon;
+	inline const Vector<String>& getWeapons() const {
+		return weapons;
 	}
 
-	inline const String& getSecondaryWeapon() const {
-		return secondaryWeapon;
-	}
-
-	inline const String& getThrownWeapon() const {
-		return thrownWeapon;
-	}
-
-	inline const CreatureAttackMap* getPrimaryAttacks() const {
-		return primaryAttacks;
-	}
-
-	inline const CreatureAttackMap* getSecondaryAttacks() const {
-		return secondaryAttacks;
+	inline const CreatureAttackMap* getAttacks() const {
+		return attacks;
 	}
 
 	inline const String& getPatrolPathTemplate() const {
@@ -472,10 +418,6 @@ public:
 
 	inline const String& getPersonalityStf() const {
 		return personalityStf;
-	}
-
-	inline const String& getHealerType() const {
-		return healerType;
 	}
 
 	inline bool isSpecialProtection(int resistType) const {

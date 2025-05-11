@@ -44,7 +44,7 @@
 Melee1hDizzyHit2Command = {
         name = "melee1hdizzyhit2",
 
-	damageMultiplier = 3.5,
+	damageMultiplier = 1.5,
 	speedMultiplier = 2.25,
 	healthCostMultiplier = 0.75,
 	actionCostMultiplier = 0.75,
@@ -71,7 +71,7 @@ Melee1hDizzyHit2Command = {
 	  )
 	},
 	
-	weaponType = ONEHANDMELEEWEAPON,
+	weaponType = TWOHANDMELEEWEAPON + ONEHANDMELEEWEAPON + POLEARMWEAPON,
 
 	range = -1
 }

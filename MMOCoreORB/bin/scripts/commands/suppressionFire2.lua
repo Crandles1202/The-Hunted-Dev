@@ -42,9 +42,9 @@
 --true = 1, false = 0
 
 SuppressionFire2Command = {
-	name = "suppressionfire2",
+        name = "suppressionfire2",
 
-	damageMultiplier = 2.5,
+	damageMultiplier = 2.0,
 	speedMultiplier = 1.5,
 	healthCostMultiplier = 2.0,
 	actionCostMultiplier = 1.25,
@@ -52,15 +52,15 @@ SuppressionFire2Command = {
 	accuracyBonus = 25,
 
 	stateEffects = {
-		StateEffect(
-			POSTUREDOWN_EFFECT,
-			{ "postureDownRecovery" },
-			{ "posture_change_down_defense" },
-			{},
-			100,
-			0,
-			0
-		)
+	  StateEffect( 
+		POSTUREDOWN_EFFECT, 
+		{ "postureDownRecovery" }, 
+		{ "posture_change_down_defense" }, 
+		{},
+		100, 
+		0, 
+		0 
+	  )
 	},
 
 	poolsToDamage = RANDOM_ATTRIBUTE,
@@ -68,8 +68,8 @@ SuppressionFire2Command = {
 	animation = "fire_defender_posture_change_down",
 
 	combatSpam = "sup_fire",
-
-	weaponType = CARBINEWEAPON,
+	
+	weaponType = RIFLEWEAPON + PISTOLWEAPON + CARBINEWEAPON,
 
 	range = -1
 }

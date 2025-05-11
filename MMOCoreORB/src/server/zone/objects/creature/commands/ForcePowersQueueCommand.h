@@ -15,6 +15,7 @@
 #include "server/zone/managers/collision/CollisionManager.h"
 #include "CombatQueueCommand.h"
 #include "server/zone/managers/visibility/VisibilityManager.h"
+#include "server/zone/managers/player/PlayerManager.h"
 
 class ForcePowersQueueCommand : public CombatQueueCommand {
 public:
@@ -42,10 +43,6 @@ public:
 			return GENERALERROR;
 		}
 
-		if (!playerEntryCheck(creature, targetObject->asTangibleObject())) {
-			return GENERALERROR;
-		}
-
 		ManagedReference<PlayerObject*> ghost = creature->getPlayerObject();
 
 		if (ghost != nullptr && ghost->getForcePower() < getFrsModifiedForceCost(creature)) {
@@ -65,8 +62,11 @@ public:
 				return GENERALERROR;
 			}
 
-			if (ghost != nullptr)
+			if (ghost != nullptr){
 				ghost->setForcePower(ghost->getForcePower() - getFrsModifiedForceCost(creature));
+				PlayerManager* playerManager = server->getZoneServer()->getPlayerManager();
+				playerManager->awardExperience(creature, "jedi_general", getFrsModifiedForceCost(creature), true, 1.0, false);
+			}
 
 		} catch (Exception& e) {
 			error("unreported exception caught in ForcePowersQueueCommand::doCombatAction");
@@ -97,18 +97,39 @@ public:
 		int manipulationMod = 0;
 		float frsModifier = 0;
 
-		if (councilType == FrsManager::COUNCIL_LIGHT) {
-			manipulationMod = creature->getSkillMod("force_manipulation_light");
-			frsModifier = frsLightForceCostModifier;
-		} else if (councilType == FrsManager::COUNCIL_DARK) {
-			manipulationMod = creature->getSkillMod("force_manipulation_dark");
-			frsModifier = frsDarkForceCostModifier;
+		float newfc = forceCost;
+
+		//put wearing armor force cost increase here?
+		for (int i = 0; i < creature->getSlottedObjectsSize(); ++i) {
+			SceneObject* item = creature->getSlottedObject(i);
+			if (item != nullptr && item->isArmorObject()){
+				newfc *= 1.1;
+			}
 		}
 
-		if (manipulationMod == 0 || frsModifier == 0)
-			return forceCost;
+//		bool jarmor = false;
+//		for (int i = 0; i < creature->getSlottedObjectsSize(); ++i) {
+//			SceneObject* item = creature->getSlottedObject(i);
+//			if (item != nullptr && item->isArmorObject()){
+//				jarmor = true;
+//			}
+//		}
+//		if (jarmor == true) newfc *= 1.5;
 
-		return forceCost + (int)((manipulationMod * frsModifier) + .5);
+		return newfc;
+
+//		if (councilType == FrsManager::COUNCIL_LIGHT) {
+//			manipulationMod = creature->getSkillMod("force_manipulation_light");
+//			frsModifier = frsLightForceCostModifier;
+//		} else if (councilType == FrsManager::COUNCIL_DARK) {
+//			manipulationMod = creature->getSkillMod("force_manipulation_dark");
+//			frsModifier = frsDarkForceCostModifier;
+//		}
+//
+//		if (manipulationMod == 0 || frsModifier == 0)
+//			return forceCost;
+//
+//		return forceCost + (int)((manipulationMod * frsModifier) + .5);
 	}
 
 	float getCommandDuration(CreatureObject *object, const UnicodeString& arguments) const {

@@ -44,23 +44,6 @@ public:
 		canSeeHeightMod = m.canSeeHeightMod;
 	}
 
-	CreatureMovementEntry& operator=(const CreatureMovementEntry& m) {
-		if (this == &m) {
-			return *this;
-		}
-
-		posture = m.posture;
-		stationary = m.stationary;
-		slow = m.slow;
-		fast = m.fast;
-		movementScale = m.movementScale;
-		accelerationScale = m.accelerationScale;
-		turnScale = m.turnScale;
-		canSeeHeightMod = m.canSeeHeightMod;
-
-		return *this;
-	}
-
 	bool operator==(CreatureMovementEntry entry) {
 		return posture == entry.posture; // only need posture here because I am sure that these are unique to entries
 	}
@@ -130,18 +113,18 @@ public:
 
 	CreaturePosture() {
 		rangedAttackMod.put(CreatureLocomotion::STANDING, 0);
-		rangedAttackMod.put(CreatureLocomotion::SNEAKING, -6);
-		rangedAttackMod.put(CreatureLocomotion::WALKING, -40);
-		rangedAttackMod.put(CreatureLocomotion::RUNNING, -60);
-		rangedAttackMod.put(CreatureLocomotion::KNEELING, 15);
+		rangedAttackMod.put(CreatureLocomotion::SNEAKING, 0);
+		rangedAttackMod.put(CreatureLocomotion::WALKING, 0);
+		rangedAttackMod.put(CreatureLocomotion::RUNNING, 0);
+		rangedAttackMod.put(CreatureLocomotion::KNEELING, 0);
 		rangedAttackMod.put(CreatureLocomotion::CROUCHSNEAKING, 0);
 		rangedAttackMod.put(CreatureLocomotion::CROUCHWALKING, 0);
-		rangedAttackMod.put(CreatureLocomotion::PRONE, 30);
-		rangedAttackMod.put(CreatureLocomotion::CRAWLING, -80);
+		rangedAttackMod.put(CreatureLocomotion::PRONE, 0);
+		rangedAttackMod.put(CreatureLocomotion::CRAWLING, 0);
 		rangedAttackMod.put(CreatureLocomotion::CLIMBINGSTATIONARY, 0);
 		rangedAttackMod.put(CreatureLocomotion::CLIMBING, 0);
 		rangedAttackMod.put(CreatureLocomotion::HOVERING, 0);
-		rangedAttackMod.put(CreatureLocomotion::FLYING, -10);
+		rangedAttackMod.put(CreatureLocomotion::FLYING, 0);
 		rangedAttackMod.put(CreatureLocomotion::LYINGDOWN, 0);
 		rangedAttackMod.put(CreatureLocomotion::SITTING, 0);
 		rangedAttackMod.put(CreatureLocomotion::SKILLANIMATING, 0);
@@ -153,43 +136,43 @@ public:
 		rangedAttackMod.put(CreatureLocomotion::DEAD, 0);
 		rangedAttackMod.put(CreatureLocomotion::INVALID, 0);
 
-		rangedDefenseMod.put(CreatureLocomotion::STANDING, -10);
-		rangedDefenseMod.put(CreatureLocomotion::SNEAKING, 5);
-		rangedDefenseMod.put(CreatureLocomotion::WALKING, 25);
-		rangedDefenseMod.put(CreatureLocomotion::RUNNING, 45);
+		rangedDefenseMod.put(CreatureLocomotion::STANDING, 0);
+		rangedDefenseMod.put(CreatureLocomotion::SNEAKING, 0);
+		rangedDefenseMod.put(CreatureLocomotion::WALKING, 0);
+		rangedDefenseMod.put(CreatureLocomotion::RUNNING, 0);
 		rangedDefenseMod.put(CreatureLocomotion::KNEELING, 0);
 		rangedDefenseMod.put(CreatureLocomotion::CROUCHSNEAKING, 0);
 		rangedDefenseMod.put(CreatureLocomotion::CROUCHWALKING, 0);
-		rangedDefenseMod.put(CreatureLocomotion::PRONE, 25);
-		rangedDefenseMod.put(CreatureLocomotion::CRAWLING, 5);
+		rangedDefenseMod.put(CreatureLocomotion::PRONE, 0);
+		rangedDefenseMod.put(CreatureLocomotion::CRAWLING, 0);
 		rangedDefenseMod.put(CreatureLocomotion::CLIMBINGSTATIONARY, 0);
 		rangedDefenseMod.put(CreatureLocomotion::CLIMBING, 0);
-		rangedDefenseMod.put(CreatureLocomotion::HOVERING, -5);
-		rangedDefenseMod.put(CreatureLocomotion::FLYING, -10);
+		rangedDefenseMod.put(CreatureLocomotion::HOVERING, 0);
+		rangedDefenseMod.put(CreatureLocomotion::FLYING, 0);
 		rangedDefenseMod.put(CreatureLocomotion::LYINGDOWN, 0);
 		rangedDefenseMod.put(CreatureLocomotion::SITTING, 0);
 		rangedDefenseMod.put(CreatureLocomotion::SKILLANIMATING, 0);
 		rangedDefenseMod.put(CreatureLocomotion::DRIVINGVEHICLE, 0);
 		rangedDefenseMod.put(CreatureLocomotion::RIDINGCREATURE, 0);
-		rangedDefenseMod.put(CreatureLocomotion::KNOCKEDDOWN, -15);
+		rangedDefenseMod.put(CreatureLocomotion::KNOCKEDDOWN, 0);
 		rangedDefenseMod.put(CreatureLocomotion::INCAPACITATED, 0);
 		rangedDefenseMod.put(CreatureLocomotion::DEAD, 0);
 		rangedDefenseMod.put(CreatureLocomotion::BLOCKING, 0);
 		rangedDefenseMod.put(CreatureLocomotion::INVALID, 0);
 
 		meleeAttackMod.put(CreatureLocomotion::STANDING, 0);
-		meleeAttackMod.put(CreatureLocomotion::SNEAKING, -20);
-		meleeAttackMod.put(CreatureLocomotion::WALKING, 10);
-		meleeAttackMod.put(CreatureLocomotion::RUNNING, 25);
-		meleeAttackMod.put(CreatureLocomotion::KNEELING, -20);
+		meleeAttackMod.put(CreatureLocomotion::SNEAKING, 0);
+		meleeAttackMod.put(CreatureLocomotion::WALKING, 0);
+		meleeAttackMod.put(CreatureLocomotion::RUNNING, 0);
+		meleeAttackMod.put(CreatureLocomotion::KNEELING, 0);
 		meleeAttackMod.put(CreatureLocomotion::CROUCHSNEAKING, 0);
 		meleeAttackMod.put(CreatureLocomotion::CROUCHWALKING, 0);
-		meleeAttackMod.put(CreatureLocomotion::PRONE, -90);
-		meleeAttackMod.put(CreatureLocomotion::CRAWLING, -90);
+		meleeAttackMod.put(CreatureLocomotion::PRONE, 0);
+		meleeAttackMod.put(CreatureLocomotion::CRAWLING, 0);
 		meleeAttackMod.put(CreatureLocomotion::CLIMBINGSTATIONARY, 0);
 		meleeAttackMod.put(CreatureLocomotion::CLIMBING, 0);
 		meleeAttackMod.put(CreatureLocomotion::HOVERING, 0);
-		meleeAttackMod.put(CreatureLocomotion::FLYING, -10);
+		meleeAttackMod.put(CreatureLocomotion::FLYING, 0);
 		meleeAttackMod.put(CreatureLocomotion::LYINGDOWN, 0);
 		meleeAttackMod.put(CreatureLocomotion::SITTING, 0);
 		meleeAttackMod.put(CreatureLocomotion::SKILLANIMATING, 0);
@@ -203,59 +186,30 @@ public:
 
 		meleeDefenseMod.put(CreatureLocomotion::STANDING, 0);
 		meleeDefenseMod.put(CreatureLocomotion::SNEAKING, 0);
-		meleeDefenseMod.put(CreatureLocomotion::WALKING, 10);
-		meleeDefenseMod.put(CreatureLocomotion::RUNNING, 25);
-		meleeDefenseMod.put(CreatureLocomotion::KNEELING, -20);
+		meleeDefenseMod.put(CreatureLocomotion::WALKING, 0);
+		meleeDefenseMod.put(CreatureLocomotion::RUNNING, 0);
+		meleeDefenseMod.put(CreatureLocomotion::KNEELING, 0);
 		meleeDefenseMod.put(CreatureLocomotion::CROUCHSNEAKING, 0);
 		meleeDefenseMod.put(CreatureLocomotion::CROUCHWALKING, 0);
-		meleeDefenseMod.put(CreatureLocomotion::PRONE, -80);
-		meleeDefenseMod.put(CreatureLocomotion::CRAWLING, -95);
+		meleeDefenseMod.put(CreatureLocomotion::PRONE, 0);
+		meleeDefenseMod.put(CreatureLocomotion::CRAWLING, 0);
 		meleeDefenseMod.put(CreatureLocomotion::CLIMBINGSTATIONARY, 0);
 		meleeDefenseMod.put(CreatureLocomotion::CLIMBING, 0);
-		meleeDefenseMod.put(CreatureLocomotion::HOVERING, -5);
-		meleeDefenseMod.put(CreatureLocomotion::FLYING, -40);
+		meleeDefenseMod.put(CreatureLocomotion::HOVERING, 0);
+		meleeDefenseMod.put(CreatureLocomotion::FLYING, 0);
 		meleeDefenseMod.put(CreatureLocomotion::LYINGDOWN, 0);
 		meleeDefenseMod.put(CreatureLocomotion::SITTING, 0);
 		meleeDefenseMod.put(CreatureLocomotion::SKILLANIMATING, 0);
 		meleeDefenseMod.put(CreatureLocomotion::DRIVINGVEHICLE, 0);
 		meleeDefenseMod.put(CreatureLocomotion::RIDINGCREATURE, 0);
-		meleeDefenseMod.put(CreatureLocomotion::KNOCKEDDOWN, -15);
+		meleeDefenseMod.put(CreatureLocomotion::KNOCKEDDOWN, 0);
 		meleeDefenseMod.put(CreatureLocomotion::INCAPACITATED, 0);
 		meleeDefenseMod.put(CreatureLocomotion::DEAD, 0);
 		meleeDefenseMod.put(CreatureLocomotion::BLOCKING, 0);
 		meleeDefenseMod.put(CreatureLocomotion::INVALID, 0);
-
-		loadMovementData();
 	}
 
 	~CreaturePosture() {}
-
-	static const String postureToString(uint8 posture) {
-		switch (posture) {
-		case INVALID:        return "invalid";
-		case UPRIGHT:        return "upright";
-		case CROUCHED:       return "crouched";
-		case PRONE:          return "prone";
-		case SNEAKING:       return "sneaking";
-		case BLOCKING:       return "blocking";
-		case CLIMBING:       return "climbing";
-		case FLYING:         return "flying";
-		case LYINGDOWN:      return "lyingdown";
-		case SITTING:        return "sitting";
-		case SKILLANIMATING: return "skillanimating";
-		case DRIVINGVEHICLE: return "drivingvehicle";
-		case RIDINGCREATURE: return "ridingcreature";
-		case KNOCKEDDOWN:    return "knockeddown";
-		case INCAPACITATED:  return "incapacitated";
-		case DEAD:           return "dead";
-		}
-
-		StringBuffer msg;
-
-		msg << "Unknown(" << hex << posture << ")";
-
-		return msg.toString();
-	}
 
 	uint8 getLocomotion(uint8 pos, uint8 speed) const {
 		const CreatureMovementEntry* move = &movementTable.get(pos);

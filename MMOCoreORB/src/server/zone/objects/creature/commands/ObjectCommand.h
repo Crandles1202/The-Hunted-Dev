@@ -102,7 +102,6 @@ public:
 
 				if (inventory->transferObject(object, -1, true)) {
 					inventory->broadcastObject(object, true);
-					creature->info(true) << "/object createitem " << objectTemplate << " created oid: " << object->getObjectID() << " \"" << object->getDisplayedName() << "\"";
 				} else {
 					object->destroyObjectFromDatabase(true);
 					creature->sendSystemMessage("Error transferring object to inventory.");
@@ -130,8 +129,7 @@ public:
 
 				TransactionLog trx(TrxCode::ADMINCOMMAND, creature);
 				trx.addState("commandType", commandType);
-				if (lootManager->createLoot(trx, inventory, lootGroup, level) > 0) {
-					creature->info(true) << "/object creatloot " << lootGroup << " trxId: " << trx.getTrxID();
+				if (lootManager->createLoot(trx, inventory, lootGroup, level)) {
 					trx.commit(true);
 				} else {
 					trx.abort() << "createLoot failed for lootGroup " << lootGroup << " level " << level;
@@ -174,10 +172,10 @@ public:
 					return GENERALERROR;
 
 				// Find all objects in range
-				SortedVector<TreeEntry*> closeObjects;
+				SortedVector<QuadTreeEntry*> closeObjects;
 				CloseObjectsVector* closeObjectsVector = (CloseObjectsVector*) creature->getCloseObjects();
 				if (closeObjectsVector == nullptr) {
-					zone->getInRangeObjects(creature->getPositionX(), creature->getPositionZ(), creature->getPositionY(), range, &closeObjects, true);
+					zone->getInRangeObjects(creature->getPositionX(), creature->getPositionY(), range, &closeObjects, true);
 				} else {
 					closeObjectsVector->safeCopyTo(closeObjects);
 				}
@@ -195,8 +193,7 @@ public:
 						if (inventory != nullptr) {
 							TransactionLog trx(creature, targetPlayer, nullptr, TrxCode::ADMINCOMMAND);
 							trx.addState("commandType", commandType);
-							if (lootManager->createLoot(trx, inventory, lootGroup, level) > 0) {
-								creature->info(true) << "/object creatlootarea " << lootGroup << " trxId: " << trx.getTrxID();
+							if (lootManager->createLoot(trx, inventory, lootGroup, level)) {
 								trx.commit(true);
 								targetPlayer->sendSystemMessage( "You have received a loot item!");
 							} else {
@@ -217,11 +214,6 @@ public:
 				creature->sendSystemMessage("Number of Magical Looted: " + String::valueOf(lootManager->getYellowLooted()));
 
 			} else if (commandType.beginsWith("characterbuilder")) {
-				if (!ConfigManager::instance()->getBool("Core3.CharacterBuilderEnabled", true)) {
-					creature->sendSystemMessage("characterbuilder is not enabled on this server.");
-					return GENERALERROR;
-				}
-
 				ZoneServer* zserv = server->getZoneServer();
 
 				String blueFrogTemplate = "object/tangible/terminal/terminal_character_builder.iff";
@@ -239,14 +231,15 @@ public:
 				ManagedReference<SceneObject*> parent = creature->getParent().get();
 
 				blueFrog->initializePosition(x, z, y);
-				blueFrog->setDirection(creature->getDirectionW(), creature->getDirectionX(), creature->getDirectionY(), creature->getDirectionZ());
+					blueFrog->setDirection(creature->getDirectionW(), creature->getDirectionX(), creature->getDirectionY(), creature->getDirectionZ());
 
 				if (parent != nullptr && parent->isCellObject())
 					parent->transferObject(blueFrog, -1);
 				else
 					creature->getZone()->transferObject(blueFrog, -1, true);
 
-				creature->info(true) << "/object characterbuilder " << " created oid: " << blueFrog->getObjectID() << " \"" << blueFrog->getDisplayedName() << "\" as " << creature->getWorldPosition() << " on " << creature->getZone()->getZoneName();
+				info("blue frog created", true);
+
 			}
 
 		} catch (Exception& e) {
@@ -256,7 +249,7 @@ public:
 			creature->sendSystemMessage("SYNTAX: /object createarealoot <loottemplate> [<range>] [<level>]");
 			creature->sendSystemMessage("SYNTAX: /object checklooted");
 			creature->sendSystemMessage("SYNTAX: /object characterbuilder");
-
+                  
 			return INVALIDPARAMETERS;
 		}
 

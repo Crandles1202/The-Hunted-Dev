@@ -15,7 +15,7 @@ end
 function DotEffect(t, dm, pl, h, p, c, s, d, pp, sp)
   return {
 	dotType = t,
-	defenderStateDefenseModifiers = dm,
+	defenderStateDefenseModifers = dm,
 	dotPool = pl,
 	dotDamageofHit = h,
 	dotPotency = p,
@@ -106,7 +106,6 @@ RunSlashCommandsFile("combatEscape.lua")
 RunSlashCommandsFile("combatModeCheck.lua")
 RunSlashCommandsFile("combatSpam.lua")
 RunSlashCommandsFile("combatTarget.lua")
-RunSlashCommandsFile("comm.lua")
 RunSlashCommandsFile("completeQuest.lua")
 RunSlashCommandsFile("conceal.lua")
 RunSlashCommandsFile("concealShot.lua")
@@ -500,7 +499,6 @@ RunSlashCommandsFile("petClearPatrolPoints.lua")
 RunSlashCommandsFile("petEmote.lua")
 RunSlashCommandsFile("petFeed.lua")
 RunSlashCommandsFile("petFollow.lua")
-RunSlashCommandsFile("petFormation.lua")
 RunSlashCommandsFile("petFriend.lua")
 RunSlashCommandsFile("petGetPatrolPoint.lua")
 RunSlashCommandsFile("petGroup.lua")
@@ -825,10 +823,10 @@ RunSlashCommandsFile("warningShot.lua")
 RunSlashCommandsFile("watch.lua")
 RunSlashCommandsFile("wildShot1.lua")
 RunSlashCommandsFile("wildShot2.lua")
-RunSlashCommandsFile("wipeItems.lua")
 RunSlashCommandsFile("wookieeRoar.lua")
 RunSlashCommandsFile("eject.lua")
 RunSlashCommandsFile("waypoint.lua")
 RunSlashCommandsFile("unstick.lua")
 RunSlashCommandsFile("launchIntoSpace.lua")
 RunSlashCommandsFile("createVendor.lua")
+RunSlashCommandsFile("follow.lua")

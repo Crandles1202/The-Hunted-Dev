@@ -28,15 +28,6 @@ namespace server {
 using namespace server::zone::objects::scene;
 using namespace server::zone::objects::creature;
 
-enum ContainerType {
-	NONE = 0,        // Nothing is allowed to be put in this object
-	SLOTTED = 1,    // Only allowed to put into slots (transferType >= 4)
-	VOLUME = 2,     // Tangible items only
-	INTANGIBLE = 3, // Only allow intangible items (i.e. Waypoint into a datapad)
-	GENERIC = 4,    // Tangible and Intangible allowed
-	RIDABLE = 5,    // Special for mounts, slotted only and the slots are visible to world
-};
-
 class ContainerComponent : public SceneObjectComponent {
 
 public:
@@ -60,7 +51,7 @@ public:
 	 * @param notifyClient not used currently
 	 * @return returns true if the object has been successfully removed
 	 */
-	virtual bool removeObject(SceneObject* sceneObject, SceneObject* object, SceneObject* destination, bool notifyClient, bool nullifyParent) const;
+	virtual bool removeObject(SceneObject* sceneObject, SceneObject* object, SceneObject* destination, bool notifyClient) const;
 
 	/**
 	 * Evaluates if this object has the necessary free slots to be able to add the specified SceneObject
@@ -85,6 +76,7 @@ public:
 	 * @param object object that has been inserted
 	 */
 	virtual int notifyObjectRemoved(SceneObject* sceneObject, SceneObject* object, SceneObject* destination) const;
+
 };
 
 #endif /* CONTAINERCOMPONENT_H_ */

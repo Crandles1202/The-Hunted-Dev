@@ -93,7 +93,7 @@ Vector3 DestroyMissionObjectiveImplementation::findValidSpawnPosition(Zone* zone
 	if (zone == nullptr)
 		return position;
 
-	float newX = spawnActiveArea->getPositionX() + (256.0f - (float) System::random(512));
+	float newX = spawnActiveArea->getPositionX() + (256.0f - (float) System::random(512));//mission distances here
 	float newY = spawnActiveArea->getPositionY() + (256.0f - (float) System::random(512));
 
 	float height = zone->isWithinBoundaries(Vector3(newX, newY, 0)) ? zone->getHeight(newX, newY) : 0;
@@ -208,15 +208,12 @@ void DestroyMissionObjectiveImplementation::spawnLair() {
 	 		return;
 	 	}
 
-		String lairName = lair->getName();
-
 	 	Locker llocker(lairObject);
 
-		lairObject->setObjectName("@lair_n:" + lairName, false);
 	 	lairObject->setFaction(lair->getFaction());
-	 	lairObject->setPvpStatusBitmask(ObjectFlag::ATTACKABLE);
+	 	lairObject->setPvpStatusBitmask(CreatureFlag::ATTACKABLE);
 	 	lairObject->setOptionsBitmask(0, false);
-	 	lairObject->setMaxCondition(difficultyLevel * (900 + System::random(200)));
+	 	lairObject->setMaxCondition(difficultyLevel * 100);
 	 	lairObject->setConditionDamage(0, false);
 	 	lairObject->initializePosition(pos.getX(), pos.getZ(), pos.getY());
 	 	lairObject->setDespawnOnNoPlayersInRange(false);
@@ -237,8 +234,6 @@ void DestroyMissionObjectiveImplementation::spawnLair() {
 	 	lairObject->registerObserver(ObserverEventType::DAMAGERECEIVED, lairObserver);
 	 	lairObject->registerObserver(ObserverEventType::AIMESSAGE, lairObserver);
 	 	lairObject->registerObserver(ObserverEventType::OBJECTREMOVEDFROMZONE, lairObserver);
-		lairObject->registerObserver(ObserverEventType::NOPLAYERSINRANGE, lairObserver);
-		lairObject->registerObserver(ObserverEventType::CREATUREDESPAWNED, lairObserver);
 
 		zone->transferObject(lairObject, -1, true);
 
@@ -249,10 +244,6 @@ void DestroyMissionObjectiveImplementation::spawnLair() {
 		Locker llocker(lairObject);
 
 		zone->transferObject(lairObject, -1, true);
-	}
-
-	if (lairObject != nullptr) {
-		lairSpawnTime.updateToCurrentTime();
 	}
 }
 
@@ -286,10 +277,6 @@ void DestroyMissionObjectiveImplementation::abort() {
 
 		spawnActiveArea->destroyObjectFromWorld(true);
 	}
-}
-
-void DestroyMissionObjectiveImplementation::addMissionStats(TransactionLog& trx) {
-	trx.addState("missionTimeLairDestroyed", lairSpawnTime.miliDifference() / 1000);
 }
 
 void DestroyMissionObjectiveImplementation::complete() {

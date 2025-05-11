@@ -153,7 +153,7 @@ void MissionObjectImplementation::setRewardCredits(int creds, bool notifyClient)
 	if (rewardCredits == creds)
 		return;
 
-	rewardCredits = creds;
+	rewardCredits = creds;//changing this works but doesnt show on terminal
 
 	if (!notifyClient)
 		return;
@@ -285,28 +285,7 @@ void MissionObjectImplementation::setStartPosition(float posX, float posY, const
 
 	if (player != nullptr) {
 		MissionObjectDeltaMessage3* delta = new MissionObjectDeltaMessage3(_this.getReferenceUnsafeStaticCast());
-		delta->updateStartPosition(posX, 0.f, posY, planet.hashCode());
-		delta->close();
-
-		player->sendMessage(delta);
-	}
-}
-
-void MissionObjectImplementation::setStartPosition(float posX, float posZ, float posY, const String& planet, bool notifyClient) {
-	startPositionX = posX;
-	startPositionZ = posZ;
-	startPositionY = posY;
-	startPlanet = planet;
-
-	if (!notifyClient) {
-		return;
-	}
-
-	ManagedReference<SceneObject*> player = getParentRecursively(SceneObjectType::PLAYERCREATURE);
-
-	if (player != nullptr) {
-		MissionObjectDeltaMessage3* delta = new MissionObjectDeltaMessage3(_this.getReferenceUnsafeStaticCast());
-		delta->updateStartPosition(posX, posZ, posY, planet.hashCode());
+		delta->updateStartPosition(posX, posY, planet.hashCode());
 		delta->close();
 
 		player->sendMessage(delta);
@@ -333,28 +312,7 @@ void MissionObjectImplementation::setEndPosition(float posX, float posY, const S
 
 	if (player != nullptr) {
 		MissionObjectDeltaMessage3* delta = new MissionObjectDeltaMessage3(_this.getReferenceUnsafeStaticCast());
-		delta->updateDestination(posX, 0.f, posY, endPlanet.hashCode());
-		delta->close();
-
-		player->sendMessage(delta);
-	}
-}
-
-void MissionObjectImplementation::setEndPosition(float posX, float posZ, float posY, const String& planet, bool notifyClient) {
-	endPositionX = posX;
-	endPositionZ = posZ;
-	endPositionY = posY;
-	endPlanet = planet;
-
-	if (!notifyClient) {
-		return;
-	}
-
-	ManagedReference<SceneObject*> player = getParentRecursively(SceneObjectType::PLAYERCREATURE);
-
-	if (player != nullptr) {
-		MissionObjectDeltaMessage3* delta = new MissionObjectDeltaMessage3(_this.getReferenceUnsafeStaticCast());
-		delta->updateDestination(posX, posZ, posY, endPlanet.hashCode());
+		delta->updateDestination(posX, posY, endPlanet.hashCode());
 		delta->close();
 
 		player->sendMessage(delta);
@@ -376,41 +334,4 @@ void MissionObjectImplementation::setCreatorName(const String& name, bool notify
 
 		player->sendMessage(delta);
 	}
-}
-
-String MissionObjectImplementation::getTypeAsString() const {
-	// clang-format off
-	switch (typeCRC) {
-		case MissionTypes::BOUNTY:          return "bounty";
-		case MissionTypes::CRAFTING:        return "crafting";
-		case MissionTypes::DANCER:          return "dancer";
-		case MissionTypes::DELIVER:         return "deliver";
-		case MissionTypes::DESTROY:         return "destroy";
-		case MissionTypes::ESCORT2ME:       return "escort2me";
-		case MissionTypes::ESCORT:          return "escort";
-		case MissionTypes::ESCORTTOCREATOR: return "escorttocreator";
-		case MissionTypes::HUNTING:         return "hunting";
-		case MissionTypes::MUSICIAN:        return "musician";
-		case MissionTypes::RECON:           return "recon";
-		case MissionTypes::SURVEY:          return "survey";
-	}
-	// clang-format on
-
-	StringBuffer asString;
-	asString << "MissionTypeCRC(" << hex << typeCRC << ")";
-	return asString.toString();
-}
-
-uint32 MissionObjectImplementation::getQuestCRC() const {
-	uint32 questCRC = 0;
-
-	if (questName.isEmpty()) {
-		return questCRC;
-	}
-
-	String questString = "spacequest/" + questType + "/" + questName;
-
-	questCRC = questString.hashCode();
-
-	return questCRC;
 }

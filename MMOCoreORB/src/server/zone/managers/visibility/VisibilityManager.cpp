@@ -23,15 +23,13 @@ float VisibilityManager::calculateVisibilityIncrease(CreatureObject* creature) {
 		return visibilityIncrease;
 
 
-	SortedVector<TreeEntry*> closeObjects;
+	SortedVector<QuadTreeEntry*> closeObjects;
 	CloseObjectsVector* closeObjectsVector = (CloseObjectsVector*) creature->getCloseObjects();
 	if (closeObjectsVector == nullptr) {
-		zone->getInRangeObjects(creature->getWorldPositionX(), creature->getWorldPositionZ(), creature->getWorldPositionY(), 32, &closeObjects, true);
+		zone->getInRangeObjects(creature->getWorldPositionX(), creature->getWorldPositionY(), 32, &closeObjects, true);
 	} else {
 		closeObjectsVector->safeCopyReceiversTo(closeObjects, CloseObjectsVector::CREOTYPE);
 	}
-
-	bool disableGroupVis = ConfigManager::instance()->getBool("Core3.PlayerManager.DisableGroupVisibility", false);
 
 	for (int i = 0; i < closeObjects.size(); ++i) {
 		SceneObject* obj = static_cast<SceneObject*>(closeObjects.get(i));
@@ -47,31 +45,32 @@ float VisibilityManager::calculateVisibilityIncrease(CreatureObject* creature) {
 		if (c == nullptr || (!c->isNonPlayerCreatureObject() && !c->isPlayerCreature()))
 			continue;
 
-		if (c->isDead() || c->isIncapacitated() || (c->isPlayerCreature() && c->getPlayerObject()->hasGodMode()))
+		if (c->isDead() || c->isIncapacitated())// || (c->isPlayerCreature() && c->getPlayerObject()->hasGodMode())
 			continue;
 
-		if (disableGroupVis && creature->isGrouped()) {
-			ManagedReference<GroupObject*> group = creature->getGroup();
-
-			if (group != nullptr && group->hasMember(c))
-				continue;
-		}
-
-		if (!creature->isInRange(c, 32) || !CollisionManager::checkLineOfSight(creature, c))
+		if (!creature->isInRange(c, 32) || !CollisionManager::checkLineOfSight(creature, c))//distance
 			continue;
 
-		if (creature->getFaction() == 0 || (c->getFaction() != factionImperial && c->getFaction() != factionRebel)) {
-			visibilityIncrease += 0.5;
-			//info(c->getCreatureName().toString() + " generating a 0.5 visibility modifier", true);
-		} else {
-			if (creature->getFaction() == c->getFaction()) {
-				visibilityIncrease += 0.25;
-				//info(c->getCreatureName().toString() + " generating a 0.25 visibility modifier", true);
-			} else {
-				visibilityIncrease += 1;
-				//info( c->getCreatureName().toString() + " generating a 1.0 visibility modifier", true);
-			}
-		}
+		GroupObject* pgrp = creature->getGroup();
+		GroupObject* cgrp = c->getGroup();
+
+		if (pgrp != nullptr && cgrp != nullptr && pgrp == cgrp) //
+			continue;
+
+		visibilityIncrease = 1;
+
+//		if (creature->getFaction() == 0 || (c->getFaction() != factionImperial && c->getFaction() != factionRebel)) {
+//			visibilityIncrease += 2;//0.5;
+//			//info(c->getCreatureName().toString() + " generating a 0.5 visibility modifier", true);
+//		} else {
+//			if (creature->getFaction() == c->getFaction()) {
+//				visibilityIncrease += 1;//0.2;
+//				//info(c->getCreatureName().toString() + " generating a 0.25 visibility modifier", true);
+//			} else {
+//				visibilityIncrease += 3;//1;
+//				//info( c->getCreatureName().toString() + " generating a 1.0 visibility modifier", true);
+//			}
+//		}
 
 	}
 
@@ -85,19 +84,29 @@ void VisibilityManager::decreaseVisibility(CreatureObject* creature) {
 
 	if (ghost != nullptr) {
 		Locker locker(ghost);
-		if (ghost->getVisibility() > 0)
-		{
-
+		if (ghost->getVisibility() >= 1)	{
 			//info("VisDecayTickRate: " + String::valueOf(visDecayTickRate) + " DecayPerTick: " + String::valueOf(visDecayPerTick), true);
-			float visibilityDecrease = (((ghost->getLastVisibilityUpdateTimestamp().miliDifference() / 1000.0f) / visDecayTickRate) * visDecayPerTick);
+			float visibilityDecrease = 1;//(((ghost->getLastVisibilityUpdateTimestamp().miliDifference() / 1000.0f) / visDecayTickRate) * visDecayPerTick);
 
 			//info("Decreasing visibility of player " + creature->getFirstName() + " by " + String::valueOf(visibilityDecrease), true);
-			if (ghost->getVisibility() <= visibilityDecrease) {
-				clearVisibility(creature);
-			} else {
+//			if (ghost->getVisibility() - visibilityDecrease < 1) {
+//				clearVisibility(creature);
+//				creature->sendSystemMessage("Visibility decreased to 0. You are not yet on the Bounty Hunter Terminals.");
+//			} else {
 				ghost->setVisibility(ghost->getVisibility() - visibilityDecrease);
-			}
+				//creature->sendSystemMessage("visibility decreased to " + String::valueOf(ghost->getVisibility() - visibilityDecrease));
+
+//				creature->sendSystemMessage("Jedi visibility decreased.");
+
+//				if (ghost->getVisibility() >= terminalVisThreshold)
+//					creature->sendSystemMessage("Visibility decreased to " + String::valueOf(ghost->getVisibility() - visibilityDecrease) + ". You are listed on the Bounty Hunter Terminals.");
+//				if (ghost->getVisibility() < terminalVisThreshold)
+//					creature->sendSystemMessage("Visibility decreased to " + String::valueOf(ghost->getVisibility() - visibilityDecrease) + ". You are not yet on the Bounty Hunter Terminals.");
+
+//			}
 		}
+		if (ghost->getVisibility() <= 0)
+			clearVisibility(creature);
 	}
 }
 
@@ -113,7 +122,7 @@ void VisibilityManager::addToVisibilityList(CreatureObject* creature) {
 	Reference<PlayerObject*> ghost = creature->getSlottedObject("ghost").castTo<PlayerObject*>();
 
 	if (ghost != nullptr) {
-		decreaseVisibility(creature);
+		//decreaseVisibility(creature);
 
 		Locker locker(&visibilityListLock);
 
@@ -128,7 +137,7 @@ void VisibilityManager::addToVisibilityList(CreatureObject* creature) {
 
 float VisibilityManager::getTerminalVisThreshold() {
 	return terminalVisThreshold;
-}
+}//
 
 void VisibilityManager::removeFromVisibilityList(CreatureObject* creature) {
 	//info("Logging out " + creature->getFirstName(), true);
@@ -144,14 +153,30 @@ void VisibilityManager::increaseVisibility(CreatureObject* creature, int visibil
 	//info("Increasing visibility for " + creature->getFirstName(), true);
 	Reference<PlayerObject*> ghost = creature->getSlottedObject("ghost").castTo<PlayerObject*>();
 
-	if (ghost != nullptr  && !ghost->hasGodMode()) {
+	if (ghost != nullptr) {//  && !ghost->hasGodMode()
 		Locker locker(ghost);
-		decreaseVisibility(creature);
+		//decreaseVisibility(creature);
 
-		float newVis = ghost->getVisibility() + (calculateVisibilityIncrease(creature) * visibilityMultiplier); // Calculate new total vis
-		newVis = Math::min(maxVisibility,  newVis); // Cap visibility
+		int newVis = calculateVisibilityIncrease(creature);// * visibilityMultiplier); // Calculate new total vis
 
-		ghost->setVisibility(newVis);
+		if (newVis > 0) {
+
+			int finalVis = ghost->getVisibility() + newVis;
+
+			if (finalVis > maxVisibility) finalVis = maxVisibility;
+
+			ghost->setVisibility(finalVis);
+
+			creature->sendSystemMessage("Jedi visibility increased.");
+
+//			ghost->updateLastCombatActionTimestamp(false,false,true);
+
+//			if (ghost->getVisibility() >= terminalVisThreshold)
+//				creature->sendSystemMessage("Visibility increased to " + String::valueOf(finalVis) + ". You are listed on the Bounty Hunter Terminals.");
+//			if (ghost->getVisibility() < terminalVisThreshold)
+//				creature->sendSystemMessage("Visibility increased to " + String::valueOf(finalVis) + ". You are not yet on the Bounty Hunter Terminals.");
+
+		}
 
 		//info("New visibility for " + creature->getFirstName() + " is " + String::valueOf(ghost->getVisibility()), true);
 		locker.release();
@@ -163,7 +188,7 @@ void VisibilityManager::increaseVisibility(CreatureObject* creature, int visibil
 void VisibilityManager::clearVisibility(CreatureObject* creature) {
 	Reference<PlayerObject*> ghost = creature->getSlottedObject("ghost").castTo<PlayerObject*>();
 
-	if (ghost != nullptr  && !ghost->hasGodMode()) {
+	if (ghost != nullptr ) {// && !ghost->hasGodMode()
 		//info("Clearing visibility for player " + String::valueOf(creature->getObjectID()), true);
 
 		Locker locker(ghost);

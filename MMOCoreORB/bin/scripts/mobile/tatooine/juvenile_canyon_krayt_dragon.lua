@@ -2,8 +2,8 @@ juvenile_canyon_krayt_dragon = Creature:new {
 	objectName = "@mob/creature_names:juvenile_canyon_krayt",
 	socialGroup = "krayt",
 	faction = "",
-	mobType = MOB_CARNIVORE,
-	level = 122,
+	level = 80,
+	elite = 1.25,
 	chanceHit = 4.0,
 	damageMin = 745,
 	damageMax = 1200,
@@ -25,34 +25,29 @@ juvenile_canyon_krayt_dragon = Creature:new {
 	creatureBitmask = PACK + KILLER,
 	optionsBitmask = AIENABLED,
 	diet = CARNIVORE,
-	scale = 0.5,
 
 	templates = {"object/mobile/juvenile_canyon_krayt.iff"},
 	hues = { 24, 25, 26, 27, 28, 29, 30, 31 },
+	scale = 0.55;
 
 	lootGroups = {
 		{
-			groups = {
-				{group = "krayt_dragon_common", chance = 3000000},
+	        groups = {
+				{group = "krayt_tissue_rare", chance = 2000000},
+				{group = "krayt_dragon_common", chance = 2500000},
 				{group = "krayt_pearls", chance = 1500000},
-				{group = "krayt_tissue_uncommon", chance = 2000000},
-				{group = "armor_all", chance = 1750000},
-				{group = "weapons_all", chance = 1750000},
+				{group = "armor_all", chance = 2000000},
+				{group = "weapons_all", chance = 2000000},
 			},
-			lootChance = 5500000
+			lootChance = 3000000
 		}
 	},
-
-	-- Primary and secondary weapon should be different types (rifle/carbine, carbine/pistol, rifle/unarmed, etc)
-	-- Unarmed should be put on secondary unless the mobile doesn't use weapons, in which case "unarmed" should be put primary and "none" as secondary
-	primaryWeapon = "unarmed",
-	secondaryWeapon = "none",
+	weapons = {},
 	conversationTemplate = "",
-
-	-- primaryAttacks and secondaryAttacks should be separate skill groups specific to the weapon type listed in primaryWeapon and secondaryWeapon
-	-- Use merge() to merge groups in creatureskills.lua together. If a weapon is set to "none", set the attacks variable to empty brackets
-	primaryAttacks = { {"posturedownattack",""}, {"creatureareaattack",""} },
-	secondaryAttacks = { }
+	attacks = {
+		{"posturedownattack",""},
+		{"creatureareaattack",""}
+	}
 }
 
 CreatureTemplates:addCreatureTemplate(juvenile_canyon_krayt_dragon, "juvenile_canyon_krayt_dragon")

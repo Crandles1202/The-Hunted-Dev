@@ -44,7 +44,7 @@
 RollShotCommand = {
 	name = "rollshot",
 
-	damageMultiplier = 2.5,
+	damageMultiplier = 2.0,
 	speedMultiplier = 1.5,
 	healthCostMultiplier = 0.5,
 	actionCostMultiplier = 0.75,
@@ -55,7 +55,7 @@ RollShotCommand = {
 
 	combatSpam = "rollshot",
 	
-	weaponType = PISTOLWEAPON,
+	weaponType = RIFLEWEAPON + PISTOLWEAPON + CARBINEWEAPON,
 
 	range = -1,
 	stateEffects = {

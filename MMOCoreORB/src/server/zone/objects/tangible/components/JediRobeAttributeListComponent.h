@@ -21,25 +21,16 @@ public:
 			return;
 		}
 
-		int maxCondition = robe->getMaxCondition();
-
-		if (maxCondition > 0) {
-			StringBuffer cond;
-			cond << maxCondition << "/" << maxCondition;
-
-			auto config = ConfigManager::instance();
-
-			if (robe->isForceNoTrade()) {
-				cond << config->getForceNoTradeMessage();
-			}
-
-			alm->insertAttribute("condition", cond);
+		const auto skills = robe->getTemplateSkillMods();
+//show stats on jedi robe
+		if (skills->contains("jedi_force_power_max")) {
+			int mod = skills->get("jedi_force_power_max");
+			alm->insertAttribute("jedi_robe_power", "+" + String::valueOf(mod));
 		}
 
-		int volume = robe->getVolume();
-
-		if (volume > 0) {
-			alm->insertAttribute("volume", volume);
+		if (skills->contains("jedi_force_power_regen")) {
+			int mod = skills->get("jedi_force_power_regen");
+			alm->insertAttribute("jedi_robe_regen", "+" + String::valueOf(mod));
 		}
 
 		String rankRequired = robe->getSkillRequired();
@@ -47,19 +38,8 @@ public:
 		if (!rankRequired.isEmpty() && rankRequired != "force_title_jedi_rank_02") {
 			alm->insertAttribute("jedi_rank_required", "@skl_n:" + rankRequired);
 		}
-
-		const auto skills = robe->getTemplateSkillMods();
-
-		if (skills->contains("jedi_force_power_regen")) {
-			int mod = skills->get("jedi_force_power_regen");
-			alm->insertAttribute("jedi_robe_regen", "+" + String::valueOf(mod));
-		}
-
-		if (skills->contains("jedi_force_power_max")) {
-			int mod = skills->get("jedi_force_power_max");
-			alm->insertAttribute("jedi_robe_power", "+" + String::valueOf(mod));
-		}
 	}
+
 };
 
 #endif /* JEDIROBEATTIBUTELISTCOMPONENT_H_ */

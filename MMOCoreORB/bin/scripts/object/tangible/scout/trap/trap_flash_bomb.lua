@@ -42,6 +42,7 @@
 
 
 object_tangible_scout_trap_trap_flash_bomb = object_tangible_scout_trap_shared_trap_flash_bomb:new {
+
 	templateType = TRAP,
 	objectMenuComponent = "TrapMenuComponent",
 
@@ -51,11 +52,10 @@ object_tangible_scout_trap_trap_flash_bomb = object_tangible_scout_trap_shared_t
 	skillMods = {},
 
 	healthCost = 17,
-	actionCost = 30,
+	actionCost = 30, 
 	mindCost = 17,
 
 	maxRange = 32,
-	areaOfEffect = true,
 
 	poolToDamage = MIND,
 	minDamage = 200,

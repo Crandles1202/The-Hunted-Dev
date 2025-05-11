@@ -3,7 +3,7 @@
 #define PVPTEFREMOVALTASK_H_
 
 #include "server/zone/objects/player/PlayerObject.h"
-#include "templates/params/creature/ObjectFlag.h"
+#include "templates/params/creature/CreatureFlag.h"
 
 namespace server {
 namespace zone {
@@ -37,20 +37,13 @@ public:
 			auto gcwCrackdownTefMs = ghost->getLastGcwCrackdownCombatActionTimestamp().miliDifference();
 			auto gcwTefMs = ghost->getLastGcwPvpCombatActionTimestamp().miliDifference();
 			auto bhTefMs = ghost->getLastBhPvpCombatActionTimestamp().miliDifference();
-			auto pvpAreaMs = ghost->getLastPvpAreaCombatActionTimestamp().miliDifference();
-
-			auto rescheduleTime = gcwTefMs < bhTefMs ? gcwTefMs : bhTefMs;
+			auto rescheduleTime = gcwTefMs < bhTefMs ? gcwTefMs : bhTefMs;//adding multiplier here affected the flag but not the attackable
 			rescheduleTime = gcwCrackdownTefMs < rescheduleTime ? gcwCrackdownTefMs : rescheduleTime;
-			rescheduleTime = pvpAreaMs < rescheduleTime ? pvpAreaMs : rescheduleTime;
-
 			this->reschedule(llabs(rescheduleTime));
 		} else {
 			ghost->updateInRangeBuildingPermissions();
 			ghost->setCrackdownTefTowards(0, false);
-			player->clearPvpStatusBit(ObjectFlag::TEF, true);
-
-			if (ConfigManager::instance()->useCovertOvertSystem())
-				player->broadcastPvpStatusBitmask();
+			player->clearPvpStatusBit(CreatureFlag::TEF);
 		}
 
 		if (!ghost->hasBhTef())

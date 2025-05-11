@@ -42,22 +42,25 @@
 --true = 1, false = 0
 
 FireLightningCone1Command = {
-	name = "firelightningcone1",
+        name = "firelightningcone1",
 
-	damageMultiplier = 3.0,
+	damageMultiplier = 2.0,
 	speedMultiplier = 2.0,
 	healthCostMultiplier = 1,
 	actionCostMultiplier = 1,
 	mindCostMultiplier = 1,
 
-	animation = "fire_area",
+--	animation = "fire_lightning_rifle_single_1",
+--	animType = GENERATE_INTENSITY,
+
+	animation = "fire_area_no_trails", 
 	animType = GENERATE_INTENSITY,
 
 	combatSpam = "firelightningcone1",
 
 	coneAngle = 60,
 	coneAction = true,
-
+	
 	weaponType = SPECIALHEAVYWEAPON,
 
 	range = 16

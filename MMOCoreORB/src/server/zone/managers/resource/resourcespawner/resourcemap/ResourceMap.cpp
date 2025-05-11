@@ -103,19 +103,13 @@ void ResourceMap::addToSuiListBox(SuiListBox* suil, const String& name) {
 		return;
 	}
 
-	SortedVector<ManagedReference<ResourceSpawn*>> spawns;
-
 	for(int i = 0; i < typemap->size(); ++i) {
 		ManagedReference<ResourceSpawn*> spawn = typemap->get(i);
 
 		if(spawn == nullptr)
 			continue;
 
-		spawns.put(spawn);
-	}
-
-	for(int i = 0; i < spawns.size(); ++i){
-		suil->addMenuItem(spawns.get(i)->getName(), spawns.get(i)->getObjectID());
+		suil->addMenuItem(spawn->getName(), spawn->getObjectID());
 	}
 
 }

@@ -3,32 +3,31 @@
 #include "server/zone/managers/minigames/GamblingManager.h"
 #include "server/zone/objects/tangible/terminal/gambling/GamblingTerminal.h"
 
-GamblingEvent::GamblingEvent(GamblingTerminal* terminal, int count) : Task() {
-	gamblingTerm = terminal;
-	gameCount = count;
+GamblingEvent::GamblingEvent(GamblingTerminal* gamblingTerm, int counter) : Task() {
+	gamblingTerminal = gamblingTerm;
+	gameCount = counter;
 }
 
 void GamblingEvent::run() {
-	ManagedReference<GamblingTerminal*> gamblingTerminal = gamblingTerm.get();
+	try {
+		//Locker _locker(player);
 
-	if (gamblingTerminal == nullptr)
-		return;
+		//player->info("activating command queue action");
 
-	if (gamblingTerminal->getState() == GamblingTerminal::NOGAMERUNNING)
-		return;
+		Reference<GamblingManager*> manager = gamblingTerminal->getZoneProcessServer()->getGamblingManager();
+		//gamblingTerminal->setState(state+1);
+		if ((gamblingTerminal->getState() != GamblingTerminal::NOGAMERUNNING) && (gamblingTerminal->getGameCount() == gameCount)) {
+			manager->continueGame(gamblingTerminal);
+		}
 
-	if (gamblingTerminal->getGameCount() != gameCount)
-		return;
+		//player->info("command queue action activated");
 
-	auto zoneProcess = gamblingTerminal->getZoneProcessServer();
 
-	if (zoneProcess == nullptr)
-		return;
+	}
+	catch (...) {
+		throw;
+	}
 
-	auto gamblingManager = zoneProcess->getGamblingManager();
+	//gamblingTerminal = nullptr; <- ?
 
-	if (gamblingManager == nullptr)
-		return;
-
-	gamblingManager->continueGame(gamblingTerminal);
 }

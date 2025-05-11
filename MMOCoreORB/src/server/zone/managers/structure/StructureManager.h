@@ -7,7 +7,6 @@
 
 #include "templates/manager/TemplateManager.h"
 #include "templates/tangible/SharedStructureObjectTemplate.h"
-#include "server/zone/objects/scene/variables/CustomizationVariables.h"
 
 namespace server {
 namespace zone {
@@ -63,8 +62,6 @@ public:
 	 */
 	StructureObject* placeStructure(CreatureObject* creature, const String& structureTemplatePath, float x, float y, int angle, int persistenceLevel = 1);
 
-	StructureObject* placeCamp(CreatureObject* creature, CustomizationVariables* customVars, const String& structureTemplatePath, float x, float y, int angle, int persistenceLevel = 1);
-
 	/**
 	 * Destroys the structure after the confirmation of the player.
 	 * All items still in the structure will be deleted from the database. If the maintenance requirements are met, it is to be redeeded.
@@ -105,7 +102,7 @@ public:
 	 * @param creature The creature receiving the report.
 	 * @param structure The structure the report is about.
 	 */
-	void reportStructureStatus(CreatureObject* creature, StructureObject* structure, SceneObject* terminal);
+	void reportStructureStatus(CreatureObject* creature, StructureObject* structure);
 
 	/**
 	 * Sends a Sui prompt to the player asking them to enter a name for the structure.

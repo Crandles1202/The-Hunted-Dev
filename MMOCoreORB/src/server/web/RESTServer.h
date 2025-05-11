@@ -32,7 +32,6 @@ namespace server {
  class APIProxyObjectManager;
  class APIProxyGuildManager;
  class APIProxyConfigManager;
- class APIProxyStatisticsManager;
  class RESTEndpoint;
 
  using namespace web;
@@ -41,7 +40,7 @@ namespace server {
  class RESTServer : public Logger {
  protected:
 	AtomicBoolean doRun;
-	uint16 port{};
+	uint16 port;
 
  private:
 	String mAuthHeader;
@@ -51,7 +50,6 @@ namespace server {
 	APIProxyObjectManager* mObjectManagerProxy = nullptr;
 	APIProxyGuildManager* mGuildManagerProxy = nullptr;
 	APIProxyConfigManager* mConfigManagerProxy = nullptr;
-	APIProxyStatisticsManager* mStatisticsManager = nullptr;
 
 	void createProxies();
 	void destroyProxies();

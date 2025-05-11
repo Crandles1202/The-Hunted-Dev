@@ -43,18 +43,15 @@
 -- 0 = false, 1 = true
 
 Core3 = {
-	------Server Make Options------
 	MakeLogin = 1,
 	MakeZone = 1,
 	MakePing = 1,
 	MakeStatus = 1,
 	MakeWeb = 0,
 
-	------ORB Server Config------
 	ORB = "",
 	ORBPort = 44419,
 
-	------Main Database Config------
 	DBHost = "127.0.0.1",
 	DBPort = 3306,
 	DBName = "swgemu",
@@ -63,13 +60,11 @@ Core3 = {
 	DBInstances = 2,
 	DBSecret = "swgemus3cr37!", -- Change this! This value should be unique and of reasonable length.
 
-	------Login Server Config------
 	LoginPort = 44453,
 	LoginProcessingThreads = 1,
 	LoginAllowedConnections = 3000,
 	LoginRequiredVersion = "20050408-18:00",
 
-	------Mantis Database Config------
 	MantisHost = "127.0.0.1",
 	MantisPort = 3306,
 	MantisName = "swgemu",
@@ -77,169 +72,173 @@ Core3 = {
 	MantisPass = "123456",
 	MantisPrfx = "mantis_", -- The prefix for your mantis tables.
 
-	------Metrics Server Config------
 	MetricsHost = "localhost",
 	MetricsPort = 8125,
 	MetricsPrefix = "",
 
-	------Ping Server Config------
+	AutoReg = 1,
+
+	ProgressMonitors = "true",
+
 	PingPort = 44462,
 	PingAllowedConnections = 3000,
 
-	------Zone Server config------
 	ZoneProcessingThreads = 10,
 	ZoneAllowedConnections = 30000,
 	ZoneGalaxyID = 2, --The actual zone server's galaxyID. Should coordinate with your login server.
 
-	-------- GROUND ZONES -------
+	--The following zones are enabled, and will be loaded with server start.
+	--To save on RAM and CPU usage, you should only enable the zones you need.
+	--In order to disable a zone, all you have to do is comment it out.
 	ZonesEnabled = {
-		-------- PRE-CU ZONES -------
-		"corellia",
-		"dantooine",
-		"dathomir",
-		"dungeon1",
-		"endor",
-		"lok",
-		"naboo",
-		"rori",
-		"talus",
-		"tatooine",
-		"tutorial",
-		"yavin4",
-		-------- NEW CONTENT ZONES -------
-		"chandrila",
-		"coruscant",
-		"dungeon2",
-		"hoth",
-		"kaas",
-		"kashyyyk",
-		"kashyyyk_hunting",
-		"kashyyyk_rryatt_trail",
-		"kashyyyk_main",
-		"kashyyyk_south_dungeons",
-		"kashyyyk_north_dungeons",
-		"kashyyyk_pob_dungeons",
-		"kashyyyk_dead_forest",
-		"mandalore",
-		--"moraband",
-		"mustafar",
-		"taanab",
-		-------- TEST ZONES -------
-		--"09",
-		--"10",
-		--"11",
-		--"character_farm",
-		--"cinco_city_test_m5",
-		--"creature_test",
-		--"endor_asommers",
-		--"floratest",
-		--"godclient_test",
-		--"otoh_gunga",
-		--"rivertest",
-		--"runtimerules",
-		--"simple",
-		--"taanab",
-		--"test_wearables",
-		--"umbra",
-		--"watertabletest",
-	},
-	-------- SPACE ZONES -------
-	SpaceZonesEnabled = {
-		"space_corellia",
-		"space_dantooine",
-		"space_dathomir",
-		"space_endor",
-		"space_heavy1",
-		"space_light1",
-		"space_lok",
-		"space_naboo",
-		"space_tatooine",
-		"space_yavin4"
-		---- TEST ZONES ----
-		--"space_09",
-		--"space_corellia_2",
-		--"space_env",
-		--"space_halos",
-		--"space_naboo_2",
-		--"space_tatooine_2",
+	--"09",
+	--"10",
+	--"11",
+	--"character_farm",
+	--"cinco_city_test_m5",
+	"corellia",
+	--"creature_test",
+	"dantooine",
+	"dathomir",
+	"dungeon1",
+	"endor",
+	"endor_asommers",
+	--"floratest",
+	--"godclient_test",
+	"lok",
+	"naboo",
+	"otoh_gunga",
+	--"rivertest",
+	"rori",
+	--"runtimerules",
+	--"simple",
+	--"space_09",
+	--"space_corellia",
+	--"space_corellia_2",
+	--"space_dantooine",
+	--"space_dathomir",
+	--"space_endor",
+	--"space_env",
+	--"space_halos",
+	--"space_heavy1",
+	--"space_light1",
+	--"space_lok",
+	--"space_naboo",
+	--"space_naboo_2",
+	--"space_tatooine",
+	--"space_tatooine_2",
+	--"space_yavin4",
+	--"taanab",
+	--"talus",
+	"tatooine",
+	--"test_wearables",
+	"tutorial",
+	--"umbra",
+	--"watertabletest",
+	"yavin4"
 	},
 
-	------TRE config------
-	TrePath = "/home/swgemu/workspace/tre",
 
+	-- Where tre files are stored
+	TrePath = "/tre",
+
+	-- Each tre file (order is important!)
 	TreFiles = {
-		"mtg_patch_023.tre",
-		"mtg_patch_022.tre",
-		"mtg_planets.tre",
-		"mtg_patch_021.tre",
-		--"mtg_patch_020.tre",
-		"mtg_patch_019.tre",
-		"mtg_patch_018.tre",
-		"mtg_patch_017.tre",
-		"mtg_patch_016.tre",
-		"mtg_patch_015.tre",
-		"mtg_patch_014.tre",
-		"mtg_patch_013_configurable_02.tre",
-		"mtg_patch_012_configurable_01.tre",
-		"mtg_patch_011_files_01.tre",
-		"mtg_patch_010_object_01.tre",
-		"mtg_patch_009_Shader_01.tre",
-		"mtg_patch_008_texture_04.tre",
-		"mtg_patch_007_texture_03.tre",
-		"mtg_patch_006_texture_02.tre",
-		"mtg_patch_005_texture_01.tre",
-		"mtg_patch_004_appearance_04.tre",
-		"mtg_patch_003_appearance_03.tre",
-		"mtg_patch_002_appearance_02.tre",
-		"mtg_patch_001_appearance_01.tre"
+		"default_patch.tre",
+		"patch_sku1_14_00.tre",
+		"patch_14_00.tre",
+		"patch_sku1_13_00.tre",
+		"patch_13_00.tre",
+		"patch_sku1_12_00.tre",
+		"patch_12_00.tre",
+		"patch_11_03.tre",
+		"data_sku1_07.tre",
+		"patch_11_02.tre",
+		"data_sku1_06.tre",
+		"patch_11_01.tre",
+		"patch_11_00.tre",
+		"data_sku1_05.tre",
+		"data_sku1_04.tre",
+		"data_sku1_03.tre",
+		"data_sku1_02.tre",
+		"data_sku1_01.tre",
+		"data_sku1_00.tre",
+		"patch_10.tre",
+		"patch_09.tre",
+		"patch_08.tre",
+		"patch_07.tre",
+		"patch_06.tre",
+		"patch_05.tre",
+		"patch_04.tre",
+		"patch_03.tre",
+		"patch_02.tre",
+		"patch_01.tre",
+		"patch_00.tre",
+		"data_other_00.tre",
+		"data_static_mesh_01.tre",
+		"data_static_mesh_00.tre",
+		"data_texture_07.tre",
+		"data_texture_06.tre",
+		"data_texture_05.tre",
+		"data_texture_04.tre",
+		"data_texture_03.tre",
+		"data_texture_02.tre",
+		"data_texture_01.tre",
+		"data_texture_00.tre",
+		"data_skeletal_mesh_01.tre",
+		"data_skeletal_mesh_00.tre",
+		"data_animation_00.tre",
+		"data_sample_04.tre",
+		"data_sample_03.tre",
+		"data_sample_02.tre",
+		"data_sample_01.tre",
+		"data_sample_00.tre",
+		"data_music_00.tre",
+		"bottom.tre"
 	},
 
-	------Status Server Config------
+	-- Status Server Config
 	StatusPort = 44455,
 	StatusAllowedConnections = 500,
 	StatusInterval = 30, -- interval to check if zone is locked up (in seconds)
 
-	------Web Server Config------
+	-- Web Server Config
 	WebPorts = 44460, -- Can be multiple ports 44460,44461
 	WebAccessLog = "../log/webaccess.log",
 	WebErrorLog = "../log/weberror.log",
 	WebSessionTimeout = 600, -- Length that inactive web sessions expire
 
-	------Logging Config------
+	DeleteCharacters = 10, -- How often in minutes to purge deleted characters
+	MaxNavMeshJobs = 6,
+	MaxAuctionSearchJobs = 1,
+	DumpObjFiles = 1,
+
+	UnloadContainers = 1, -- Whether to unload container contents from RAM after the container hasn't been accessed for a time
+
 	LogFile = "log/core3.log",
 	LogFileLevel = 4, -- -1 NONE, 0 FATAL, 1 ERROR, 2 WARNING, 3 LOG, 4 INFO, 5 DEBUG
 	LogJSON = 0, -- global log output in JSON format
 	LogSync = 0, -- flush global log file after each write
+
 	LuaLogJSON = 0,
 	PathfinderLogJSON = 0,
-	PlayerLogLevel = 4, -- -1 NONE, 0 FATAL, 1 ERROR, 2 WARNING, 3 LOG, 4 INFO, 5 DEBUG
-	MaxLogLines = 1000000, -- how often to rotate log (currently only log/player.log rotates)
 
-	------REST Server Config------
+	TermsOfServiceVersion = 0,
+	TermsOfService = "",
+
+	CleanupMailCount = 25000,
+
 	RESTServerPort = 0,
 
-	------Account Config------
 	InactiveAccountTitle = "Account Disabled",
 	InactiveAccountText = "The server administrators have disabled your account.",
 
-	------Character Config------
-	CleanupMailCount = 25000,
-	DeleteCharacters = 10, -- How often in minutes to purge deleted characters
+	CharacterBuilderEnabled = "true", -- Enable character builder frog terminals (does not remove them from world)
 
-	------Extra Config ------
-	MaxNavMeshJobs = 6,
-	MaxAuctionSearchJobs = 1,
-	DumpObjFiles = 1,
-	ProgressMonitors = "true",
-	UnloadContainers = 1, -- Whether to unload container contents from RAM after the container hasn't been accessed for a time
+	PlayerLogLevel = 4, -- -1 NONE, 0 FATAL, 1 ERROR, 2 WARNING, 3 LOG, 4 INFO, 5 DEBUG
+	MaxLogLines = 1000000, -- how often to rotate log (currently only log/player.log rotates)
+	maxAccountsPerIP = 1	
 
-	------Server Config------
-	CharacterBuilderEnabled = "true",
-	AutoReg = 1,
-
-	------TOS Config------
-	TermsOfServiceVersion = 0,
-	TermsOfService = "",
 }
 
 -- NOTE: conf/config-local.lua is parsed after this file if it exists

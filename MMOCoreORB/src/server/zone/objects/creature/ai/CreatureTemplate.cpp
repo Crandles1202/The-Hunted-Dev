@@ -21,23 +21,19 @@ CreatureTemplate::CreatureTemplate() {
 	lightSaber = 0;
 
 	scale = 1.f;
+	elite = 1.f;
 
 	objectName = "";
 	randomNameType = 0;
-	mobType = 0;
 	randomNameTag = false;
 	customName = "";
 	planetMapCategory = 0;
-	mapCategoryName = "";
-	planetMapSubCategory = 0;
-	mapSubCategoryName = "";
 	socialGroup = "";
 	faction = "";
 	level = 0;
 	chanceHit = 0.f;
 	damageMin = 0;
 	damageMax = 0;
-	attackSpeed = 0.0f;
 	specialDamageMult = 1.f;
 	range = 0;
 	baseXp = 0;
@@ -59,19 +55,12 @@ CreatureTemplate::CreatureTemplate() {
 	creatureBitmask = 0;
 	diet = 0;
 	optionsBitmask = 0;
-	customAiMap = 0;
-	tauntable = true;
-	healerType = "";
-	lightsaberColor = 0;
-
-	primaryWeapon = "";
-	secondaryWeapon = "";
-	thrownWeapon = "",
 
 	templates.removeAll();
 
-	primaryAttacks = new CreatureAttackMap();
-	secondaryAttacks = new CreatureAttackMap();
+	weapons.removeAll();
+
+	attacks = new CreatureAttackMap();
 
 	aiTemplate = "example";
 	defaultWeapon = "";
@@ -85,11 +74,10 @@ CreatureTemplate::CreatureTemplate() {
 CreatureTemplate::~CreatureTemplate() {
 	templates.removeAll();
 
-	delete primaryAttacks;
-	primaryAttacks = nullptr;
+	weapons.removeAll();
 
-	delete secondaryAttacks;
-	secondaryAttacks = nullptr;
+	delete attacks;
+	attacks = nullptr;
 }
 
 void CreatureTemplate::readObject(LuaObject* templateData) {
@@ -97,14 +85,7 @@ void CreatureTemplate::readObject(LuaObject* templateData) {
 	objectName = templateData->getStringField("objectName").trim();
 	randomNameType = templateData->getIntField("randomNameType");
 	randomNameTag = templateData->getBooleanField("randomNameTag");
-
-	mapCategoryName = String(templateData->getStringField("planetMapCategory").trim());
-	planetMapCategory = mapCategoryName.hashCode();
-
-	mapSubCategoryName = String(templateData->getStringField("planetMapSubCategory").trim());
-	planetMapSubCategory = mapSubCategoryName.hashCode();
-
-	mobType = templateData->getIntField("mobType");
+	planetMapCategory = String(templateData->getStringField("planetMapCategory").trim()).hashCode();
 
 	customName = templateData->getStringField("customName").trim();
 	socialGroup = templateData->getStringField("socialGroup").trim();
@@ -114,7 +95,6 @@ void CreatureTemplate::readObject(LuaObject* templateData) {
 	damageMin = templateData->getIntField("damageMin");
 	damageMax = templateData->getIntField("damageMax");
 	specialDamageMult = templateData->getFloatField("specialDamageMult");
-	attackSpeed = templateData->getFloatField("attackSpeed");
 	if (specialDamageMult < 0.001f) specialDamageMult = 1.f; // could use numeric_limit here, but this will prevent people from putting tiny modifiers in as well.
 	baseXp = templateData->getIntField("baseXp");
 	baseHAM = templateData->getIntField("baseHAM");
@@ -136,17 +116,12 @@ void CreatureTemplate::readObject(LuaObject* templateData) {
 	optionsBitmask = templateData->getIntField("optionsBitmask");
 	patrolPathTemplate = templateData->getStringField("patrolPathTemplate");
 	defaultWeapon = templateData->getStringField("defaultWeapon");
-	tauntable = templateData->getBooleanField("tauntable", true);
-	healerType = templateData->getStringField("healerType").trim();
-	lightsaberColor = templateData->getIntField("lightsaberColor");
 
 	if(!templateData->getStringField("defaultAttack").isEmpty())
 		defaultAttack = templateData->getStringField("defaultAttack");
 
-	if(!templateData->getStringField("customAiMap").isEmpty())
-		customAiMap = templateData->getStringField("customAiMap").hashCode();
-
 	scale = templateData->getFloatField("scale");
+	elite = templateData->getFloatField("elite");
 
 	if (!templateData->getStringField("milkType").isEmpty()) {
 		milkType = templateData->getStringField("milkType").trim();
@@ -188,35 +163,17 @@ void CreatureTemplate::readObject(LuaObject* templateData) {
 	lootgroups.readObject(&lootCollections, level);
 	lootCollections.pop();
 
-	primaryWeapon = templateData->getStringField("primaryWeapon");
-	secondaryWeapon = templateData->getStringField("secondaryWeapon");
-	thrownWeapon = templateData->getStringField("thrownWeapon");
+	LuaObject weps = templateData->getObjectField("weapons");
 
-	LuaObject attackList = templateData->getObjectField("primaryAttacks");
-	if (attackList.isValidTable()) {
-		int size = attackList.getTableSize();
-		lua_State* L = attackList.getLuaState();
-		for (int i = 1; i <= size; ++i) {
-			lua_rawgeti(L, -1, i);
-			LuaObject atk(L);
-
-			if (atk.isValidTable()) {
-				int atkSize = atk.getTableSize();
-				if (atkSize == 2) {
-					String com = atk.getStringAt(1).trim();
-					String arg = atk.getStringAt(2).trim();
-
-					primaryAttacks->addAttack(com, arg);
-				}
-			}
-
-			atk.pop();
+	if (weps.isValidTable()) {
+		for (int i = 1; i <= weps.getTableSize(); ++i) {
+			weapons.add(weps.getStringAt(i).trim());
 		}
 	}
 
-	attackList.pop();
+	weps.pop();
 
-	attackList = templateData->getObjectField("secondaryAttacks");
+	LuaObject attackList = templateData->getObjectField("attacks");
 	if (attackList.isValidTable()) {
 		int size = attackList.getTableSize();
 		lua_State* L = attackList.getLuaState();
@@ -230,7 +187,7 @@ void CreatureTemplate::readObject(LuaObject* templateData) {
 					String com = atk.getStringAt(1).trim();
 					String arg = atk.getStringAt(2).trim();
 
-					secondaryAttacks->addAttack(com, arg);
+					attacks->addAttack(com, arg);
 				}
 			}
 

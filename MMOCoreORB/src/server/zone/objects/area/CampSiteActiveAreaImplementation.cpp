@@ -23,14 +23,7 @@ void CampSiteActiveAreaImplementation::initializeTransientMembers() {
 
 	startTasks();
 
-	Core::getTaskManager()->executeTask([weakCampSiteArea = WeakReference<CampSiteActiveArea*>(_this.getReferenceUnsafeStaticCast())]() {
-		auto strongCampSiteArea = weakCampSiteArea.get();
-
-		if (strongCampSiteArea != nullptr) {
-			Locker lock(strongCampSiteArea);
-			strongCampSiteArea->setAbandoned(strongCampSiteArea->isAbandoned());
-		}
-	}, "InitCampSiteActiveArea");
+	setAbandoned(abandoned);
 }
 
 void CampSiteActiveAreaImplementation::init(CampStructureTemplate* campData) {
@@ -301,12 +294,7 @@ void CampSiteActiveAreaImplementation::assumeOwnership(CreatureObject* player) {
 		return;
 	}
 
-	auto zoneServer = player->getZoneServer();
-
-	if (zoneServer == nullptr)
-		return;
-
-	auto playerGhost = player->getPlayerObject();
+	PlayerObject* playerGhost = player->getPlayerObject();
 
 	if (playerGhost == nullptr)
 		return;
@@ -314,15 +302,12 @@ void CampSiteActiveAreaImplementation::assumeOwnership(CreatureObject* player) {
 	for (int i = 0; i < playerGhost->getTotalOwnedStructureCount(); ++i) {
 		uint64 oid = playerGhost->getOwnedStructure(i);
 
-		auto structure = zoneServer->getObject(oid).castTo<StructureObject*>();
+		ManagedReference<StructureObject*> structure = playerGhost->getZoneServer()->getObject(oid).castTo<StructureObject*>();
 
-		// Ignore structures that are not camps and ignore this camp itself, allowing the owner to reclaim their camp
-		if (structure == nullptr || !structure->isCampStructure() || structure->getObjectID() == camp->getObjectID())
-			continue;
-
-		// Player already has a camp and its not this camp
-		player->sendSystemMessage("@camp:sys_already_camping"); // But you already have a camp established elsewhere!
-		return;
+		if (structure != nullptr && structure->isCampStructure()) {
+			player->sendSystemMessage("@camp:sys_already_camping"); // But you already have a camp established elsewhere!
+			return;
+		}
 	}
 
 	Locker clocker(campOwner, _this.getReferenceUnsafeStaticCast());
@@ -341,26 +326,22 @@ void CampSiteActiveAreaImplementation::assumeOwnership(CreatureObject* player) {
 
 	clocker.release();
 
-	// Cross lock the new owner
-	Locker clocker2(player, _this.getReferenceUnsafeStaticCast());
-
 	setOwner(player);
 
 	setAbandoned(false);
 	currentXp = 0;
 	visitors.removeAll();
 
-	Vector3 campPosition = camp->getWorldPosition();
-
-	Reference<SortedVector<ManagedReference<TreeEntry*> >*> closeObjects = new SortedVector<ManagedReference<TreeEntry*> >();
-	zone->getInRangeObjects(campPosition.getX(), campPosition.getZ(), campPosition.getY(), campStructureData->getRadius(), closeObjects, true);
+	Reference<SortedVector<ManagedReference<QuadTreeEntry*> >*> closeObjects = new SortedVector<ManagedReference<QuadTreeEntry*> >();
+	zone->getInRangeObjects(camp->getWorldPositionX(), camp->getWorldPositionY(), campStructureData->getRadius(), closeObjects, true);
 
 	for (int i = 0; i < closeObjects->size(); ++i) {
 		SceneObject* scno = static_cast<SceneObject*>(closeObjects->get(i).get());
-
 		if (scno->isPlayerCreature())
 			visitors.add(scno->getObjectID());
 	}
+
+	Locker clocker2(player, _this.getReferenceUnsafeStaticCast());
 
 	playerGhost->addOwnedStructure(camp);
 
@@ -368,25 +349,19 @@ void CampSiteActiveAreaImplementation::assumeOwnership(CreatureObject* player) {
 
 	Locker locker(&taskMutex);
 
-	if (abandonTask != nullptr && abandonTask->isScheduled())
+	if(abandonTask != nullptr && abandonTask->isScheduled())
 		abandonTask->cancel();
 
-	if (despawnTask != nullptr && despawnTask->isScheduled())
+	if(despawnTask != nullptr && despawnTask->isScheduled())
 		despawnTask->cancel();
 
 	timeCreated = System::getTime();
 	despawnTask->schedule(CampSiteActiveArea::DESPAWNTIME);
 
-	if (terminal != nullptr) {
-		terminal->setFaction(campOwner->getFaction());
-		terminal->setFactionStatus(campOwner->getFactionStatus());
-		terminal->broadcastPvpStatusBitmask();
-
+	if(terminal != nullptr) {
 		String campName = campOwner->getFirstName();
-
-		if (!campOwner->getLastName().isEmpty())
+		if(!campOwner->getLastName().isEmpty())
 			campName += " " + campOwner->getLastName();
-
 		campName += "'s Camp";
 		terminal->setCustomObjectName(campName, true);
 	}

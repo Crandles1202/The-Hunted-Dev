@@ -2,6 +2,7 @@
  				Copyright <SWGEmu>
 		See file COPYING for copying conditions. */
 
+#include "server/zone/managers/jedi/JediManager.h"
 #include "server/zone/managers/crafting/CraftingManager.h"
 #include "server/zone/managers/crafting/labratories/SharedLabratory.h"
 #include "server/zone/managers/crafting/labratories/ResourceLabratory.h"
@@ -96,8 +97,12 @@ int CraftingManagerImplementation::calculateExperimentationSuccess(CreatureObjec
 	/// Range 0-100
 	int luckRoll = System::random(100) + cityBonus;
 
-	if(luckRoll > ((95 - expbonus) - forceSkill))
+	if(luckRoll > ((95 - expbonus) - forceSkill))	{
 		return AMAZINGSUCCESS;
+//		if (System::random(10) >= 10){
+//			JediManager::instance()->awardFSpoint(player);
+//		}
+	}
 
 	if(luckRoll < (5 - expbonus - failMitigate))
 		luckRoll -= System::random(100);
@@ -136,7 +141,7 @@ String CraftingManagerImplementation::generateSerial() {
 	StringBuffer ss;
 
 	char a;
-
+//remove SN here
 	ss << "(";
 
 	for (int i = 0; i < 8; ++i) {
@@ -153,10 +158,12 @@ String CraftingManagerImplementation::generateSerial() {
 
 	ss << ")";
 
+
 	return ss.toString();
 }
 
-void CraftingManagerImplementation::experimentRow(ManufactureSchematic* schematic, CraftingValues* craftingValues, int rowEffected, int pointsAttempted, float failure, int experimentationResult) {
+void CraftingManagerImplementation::experimentRow(ManufactureSchematic* schematic, CraftingValues* craftingValues,
+		int rowEffected, int pointsAttempted, float failure, int experimentationResult) {
 	int labratory = schematic->getLabratory();
 	SharedLabratory* lab = labs.get(labratory);
 	lab->experimentRow(craftingValues,rowEffected,pointsAttempted,failure,experimentationResult);
@@ -165,7 +172,7 @@ void CraftingManagerImplementation::experimentRow(ManufactureSchematic* schemati
 void CraftingManagerImplementation::configureLabratories() {
 	ResourceLabratory* resLab = new ResourceLabratory();
 	resLab->initialize(zoneServer.get());
-
+	
 	labs.put(static_cast<int>(DraftSchematicObjectTemplate::RESOURCE_LAB),resLab); //RESOURCE_LAB
 
 	GeneticLabratory* genLab = new GeneticLabratory();
@@ -175,8 +182,8 @@ void CraftingManagerImplementation::configureLabratories() {
 	DroidLabratory* droidLab = new DroidLabratory();
 	droidLab->initialize(zoneServer.get());
 	labs.put(static_cast<int>(DraftSchematicObjectTemplate::DROID_LAB), droidLab); //DROID_LAB
-}
 
+}
 void CraftingManagerImplementation::setInitialCraftingValues(TangibleObject* prototype, ManufactureSchematic* manufactureSchematic, int assemblySuccess) {
 	if(manufactureSchematic == nullptr || manufactureSchematic->getDraftSchematic() == nullptr)
 		return;

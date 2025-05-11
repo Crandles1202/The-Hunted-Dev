@@ -18,7 +18,6 @@ import system.util.VectorMap;
 import system.lang.String;
 
 @json
-@mock
 class WeaponObject extends TangibleObject {
 	protected int attackType;
 	protected string weaponEffect;
@@ -55,7 +54,7 @@ class WeaponObject extends TangibleObject {
 	// TODO: Remove after server wipe
 	protected int forceCost;
 
-	protected float saberForceCost;
+	protected int saberForceCost;
 
 	protected int bladeColor;
 
@@ -91,7 +90,7 @@ class WeaponObject extends TangibleObject {
 		mindAttackCost = 0;
 		forceCost = 0;
 
-		saberForceCost = 0.0;
+		saberForceCost = 0;
 
 		pointBlankAccuracy = 0;
 		pointBlankRange = 0;
@@ -235,40 +234,18 @@ class WeaponObject extends TangibleObject {
 		pointBlankAccuracy = value;
 	}
 
-	@mock
 	@read
-	public abstract native int getPointBlankRange(boolean withPup);
+	public native int getPointBlankRange(boolean withPup = true);
 
-	@mock
 	@read
-	public abstract int getPointBlankRange() {
-		return getPointBlankRange(true);
-	}
-
-	@mock
-	@read
-	public abstract native int getIdealRange(boolean withPup);
-	
-	@mock
-	@read
-	public abstract int getIdealRange() {
-		return getIdealRange(true);
-	}
+	public native int getIdealRange(boolean withPup = true);
 
 	public void setIdealRange(int value) {
 		idealRange = value;
 	}
 
-	@mock
 	@read
-	public abstract native int getMaxRange(boolean withPup);
-
-	@mock
-	@dirty
-	@read
-	public abstract int getMaxRange() {
-		return getMaxRange(true);
-	}
+	public native int getMaxRange(boolean withPup = true);
 
 	public void setMaxRange(int value) {
 		maxRange = value;
@@ -350,11 +327,11 @@ class WeaponObject extends TangibleObject {
 	}
 
 	@read
-	public float getForceCost() {
+	public int getForceCost() {
 		return saberForceCost;
 	}
 
-	public void setForceCost(float value) {
+	public void setForceCost(int value) {
 		saberForceCost = value;
 	}
 
@@ -595,10 +572,5 @@ class WeaponObject extends TangibleObject {
 	@read
 	public final VectorMap<string, int> getWearableSkillMods() {
 		return wearableSkillMods;
-	}
-
-	@read
-	public int getTotalWearableSkillMods() {
-		return wearableSkillMods.size();
 	}
 }

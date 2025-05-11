@@ -57,7 +57,7 @@ public:
 		if (characters == nullptr)
 			return;
 
-		auto galaxies = GalaxyList(accountid);
+		auto galaxies = GalaxyList(username);
 
 		while (characters->next()) {
 			uint32 galaxyID = characters->getInt(2);

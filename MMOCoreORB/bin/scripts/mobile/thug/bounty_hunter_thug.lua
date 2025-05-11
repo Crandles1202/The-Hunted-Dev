@@ -2,7 +2,6 @@ bounty_hunter_thug = Creature:new {
 	objectName = "@mob/creature_names:bounty_hunter",
 	randomNameType = NAME_GENERIC,
 	randomNameTag = true,
-	mobType = MOB_NPC,
 	socialGroup = "mercenary",
 	faction = "",
 	level = 24,
@@ -28,26 +27,65 @@ bounty_hunter_thug = Creature:new {
 	creatureBitmask = KILLER,
 	diet = HERBIVORE,
 
-	templates = {"object/mobile/dressed_bountyhunter_trainer_03.iff",
-		"object/mobile/dressed_bounty_hunter_zabrak_female_01.iff"},
+	templates = {"object/mobile/dressed_bountyhunter_trainer_01.iff",
+		"object/mobile/dressed_bountyhunter_trainer_02.iff",
+		"object/mobile/dressed_bountyhunter_trainer_03.iff",
+		"object/mobile/dressed_bounty_hunter_zabrak_female_01.iff",
+		"object/mobile/dressed_mercenary_warlord_hum_m.iff",
+		"object/mobile/dressed_mercenary_warlord_nikto_m.iff",
+		"object/mobile/dressed_mercenary_warlord_wee_m.iff",
+		"object/mobile/dressed_tatooine_gunrunner.iff",
+		"object/mobile/dressed_tatooine_desert_demon_bodyguard.iff",
+		"object/mobile/dressed_mugger.iff",
+		"object/mobile/dressed_hoodlum_zabrak_female_01.iff",
+		"object/mobile/dressed_robber_twk_male_01.iff",
+		"object/mobile/dressed_criminal_thug_human_female_01.iff",
+		"object/mobile/dressed_robber_twk_female_01.iff",
+		"object/mobile/dressed_crook_zabrak_male_01.iff",
+		"object/mobile/dressed_hooligan_rodian_female_01.iff",
+		"object/mobile/dressed_criminal_pirate_human_male_01.iff",
+		"object/mobile/dressed_criminal_pirate_human_female_01.iff",
+		"object/mobile/dressed_criminal_thug_aqualish_male_01.iff",
+		"object/mobile/dressed_criminal_thug_aqualish_male_02.iff",
+		"object/mobile/dressed_criminal_thug_aqualish_female_01.iff",
+		"object/mobile/dressed_criminal_thug_aqualish_female_02.iff",
+		"object/mobile/dressed_criminal_thug_bothan_male_01.iff",
+		"object/mobile/dressed_criminal_thug_bothan_female_01.iff",
+		"object/mobile/dressed_criminal_thug_human_male_01.iff",
+		"object/mobile/dressed_criminal_thug_human_male_02.iff",
+		"object/mobile/dressed_criminal_thug_human_female_01.iff",
+		"object/mobile/dressed_criminal_thug_human_female_02.iff",
+		"object/mobile/dressed_criminal_thug_rodian_male_01.iff",
+		"object/mobile/dressed_criminal_thug_rodian_female_01.iff",
+		"object/mobile/dressed_criminal_thug_trandoshan_male_01.iff",
+		"object/mobile/dressed_criminal_thug_trandoshan_female_01.iff",
+		"object/mobile/dressed_criminal_thug_zabrak_male_01.iff",
+		"object/mobile/dressed_criminal_thug_zabrak_female_01.iff",
+		"object/mobile/dressed_black_sun_assassin.iff",
+		"object/mobile/dressed_black_sun_guard.iff",
+		"object/mobile/dressed_black_sun_henchman.iff",
+		"object/mobile/dressed_black_sun_thug.iff",
+		"object/mobile/dressed_death_watch_gold.iff",
+		"object/mobile/dressed_death_watch_silver.iff",
+		"object/mobile/dressed_death_watch_red.iff",
+		"object/mobile/dressed_death_watch_grey.iff"},
 	lootGroups = {
 		{
 			groups = {
-				{group = "mercenary_tier_1", chance = 10000000}
+				{group = "junk", chance = 1500000},
+				{group = "wearables_common", chance = 2000000},
+				{group = "grenades_looted", chance = 1000000},
+				{group = "armor_all", chance = 1500000},
+				{group = "rifles", chance = 1000000},
+				{group = "carbines", chance = 1000000},
+				{group = "tailor_components", chance = 1000000},
+				{group = "loot_kit_parts", chance = 1000000}
 			}
 		}
 	},
-
-	-- Primary and secondary weapon should be different types (rifle/carbine, carbine/pistol, rifle/unarmed, etc)
-	-- Unarmed should be put on secondary unless the mobile doesn't use weapons, in which case "unarmed" should be put primary and "none" as secondary
-	primaryWeapon = "pirate_weapons_heavy",
-	secondaryWeapon = "unarmed",
+	weapons = {"pirate_weapons_heavy"},
 	reactionStf = "@npc_reaction/slang",
-	
-	-- primaryAttacks and secondaryAttacks should be separate skill groups specific to the weapon type listed in primaryWeapon and secondaryWeapon
-	-- Use merge() to merge groups in creatureskills.lua together. If a weapon is set to "none", set the attacks variable to empty brackets
-	primaryAttacks = merge(brawlermaster,marksmanmaster),
-	secondaryAttacks = { }
+	attacks = merge(brawlermaster,marksmanmaster)
 }
 
 CreatureTemplates:addCreatureTemplate(bounty_hunter_thug, "bounty_hunter_thug")

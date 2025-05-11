@@ -14,84 +14,61 @@
 class InviteCommand : public QueueCommand {
 public:
 
-	InviteCommand(const String& name, ZoneProcessServer* server) : QueueCommand(name, server) {
+	InviteCommand(const String& name, ZoneProcessServer* server)
+		: QueueCommand(name, server) {
+
 	}
 
 	int doQueueCommand(CreatureObject* creature, const uint64& target, const UnicodeString& arguments) const {
+
 		if (!checkStateMask(creature))
 			return INVALIDSTATE;
 
 		if (!checkInvalidLocomotions(creature))
 			return INVALIDLOCOMOTION;
 
-		auto ghost = creature->getPlayerObject();
+		PlayerObject* playerObject = creature->getPlayerObject();
 		bool godMode = false;
 
-		if (ghost != nullptr && ghost->isPrivileged()) {
-			godMode = true;
+		if (playerObject)
+		{
+			if (playerObject->hasGodMode())
+				godMode = true;
 		}
 
-		auto zoneServer = server->getZoneServer();
+		GroupManager* groupManager = GroupManager::instance();
+//
+//		ManagedReference<SceneObject*> object = server->getZoneServer()->getObject(target);
 
-		if (zoneServer == nullptr)
-			return GENERALERROR;
-
-		auto object = zoneServer->getObject(target);
-
-		bool galaxyWide = ConfigManager::instance()->getBool("Core3.PlayerManager.GalaxyWideGrouping", false);
-
-		if (galaxyWide && (object == nullptr || (!object->isPlayerCreature() && !object->isShipObject()))) {
-			StringTokenizer args(arguments.toString());
-			String firstName;
-
-			if (args.hasMoreTokens())
-				args.getStringToken(firstName);
-
-			if (zoneServer == nullptr)
-				return GENERALERROR;
-
-			auto playerMan = zoneServer->getPlayerManager();
-
-			if (playerMan == nullptr)
-				return GENERALERROR;
-
-			object = playerMan->getPlayer(firstName);
-		}
-
-		auto groupManager = GroupManager::instance();
-
-		if (object == nullptr || groupManager == nullptr)
-			return GENERALERROR;
-
-		if (!object->isPlayerCreature() && !object->isShipObject()) {
-			return GENERALERROR;
-		}
-
-		CreatureObject* player = nullptr;
-
-		if (object->isShipObject()) {
-			auto ship = object->asShipObject();
-
-			if (ship != nullptr) {
-				player = ship->getOwner().get();
+ 		ManagedReference<SceneObject*> object = NULL;
+		if (target != 0 && target != creature->getObjectID())
+			object = server->getZoneServer()->getObject(target);
+		else if (!arguments.isEmpty()) {
+			StringTokenizer tokenizer(arguments.toString());
+			if (tokenizer.hasMoreTokens()) {
+				String name;
+				tokenizer.getStringToken(name);
+				name = name.toLowerCase();
+				if (name != "self" && name != "this") {
+					try {
+						object = server->getPlayerManager()->getPlayer(name);
+					} catch (ArrayIndexOutOfBoundsException& ex) {
+						// this happens if the player wasn't found
+					}
+				}
 			}
-		} else {
-			player = object->asCreatureObject();
 		}
 
-		if (player == nullptr)
+		if (object == nullptr)
 			return GENERALERROR;
 
-		auto invitedGhost = player->getPlayerObject();
 
-		if (invitedGhost == nullptr)
-			return GENERALERROR;
+		if (object->isPlayerCreature()) {
+			CreatureObject* player = cast<CreatureObject*>( object.get());
 
-		// Cannot be invite by a player that they ignore, does not apply to privileged players
-		if (!godMode && invitedGhost->isIgnoring(creature->getFirstName()))
-			return GENERALERROR;
-
-		groupManager->inviteToGroup(creature, player);
+			if (!player->getPlayerObject()->isIgnoring(creature->getFirstName().toLowerCase()) || godMode)
+				groupManager->inviteToGroup(creature, player);
+		}
 
 		return SUCCESS;
 	}
@@ -99,3 +76,4 @@ public:
 };
 
 #endif //INVITECOMMAND_H_
+

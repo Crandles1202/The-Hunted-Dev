@@ -2,7 +2,6 @@ droideka = Creature:new {
 	objectName = "@mob/creature_names:droideka",
 	socialGroup = "droideka",
 	faction = "",
-	mobType = MOB_DROID,
 	level = 39,
 	chanceHit = 0.44,
 	damageMin = 370,
@@ -30,7 +29,11 @@ droideka = Creature:new {
 	lootGroups = {
 		{
 			groups = {
-				{group = "lok_droid_tier_1", chance = 10000000}
+				{group = "junk", chance = 6500000},
+				{group = "nyms_common", chance = 1000000},
+				{group = "pistols", chance = 1000000},
+				{group = "carbines", chance = 1000000},
+				{group = "tailor_components", chance = 500000}
 			}
 		}
 	},

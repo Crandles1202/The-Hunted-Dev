@@ -42,6 +42,7 @@
 
 
 object_tangible_scout_trap_trap_sonic_pulse = object_tangible_scout_trap_shared_trap_sonic_pulse:new {
+
 	templateType = TRAP,
 	objectMenuComponent = "TrapMenuComponent",
 
@@ -51,11 +52,10 @@ object_tangible_scout_trap_trap_sonic_pulse = object_tangible_scout_trap_shared_
 	skillMods = {},
 
 	healthCost = 17,
-	actionCost = 30,
+	actionCost = 30, 
 	mindCost = 17,
 
 	maxRange = 32,
-	areaOfEffect = true,
 
 	poolToDamage = HEALTH,
 	minDamage = 200,

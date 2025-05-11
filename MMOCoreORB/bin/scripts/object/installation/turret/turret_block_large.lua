@@ -45,10 +45,7 @@ object_installation_turret_turret_block_large = object_installation_turret_share
 	pvpStatusBitmask = ATTACKABLE,
 	optionsBitmask = 0,
 	maxCondition = 300000,
-
-	gameObjectType = 4105,
-
-	groundZoneComponent = "TurretZoneComponent",
+	zoneComponent = "TurretZoneComponent",
 	dataObjectComponent = "TurretDataComponent",
 	-- Damagetypes in WeaponObject
 	vulnerability = BLAST + LIGHTSABER,

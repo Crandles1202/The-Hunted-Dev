@@ -42,28 +42,27 @@
 
 
 object_weapon_melee_2h_sword_crafted_saber_sword_lightsaber_two_handed_gen2 = object_weapon_melee_2h_sword_crafted_saber_shared_sword_lightsaber_two_handed_gen2:new {
-	playerRaces = {
-		"object/creature/player/bothan_male.iff",
-		"object/creature/player/bothan_female.iff",
-		"object/creature/player/human_male.iff",
-		"object/creature/player/human_female.iff",
-		"object/creature/player/ithorian_male.iff",
-		"object/creature/player/ithorian_female.iff",
-		"object/creature/player/moncal_male.iff",
-		"object/creature/player/moncal_female.iff",
-		"object/creature/player/rodian_male.iff",
-		"object/creature/player/rodian_female.iff",
-		"object/creature/player/sullustan_male.iff",
-		"object/creature/player/sullustan_female.iff",
-		"object/creature/player/trandoshan_male.iff",
-		"object/creature/player/trandoshan_female.iff",
-		"object/creature/player/twilek_male.iff",
-		"object/creature/player/twilek_female.iff",
-		"object/creature/player/wookiee_male.iff",
-		"object/creature/player/wookiee_female.iff",
-		"object/creature/player/zabrak_male.iff",
-		"object/creature/player/zabrak_female.iff"
-	},
+
+	playerRaces = { "object/creature/player/bothan_male.iff",
+				"object/creature/player/bothan_female.iff",
+				"object/creature/player/human_male.iff",
+				"object/creature/player/human_female.iff",
+				"object/creature/player/ithorian_male.iff",
+				"object/creature/player/ithorian_female.iff",
+				"object/creature/player/moncal_male.iff",
+				"object/creature/player/moncal_female.iff",
+				"object/creature/player/rodian_male.iff",
+				"object/creature/player/rodian_female.iff",
+				"object/creature/player/sullustan_male.iff",
+				"object/creature/player/sullustan_female.iff",
+				"object/creature/player/trandoshan_male.iff",
+				"object/creature/player/trandoshan_female.iff",
+				"object/creature/player/twilek_male.iff",
+				"object/creature/player/twilek_female.iff",
+				"object/creature/player/wookiee_male.iff",
+				"object/creature/player/wookiee_female.iff",
+				"object/creature/player/zabrak_male.iff",
+				"object/creature/player/zabrak_female.iff" },
 
 	-- RANGEDATTACK, MELEEATTACK, FORCEATTACK, TRAPATTACK, GRENADEATTACK, HEAVYACIDBEAMATTACK,
 	-- HEAVYLIGHTNINGBEAMATTACK, HEAVYPARTICLEBEAMATTACK, HEAVYROCKETLAUNCHERATTACK, HEAVYLAUNCHERATTACK
@@ -73,7 +72,7 @@ object_weapon_melee_2h_sword_crafted_saber_sword_lightsaber_two_handed_gen2 = ob
 	damageType = LIGHTSABER,
 
 	-- NONE, LIGHT, MEDIUM, HEAVY
-	armorPiercing = MEDIUM,
+	armorPiercing = HEAVY,
 
 	-- combat_rangedspecialize_bactarifle, combat_rangedspecialize_rifle, combat_rangedspecialize_pistol, combat_rangedspecialize_heavy, combat_rangedspecialize_carbine
 	-- combat_meleespecialize_unarmed, combat_meleespecialize_twohand, combat_meleespecialize_polearm, combat_meleespecialize_onehand, combat_general,
@@ -133,8 +132,8 @@ object_weapon_melee_2h_sword_crafted_saber_sword_lightsaber_two_handed_gen2 = ob
 	experimentalWeights = {1, 1, 1, 2, 1, 2, 1, 1, 1, 1, 1, 2, 1, 1, 1},
 	experimentalGroupTitles = {"null", "null", "expDamage", "expDamage", "expDamage", "expDamage", "expEffeciency", "expEffeciency", "expEffeciency", "expEffeciency"},
 	experimentalSubGroupTitles = {"null", "null", "mindamage", "maxdamage", "attackspeed", "woundchance", "forcecost", "attackhealthcost", "attackactioncost", "attackmindcost"},
-	experimentalMin = {0, 0, 100, 190, 4.8, 13, 28, 55, 47, 25},
-	experimentalMax = {0, 0, 120, 230, 4.5, 25, 24, 40, 32, 20},
+	experimentalMin = {0, 0, 100, 200, 3.0, 15, 24, 25, 47, 45},
+	experimentalMax = {0, 0, 200, 400, 2.0, 30, 14, 20, 32, 40},
 	experimentalPrecision = {0, 0, 0, 0, 1, 0, 1, 0, 0, 0},
 	experimentalCombineType = {0, 0, 1, 1, 1, 1, 1, 1, 1, 1},
 }

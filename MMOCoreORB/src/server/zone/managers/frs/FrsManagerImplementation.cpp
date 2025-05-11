@@ -19,7 +19,6 @@
 #include "templates/faction/Factions.h"
 #include "server/zone/objects/player/FactionStatus.h"
 #include "server/zone/managers/player/PlayerMap.h"
-#include "server/login/account/Account.h"
 
 void FrsManagerImplementation::initialize() {
 	auto zoneServer = this->zoneServer.get();
@@ -65,22 +64,6 @@ void FrsManagerImplementation::initialize() {
 		voteStatusTask->schedule(VOTE_STATUS_TICK - miliDiff);
 }
 
-void FrsManagerImplementation::stop() {
-	cancelTasks();
-
-	rankMaintenanceTask = nullptr;
-	voteStatusTask = nullptr;
-
-	managerData = nullptr;
-	lightEnclave = nullptr;
-	darkEnclave = nullptr;
-
-	lightRankingData.removeAll();
-	darkRankingData.removeAll();
-	roomRequirements.removeAll();
-	experienceValues.removeAll();
-}
-
 void FrsManagerImplementation::cancelTasks() {
 	if (voteStatusTask) {
 		voteStatusTask->cancel();
@@ -92,7 +75,7 @@ void FrsManagerImplementation::cancelTasks() {
 }
 
 void FrsManagerImplementation::loadFrsData() {
-	info("Loading FRS Manager Data from frsmanager.db");
+	info("Loading frs manager data from frsmanager.db");
 
 	ObjectDatabaseManager* dbManager = ObjectDatabaseManager::instance();
 	ObjectDatabase* rankDatabase = ObjectDatabaseManager::instance()->loadObjectDatabase("frsmanager", true);
@@ -182,7 +165,6 @@ void FrsManagerImplementation::loadLuaConfig() {
 	maxPetitioners = lua->getGlobalInt("maxPetitioners");
 	missedVotePenalty = lua->getGlobalInt("missedVotePenalty");
 	maxChallenges = lua->getGlobalInt("maxChallenges");
-	sameAccountEnclaveRestrictions = lua->getGlobalInt("sameAccountEnclaveRestrictions");
 
 	uint32 enclaveID = lua->getGlobalInt("lightEnclaveID");
 
@@ -386,48 +368,10 @@ void FrsManagerImplementation::playerLoggedIn(CreatureObject* player) {
 	Locker lock(player);
 
 	validatePlayerData(player);
-
-	if (!ConfigManager::instance()->getBool("Core3.FrsManager.ImmediateMaintXpDeduction", false)) {
-		deductDebtExperience(player);
-	}
+	deductDebtExperience(player);
 }
 
-bool FrsManagerImplementation::isBanned(CreatureObject* player) {
-	PlayerObject* ghost = player->getPlayerObject();
-
-	if (ghost == nullptr)
-		return false;
-
-	Reference<Account*> account = ghost->getAccount();
-
-	if (account == nullptr || account->isBanned())
-		return true;
-
-	auto zoneServer = this->zoneServer.get();
-
-	if (zoneServer == nullptr)
-		return false;
-
-	uint galaxyID = zoneServer->getGalaxyID();
-
-	const GalaxyBanEntry* galaxyBan = account->getGalaxyBan(galaxyID);
-
-	if (galaxyBan != nullptr)
-		return true;
-
-	Reference<CharacterList*> characters = account->getCharacterList();
-
-	for (int i = 0; i<characters->size(); i++) {
-		CharacterListEntry& entry = characters->get(i);
-
-		if (entry.getFirstName() == player->getFirstName() && entry.getGalaxyID() == galaxyID && entry.isBanned())
-			return true;
-	}
-
-	return false;
-}
-
-void FrsManagerImplementation::validatePlayerData(CreatureObject* player, bool verifyBan) {
+void FrsManagerImplementation::validatePlayerData(CreatureObject* player) {
 	if (player == nullptr)
 		return;
 
@@ -435,13 +379,6 @@ void FrsManagerImplementation::validatePlayerData(CreatureObject* player, bool v
 
 	if (ghost == nullptr)
 		return;
-
-	if (verifyBan && isBanned(player)) {
-		removeFromFrs(player);
-		verifyRoomAccess(player, -1);
-		ghost->recalculateForcePower();
-		return;
-	}
 
 	FrsData* playerData = ghost->getFrsData();
 	int councilType = playerData->getCouncilType();
@@ -551,9 +488,6 @@ void FrsManagerImplementation::setPlayerRank(CreatureObject* player, int rank) {
 		groupName = "DarkEnclaveRank";
 
 	int curRank = playerData->getRank();
-	int curExperience = ghost->getExperience("force_rank_xp");
-
-	log(true) << "setPlayerRank for " << player->getFirstName() << " ID: " << player->getObjectID() << " Current FRS Rank = " << curRank << " New FRS Rank = " << rank << " Current FRS XP = " << curExperience;
 
 	if (isFrsEnabled() && curRank > 0 && (councilType == COUNCIL_LIGHT || councilType == COUNCIL_DARK)) {
 		ghost->removePermissionGroup(groupName + String::valueOf(curRank), true);
@@ -669,13 +603,13 @@ void FrsManagerImplementation::removeFromFrs(CreatureObject* player) {
 	}
 
 	playerData->setRank(-1);
+	playerData->setCouncilType(0);
 
 	Locker clocker(managerData, player);
 	managerData->removeChallengeTime(playerID);
 	clocker.release();
 
 	updatePlayerSkills(player);
-	playerData->setCouncilType(0);
 
 	StringIdChatParameter param("@force_rank:council_left"); // You have left the %TO.
 
@@ -870,25 +804,22 @@ void FrsManagerImplementation::adjustFrsExperience(CreatureObject* player, int a
 	if (ghost == nullptr)
 		return;
 
-	if (!player->isOnline())
-		sendSystemMessage = false;
-
 	if (amount > 0) {
-		if (ghost->hasCappedExperience("force_rank_xp")) {
-			if (sendSystemMessage) {
-				StringIdChatParameter message("base_player", "prose_hit_xp_cap"); //You have achieved your current limit for %TO experience.
-				message.setTO("exp_n", "force_rank_xp");
-				player->sendSystemMessage(message);
-			}
-			return;
-		}
-
-		TransactionLog trx(TrxCode::EXPERIENCE, player);
-		ghost->addExperience(trx, "force_rank_xp", amount, true);
+          
+          	if (ghost->hasCappedExperience("force_rank_xp"))
+                {
+                	StringIdChatParameter message("base_player", "prose_hit_xp_cap"); //You have achieved your current limit for %TO experience.
+                	message.setTO("exp_n", "force_rank_xp");
+                	player->sendSystemMessage(message);
+                	return;
+                }
+          
+		ghost->addExperience("force_rank_xp", amount, true);
 
 		if (sendSystemMessage) {
 			StringIdChatParameter param("@force_rank:experience_granted"); // You have gained %DI Force Rank experience.
 			param.setDI(amount);
+
 			player->sendSystemMessage(param);
 		}
 	} else {
@@ -902,8 +833,7 @@ void FrsManagerImplementation::adjustFrsExperience(CreatureObject* player, int a
 		if ((amount * -1) > curExperience)
 			amount = curExperience * -1;
 
-		TransactionLog trx(TrxCode::EXPERIENCE, player);
-		ghost->addExperience(trx, "force_rank_xp", amount, true);
+		ghost->addExperience("force_rank_xp", amount, true);
 
 		if (sendSystemMessage) {
 			StringIdChatParameter param("@force_rank:experience_lost"); // You have lost %DI Force Rank experience.
@@ -925,13 +855,8 @@ void FrsManagerImplementation::adjustFrsExperience(CreatureObject* player, int a
 
 		int reqXp = rankingData->getRequiredExperience();
 
-		if (reqXp > curExperience) {
-			auto zoneServer = this->zoneServer.get();
-			ChatManager* chatManager = zoneServer->getChatManager();
-
-			chatManager->sendMail("Enclave Records", "@force_rank:demote_xp_debt_sub", "@force_rank:demote_xp_debt_body", player->getFirstName());
+		if (reqXp > curExperience)
 			demotePlayer(player);
-		}
 	}
 }
 
@@ -1005,28 +930,11 @@ void FrsManagerImplementation::deductMaintenanceXp(CreatureObject* player) {
 	ChatManager* chatManager = zoneServer->getChatManager();
 
 	StringIdChatParameter mailBody("@force_rank:xp_maintenance_body"); // You have lost %DI Force Rank experience. All members of Rank 1 or higher must pay experience each day to remain in their current positions. (Note: This loss may not take effect until your next login.)
+	mailBody.setDI(maintXp);
 
-	if (ConfigManager::instance()->getBool("Core3.FrsManager.ImmediateMaintXpDeduction", false)) {
-		Locker clocker(managerData, player);
-		uint64 playerID = player->getObjectID();
-		int curDebt = managerData->getExperienceDebt(playerID);
+	chatManager->sendMail("Enclave Records", "@force_rank:xp_maintenace_sub", mailBody, player->getFirstName(), nullptr);
 
-		String msg = "You have lost " + String::valueOf(maintXp) + " Force Rank experience. All members of Rank 1 or higher must pay experience each day to remain in their current positions.";
-
-		if (curDebt > 0) {
-			maintXp += curDebt;
-			msg = "You have lost " + String::valueOf(maintXp) + " Force Rank experience. This includes " + String::valueOf(curDebt) + " previously banked experience debt. All members of Rank 1 or higher must pay experience each day to remain in their current positions.";
-			managerData->removeExperienceDebt(playerID);
-		}
-		chatManager->sendMail("Enclave Records", "@force_rank:xp_maintenace_sub", msg, player->getFirstName());
-		adjustFrsExperience(player, maintXp * -1);
-	} else {
-		addExperienceDebt(player, maintXp);
-		StringIdChatParameter mailBody("@force_rank:xp_maintenance_body"); // You have lost %DI Force Rank experience. All members of Rank 1 or higher must pay experience each day to remain in their current positions. (Note: This loss may not take effect until your next login.)
-		mailBody.setDI(maintXp);
-
-		chatManager->sendMail("Enclave Records", "@force_rank:xp_maintenace_sub", mailBody, player->getFirstName(), nullptr);
-	}
+	addExperienceDebt(player, maintXp);
 }
 
 void FrsManagerImplementation::addExperienceDebt(CreatureObject* player, int amount) {
@@ -1516,21 +1424,6 @@ void FrsManagerImplementation::handleVoteRecordSui(CreatureObject* player, Scene
 	if (playerName.isEmpty()) {
 		player->sendSystemMessage("Unable to find that player.");
 		info("FrsManagerImplementation::handleVoteRecordSui failed to find player " + String::valueOf(playerID), true);
-		return;
-	}
-
-	ManagedReference<CreatureObject*> petitioner = zoneServer->getObject(petitionerID).castTo<CreatureObject*>();
-
-	if (petitioner == nullptr)
-		return;
-
-	PlayerObject* petitionerGhost = petitioner->getPlayerObject();
-
-	if (petitionerGhost == nullptr)
-		return;
-
-	if (sameAccountEnclaveRestrictions && ghost->getAccountID() == petitionerGhost->getAccountID() && playerID != petitionerID) {
-		player->sendSystemMessage("You cannot vote for other characters on your account.");
 		return;
 	}
 
@@ -2286,15 +2179,8 @@ void FrsManagerImplementation::handleChallengeVoteIssueSui(CreatureObject* playe
 
 	PlayerObject* challengedGhost = challenged->getPlayerObject();
 
-
 	if (challengedGhost == nullptr)
 		return;
-
-	if (sameAccountEnclaveRestrictions && ghost->getAccountID() == challengedGhost->getAccountID()) {
-		player->sendSystemMessage("You cannot issue challenges against other characters on your account.");
-		return;
-	}
-
 
 	Locker xlock(challenged, player);
 
@@ -2665,11 +2551,6 @@ void FrsManagerImplementation::handleVoteDemoteSui(CreatureObject* player, Scene
 	if (demoteGhost == nullptr)
 		return;
 
-	if (sameAccountEnclaveRestrictions && ghost->getAccountID() == demoteGhost->getAccountID()) {
-		player->sendSystemMessage("You cannot vote to demote other characters on your account.");
-		return;
-	}
-
 	FrsData* demotePlayerData = demoteGhost->getFrsData();
 	int demotePlayerRank = demotePlayerData->getRank();
 
@@ -2904,17 +2785,15 @@ void FrsManagerImplementation::sendRankPlayerList(CreatureObject* player, int co
 	if (ghost == nullptr)
 		return;
 
-	if (!ghost->isPrivileged()) {
-		FrsData* playerData = ghost->getFrsData();
-		int playerCouncil = playerData->getCouncilType();
-		int curPlayerRank = playerData->getRank();
+	FrsData* playerData = ghost->getFrsData();
+	int playerCouncil = playerData->getCouncilType();
+	int curPlayerRank = playerData->getRank();
 
-		if (curPlayerRank < 0)
-			return;
+	if (curPlayerRank < 0)
+		return;
 
-		if (playerCouncil != councilType)
-			return;
-	}
+	if (playerCouncil != councilType)
+		return;
 
 	ManagedReference<FrsRank*> rankData = getFrsRank(councilType, rank);
 
@@ -3422,7 +3301,7 @@ bool FrsManagerImplementation::handleDarkCouncilDeath(CreatureObject* killer, Cr
 		}
 	}
 
-	if (challengeData == nullptr || challengeData->isChallengeCompleted())
+	if (challengeData == nullptr)
 		return false;
 
 	uint64 challengerID = challengeData->getChallengerID();
@@ -3475,13 +3354,6 @@ bool FrsManagerImplementation::handleDarkCouncilDeath(CreatureObject* killer, Cr
 
 	if (rankData == nullptr)
 		return true;
-
-	if (challengerWon) {
-		Locker datalocker(rankData);
-
-		modifySuddenDeathFlags(killer, rankData, true);
-		rankData->removeFromPetitionerList(challengerID);
-	}
 
 	Locker clocker(rankData, managerData);
 
@@ -3627,17 +3499,6 @@ void FrsManagerImplementation::acceptArenaChallenge(CreatureObject* player, uint
 	if (challenger == nullptr)
 		return;
 
-	PlayerObject* ghost = player->getPlayerObject();
-	PlayerObject* challengerGhost = challenger->getPlayerObject();
-
-	if (ghost == nullptr || challengerGhost == nullptr)
-		return;
-
-	if (sameAccountEnclaveRestrictions && ghost->getAccountID() == challengerGhost->getAccountID()) {
-		player->sendSystemMessage("You cannot accept a challenge from other characters on your account.");
-		return;
-	}
-
 	challengeData->setChallengeAccepterID(player->getObjectID());
 
 	if (!challenger->isOnline() || challenger->isDead() || !isPlayerInEnclave(challenger)) {
@@ -3716,24 +3577,11 @@ void FrsManagerImplementation::acceptArenaChallenge(CreatureObject* player, uint
 }
 
 void FrsManagerImplementation::teleportPlayerToDarkArena(CreatureObject* player) {
-	if (!isPlayerInEnclave(player)) {
+	if (!isPlayerInEnclave(player))
 		return;
-	}
 
 	float randX = -12.f + System::random(24);
 	float randY = -85.f + System::random(24);
-
-	PlayerObject* ghost = player->getPlayerObject();
-
-	if (ghost != nullptr) {
-		ghost->setForcedTransform(true);
-
-		uint64 playerCell = player->getParentID();
-
-		auto msg = player->info();
-		msg << "Dark Enclave Arena Movement  X = " << randX  << "  Y = " << randY << " Cell ID:  " << playerCell;
-		msg.flush();
-	}
 
 	player->teleport(randX, -47.424f, randY, ARENA_CELL);
 }
@@ -4182,17 +4030,15 @@ void FrsManagerImplementation::handleSuddenDeathLoss(CreatureObject* player, Thr
 
 	for (int i = 0; i < threatMap->size(); ++i) {
 		ThreatMapEntry* entry = &threatMap->elementAt(i).getValue();
-		TangibleObject* attacker = threatMap->elementAt(i).getKey();
+		CreatureObject* attacker = threatMap->elementAt(i).getKey();
 
 		if (entry == nullptr || attacker == nullptr || attacker == player || !attacker->isPlayerCreature())
 			continue;
 
-		CreatureObject* attackerCreo = attacker->asCreatureObject();
-
-		if (!player->isAttackableBy(attackerCreo, true))
+		if (!player->isAttackableBy(attacker, true))
 			continue;
 
-		PlayerObject* attackerGhost = attackerCreo->getPlayerObject();
+		PlayerObject* attackerGhost = attacker->getPlayerObject();
 
 		if (attackerGhost == nullptr)
 			continue;

@@ -8,7 +8,7 @@
 #ifndef COMMANDSNEW_H_
 #define COMMANDSNEW_H_
 
-#include "ActionShot1Command.h"
+#include "ActionShot1Command.h"//EZ DISABLE COMMANDS HERE!?!?!?!??!?!
 #include "ActionShot2Command.h"
 #include "ActivateCloneCommand.h"
 #include "ActivateQuestCommand.h"
@@ -635,6 +635,7 @@
 #include "SetMoodCommand.h"
 #include "SetMoodInternalCommand.h"
 #include "SetNameCommand.h"
+#include "SetNameCommand.h"
 #include "SetOwnerCommand.h"
 #include "SetPerformanceBuffTargetCommand.h"
 #include "SetpermissionCommand.h"
@@ -781,7 +782,6 @@
 #include "WatchCommand.h"
 #include "WildShot1Command.h"
 #include "WildShot2Command.h"
-#include "WipeItemsCommand.h"
 #include "WookieeRoarCommand.h"
 #include "CityInfoCommand.h"
 #include "EjectCommand.h"

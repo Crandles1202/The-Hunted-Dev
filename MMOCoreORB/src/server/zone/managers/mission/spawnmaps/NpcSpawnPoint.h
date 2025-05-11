@@ -70,14 +70,13 @@ protected:
 
 public:
 
-	enum SpawnType {
-		NOSPAWN              = 1,  // Spawn type no spawn.
-		NEUTRALSPAWN         = 2,  // Spawn type neutral spawn.
-		IMPERIALSPAWN        = 4,  // Spawn type imperial spawn.
-		REBELSPAWN           = 8,  // Spawn type rebel spawn.
-		BHTARGETSPAWN        = 16, // Spawn type bh target.
-		LAMBDASHUTTLESPAWN   = 32, // Spawn type Lambda shuttle landing coordinates.
-		CONTAINMENTTEAMSPAWN = 64  // Spawn type containment team coordinates.
+	enum {
+		NOSPAWN            = 1,  // Spawn type no spawn.
+		NEUTRALSPAWN       = 2,  // Spawn type neutral spawn.
+		IMPERIALSPAWN      = 4,  // Spawn type imperial spawn.
+		REBELSPAWN         = 8,  // Spawn type rebel spawn.
+		BHTARGETSPAWN      = 16, // Spawn type bh target.
+		LAMBDASHUTTLESPAWN = 32  // Spawn type Lambda shuttle landing coordinates.
 	};
 
 	/**
@@ -165,7 +164,7 @@ public:
 		return "NpcSpawnPoint at " + position.toString() + " of spawntype " + String::valueOf(spawnType) + " is " + (inUseByNumberOfMissions > 0 ? " in use." : "free.");
 	}
 
-	void allocateNpc(Zone* zone, CreatureManager* creatureManager);
+	void allocateNpc(TerrainManager* terrainManager, CreatureManager* creatureManager);
 
 	void freeNpc(Reference<MissionManager*> missionManager);
 

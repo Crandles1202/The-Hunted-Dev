@@ -60,11 +60,13 @@ int GeneratorObjectImplementation::handleObjectMenuSelect(CreatureObject* player
 }
 
 String GeneratorObjectImplementation::getRedeedMessage() {
-	if (isActive())
+
+	if(operating)
 		return "destroy_deactivate_first";
 
-	if (getHopperSize() > 0)
+	if(getHopperSize() > 0)
 		return "destroy_empty_hopper";
+
 
 	return "";
 }

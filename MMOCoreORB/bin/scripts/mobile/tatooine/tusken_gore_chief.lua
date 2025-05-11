@@ -1,17 +1,16 @@
 tusken_gore_chief = Creature:new {
-	objectName = "@mob/creature_names:tusken_gore_chief",
+	objectName = "@mob/creature_names:tusken_chief",
 	socialGroup = "tusken_raider",
 	faction = "tusken_raider",
-	mobType = MOB_NPC,
-	level = 51,
-	chanceHit = 0.51,
-	damageMin = 400,
-	damageMax = 510,
-	baseXp = 5007,
-	baseHAM = 10000,
-	baseHAMmax = 13000,
+	level = 43,
+	chanceHit = 0.46,
+	damageMin = 365,
+	damageMax = 440,
+	baseXp = 4279,
+	baseHAM = 9600,
+	baseHAMmax = 11800,
 	armor = 0,
-	resists = {30,30,0,30,-1,30,0,0,-1},
+	resists = {45,30,30,60,-1,40,-1,-1,-1},
 	meatType = "",
 	meatAmount = 0,
 	hideType = "",
@@ -30,21 +29,22 @@ tusken_gore_chief = Creature:new {
 	lootGroups = {
 		{
 			groups = {
-				{group = "tusken_raider_tier_2", chance = 10000000}
+				{group = "junk", chance = 1500000},
+				{group = "tusken_common", chance = 3500000},
+				{group = "wearables_common", chance = 1000000},
+				{group = "wearables_uncommon", chance = 500000},
+				{group = "bone_armor", chance = 750000},
+				{group = "chitin_armor", chance = 750000},
+				{group = "armor_attachments", chance = 500000},
+				{group = "clothing_attachments", chance = 500000},
+				{group = "color_crystals", chance = 500000},
+				{group = "power_crystals", chance = 500000}
 			}
 		}
 	},
-
-	-- Primary and secondary weapon should be different types (rifle/carbine, carbine/pistol, rifle/unarmed, etc)
-	-- Unarmed should be put on secondary unless the mobile doesn't use weapons, in which case "unarmed" should be put primary and "none" as secondary
-	primaryWeapon = "tusken_ranged",
-	secondaryWeapon = "tusken_melee",
+	weapons = {"tusken_weapons"},
 	conversationTemplate = "",
-
-	-- primaryAttacks and secondaryAttacks should be separate skill groups specific to the weapon type listed in primaryWeapon and secondaryWeapon
-	-- Use merge() to merge groups in creatureskills.lua together. If a weapon is set to "none", set the attacks variable to empty brackets
-	primaryAttacks = merge(marksmanmaster,riflemanmaster),
-	secondaryAttacks = merge(brawlermaster,fencermaster)
+	attacks = merge(marksmanmaster,brawlermaster,fencermaster,riflemanmaster)
 }
 
 CreatureTemplates:addCreatureTemplate(tusken_gore_chief, "tusken_gore_chief")

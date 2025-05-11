@@ -7,6 +7,7 @@
 
 #include "server/zone/objects/creature/CreatureObject.h"
 #include "server/zone/objects/creature/ai/Creature.h"
+#include "server/zone/objects/creature/ai/AiAgent.h"
 #include "server/zone/packets/object/ObjectMenuResponse.h"
 #include "server/zone/objects/creature/events/DespawnCreatureTask.h"
 #include "server/zone/managers/creature/CreatureManager.h"
@@ -63,6 +64,45 @@ int CreatureImplementation::handleObjectMenuSelect(CreatureObject* player, byte 
 		if ((selectedID == 112 || selectedID == 234 || selectedID == 235 || selectedID == 236)) {
 			zone->getCreatureManager()->harvest(_this.getReferenceUnsafeStaticCast(), player, selectedID);
 
+//			CreatureObject* creature = _this.getReferenceUnsafeStaticCast();
+//
+//			//Zone* zone = creature->getZone();
+//
+//			SortedVector<QuadTreeEntry*> closeObjects;
+//			CloseObjectsVector* closeObjectsVector = (CloseObjectsVector*) creature->getCloseObjects();
+//			if (closeObjectsVector == nullptr) {
+//				zone->getInRangeObjects(creature->getWorldPositionX(), creature->getWorldPositionY(), 32, &closeObjects, true);
+//			} else {
+//				closeObjectsVector->safeCopyReceiversTo(closeObjects, CloseObjectsVector::CREOTYPE);
+//			}
+//
+//			for (int i = 0; i < closeObjects.size(); ++i) {
+//				SceneObject* obj = static_cast<SceneObject*>(closeObjects.get(i));
+//
+//				if (obj == nullptr)
+//					continue;
+//
+//				if (obj->getObjectID() == creature->getObjectID())
+//					continue;
+//
+//				CreatureObject* c = obj->asCreatureObject();
+//
+//				if (c == nullptr || c->isPlayerCreature() || !c->isDead())
+//					continue;
+//
+//				if (!creature->isInRange(c, 32))//distance
+//					continue;
+//
+//				Creature* cr2 = cast<Creature*>( c);
+//				Locker clocker(cr2, player);
+//
+////				ManagedReference<CreatureManager*> manager2 = cr2->getZone()->getCreatureManager();
+////				manager2->harvest(cr2, player, type);
+//
+//				zone->getCreatureManager()->harvest(cr2, player, selectedID);
+//
+//			}
+
 			return 0;
 		}
 	}
@@ -77,7 +117,7 @@ int CreatureImplementation::handleObjectMenuSelect(CreatureObject* player, byte 
 void CreatureImplementation::fillAttributeList(AttributeListMessage* alm, CreatureObject* player) {
 	AiAgentImplementation::fillAttributeList(alm, player);
 
-	int creaKnowledge = player != nullptr ?  player->getSkillMod("creature_knowledge") : 100;
+	int creaKnowledge = player->getSkillMod("creature_knowledge");
 
 	if (getHideType().isEmpty() && getBoneType().isEmpty() && getMeatType().isEmpty()) {
 		if(!isPet()) // we do want to show this for pets
@@ -85,7 +125,7 @@ void CreatureImplementation::fillAttributeList(AttributeListMessage* alm, Creatu
 	}
 
 	if (creaKnowledge >= 5) {
-		if (player != nullptr && isAggressiveTo(player))
+		if (isAggressiveTo(player))
 			alm->insertAttribute("aggro", "yes");
 		else
 			alm->insertAttribute("aggro", "no");
@@ -123,19 +163,19 @@ void CreatureImplementation::fillAttributeList(AttributeListMessage* alm, Creatu
 			alm->insertAttribute("res_meat", "---");
 	}
 
-	if (creaKnowledge >= 30) {
-		if (isKiller())
-			alm->insertAttribute("killer", "yes");
-		else
-			alm->insertAttribute("killer", "no");
-	}
+//	if (creaKnowledge >= 30) {
+//		if (isKiller())
+//			alm->insertAttribute("killer", "yes");
+//		else
+//			alm->insertAttribute("killer", "no");
+//	}
 
 	if (creaKnowledge >= 40) {
 		alm->insertAttribute("ferocity", (int) getFerocity());
 	}
 
-	if (creaKnowledge >= 45)
-		alm->insertAttribute("challenge_level", getAdultLevel());
+//	if (creaKnowledge >= 45)
+//		alm->insertAttribute("challenge_level", getAdultLevel());
 
 	//int skillNum = skillCommands.size();
 	const CreatureAttackMap* attackMap = getAttackMap();
@@ -174,14 +214,24 @@ void CreatureImplementation::fillAttributeList(AttributeListMessage* alm, Creatu
 		alm->insertAttribute("pet_command_19", skillMsg.toString());
 	}
 
-	if (creaKnowledge >= 90)
-		alm->insertAttribute("basetohit", getChanceHit());
+//	if (creaKnowledge >= 90)
+//		alm->insertAttribute("basetohit", getChanceHit());
 
-	if (creaKnowledge >= 100) {
-		StringBuffer damageMsg;
-		damageMsg << getDamageMin() << "-" << getDamageMax();
-		alm->insertAttribute("cat_wpn_damage", damageMsg.toString());
-	}
+//	if (creaKnowledge >= 100) {
+//		StringBuffer damageMsg;
+//		damageMsg << getDamageMin() << "-" << getDamageMax();
+//		alm->insertAttribute("cat_wpn_damage", damageMsg.toString());
+//	}
+}
+
+void CreatureImplementation::scheduleDespawn() {
+	if (getPendingTask("despawn") != nullptr)
+		return;
+
+	Reference<DespawnCreatureTask*> despawn = new DespawnCreatureTask(_this.getReferenceUnsafeStaticCast());
+	//despawn->schedule(300000); /// 5 minutes
+	//addPendingTask("despawn", despawn, 45000); /// 45 second
+	addPendingTask("despawn", despawn, 600000);
 }
 
 bool CreatureImplementation::hasOrganics() {
@@ -196,7 +246,7 @@ bool CreatureImplementation::hasDNA() {
 		return false;
 	}
 	// skip droids and anything that doesnt have organic bits or it doesnt eat
-	if (isDroidObject() || !hasOrganics() || getDiet() == ObjectFlag::NONE) {
+	if (isDroidObject() || !hasOrganics() || getDiet() == CreatureFlag::NONE) {
 		return false;
 	}
 	return (dnaState == CreatureManager::HASDNA);
@@ -231,7 +281,7 @@ void CreatureImplementation::notifyDespawn(Zone* zone) {
 
 bool CreatureImplementation::canHarvestMe(CreatureObject* player) {
 
-	if(!player->isInRange(_this.getReferenceUnsafeStaticCast(), 10.0f) || player->isInCombat() || !player->hasSkill("outdoors_scout_novice")
+	if(!player->isInRange(_this.getReferenceUnsafeStaticCast(), 10.0f)
 			|| player->isDead() || player->isIncapacitated() || isPet())
 		return false;
 
@@ -337,24 +387,18 @@ float CreatureImplementation::getChanceToTame(CreatureObject* player) {
 bool CreatureImplementation::isVicious() {
 	CreatureTemplate* creatureTemplate = npcTemplate.get();
 
-	return creatureTemplate->getPvpBitmask() & ObjectFlag::AGGRESSIVE;
+	return creatureTemplate->getPvpBitmask() & CreatureFlag::AGGRESSIVE;
 }
 
 bool CreatureImplementation::canMilkMe(CreatureObject* player) {
-	if (player == nullptr)
-		return false;
 
 	if (!hasMilk() || milkState != CreatureManager::NOTMILKED  || _this.getReferenceUnsafeStaticCast()->isInCombat() || _this.getReferenceUnsafeStaticCast()->isDead() || isPet())
 		return false;
 
-	if(!player->isInRange(_this.getReferenceUnsafeStaticCast(), 7.0f) || player->isInCombat() || player->isDead() || player->isIncapacitated() || !(player->hasState(CreatureState::MASKSCENT)))
+	if(!player->isInRange(_this.getReferenceUnsafeStaticCast(), 5.0f) || player->isInCombat() || player->isDead() || player->isIncapacitated() || !(player->hasState(CreatureState::MASKSCENT)))
 		return false;
 
 	return true;
-}
-
-bool CreatureImplementation::hasBeenMilked() const {
-	return milkState == CreatureManager::ALREADYMILKED;
 }
 
 bool CreatureImplementation::hasSkillToSampleMe(CreatureObject* player) {
@@ -397,47 +441,53 @@ bool CreatureImplementation::canCollectDna(CreatureObject* player) {
 void CreatureImplementation::loadTemplateDataForBaby(CreatureTemplate* templateData) {
 	loadTemplateData(templateData);
 
-	setCustomObjectName(getDisplayedName() + " (baby)", false);
+	setCustomObjectName(getDisplayedName() + "\\#F0FFFF" + " (tame)", false);
 
-	setHeight(templateData->getScale() * 0.46, false);
+//	setHeight(templateData->getScale() * 0.46, false);
 
-	int newLevel = level / 10;
-	if (newLevel < 1)
-		newLevel = 1;
+	//int newlvl = level;
 
-	setLevel(newLevel, false);
+//	int newLevel = level / 10;
+//
+//	if (newLevel < 1)
+//		newLevel = 1;
+//
+//	setLevel(newLevel, false);
 
 	setBaby(true);
 
-	clearPvpStatusBit(ObjectFlag::AGGRESSIVE, false);
-	clearPvpStatusBit(ObjectFlag::ENEMY, false);
-	addObjectFlag(ObjectFlag::BABY);
 
-	/*
-	auto inventory = getInventory();
-	int invSize  = inventory->getContainerObjectsSize();
+//	int ham = 0;
+//
+//	for (int i = 0; i < 9; ++i) {
+//		if (i % 3 == 0) {
+//			ham = getBaseHAM(i) / 10;
+//			setBaseHAM(i, ham);
+//		} else
+//			setBaseHAM(i, ham);
+//	}
+//
+//	for (int i = 0; i < 9; ++i) {
+//		setHAM(i, baseHAM.get(i));
+//	}
+//
+//	for (int i = 0; i < 9; ++i) {
+//		setMaxHAM(i, baseHAM.get(i));
+//	}
 
-	if (invSize > 1) {
-		StringBuffer msg;
-		msg << "\033[32m" << getDisplayedName() << " ID: " << getObjectID() << " Inventory size: " << inventory->getContainerObjectsSize() << endl;
 
-
-		for (int i = 0; i < inventory->getContainerObjectsSize(); ++i) {
-			auto object = inventory->getContainerObject(i);
-
-			msg << getDisplayedName() << " ID: " << getObjectID() << "Inventory - #" << i << " Item: " << object->getObjectNameStringIdName() << " -- " << object->getObjectTemplate()->getTemplateFileName() << " ID: " << object->getObjectID() << endl;
-		}
-
-		info(true) << msg.toString() << "\033[0m";
-	}
-	*/
+	clearPvpStatusBit(CreatureFlag::AGGRESSIVE, false);
+	clearPvpStatusBit(CreatureFlag::ENEMY, false);
+	setCreatureBitmask(getCreatureBitmask() + CreatureFlag::BABY);
 }
 
 void CreatureImplementation::setPetLevel(int newLevel) {
 	if (newLevel == 0)
 		return;
 
-	int oldLevel = level;
+	int oldLevel = getLevel(); //level;
+
+//	setCustomObjectName(getDisplayedName().replaceAll(" [" + oldLevel, " [" + newLevel), false);
 
 	CreatureObjectImplementation::setLevel(newLevel);
 
@@ -445,46 +495,41 @@ void CreatureImplementation::setPetLevel(int newLevel) {
 		return;
 	}
 
-	Creature* thisCreature = _this.getReferenceUnsafeStaticCast();
-
 	clearBuffs(false, false);
 
-	int baseLevel = getTemplateLevel();
+//	int baseLevel = getTemplateLevel();
 
-	float minDmg = calculateAttackMinDamage(baseLevel);
-	float maxDmg = calculateAttackMaxDamage(baseLevel);
+//	float minDmg = calculateAttackMinDamage(baseLevel);
+//	float maxDmg = calculateAttackMaxDamage(baseLevel);
 
-	float ratio = ((float)newLevel) / (float)baseLevel;
-	minDmg *= ratio;
-	maxDmg *= ratio;
+	int newmaxdmg = (getDamageMax() / oldLevel) * newLevel;
 
-	ManagedReference<WeaponObject*> defaultWeap = getDefaultWeapon();
-	ManagedReference<WeaponObject*> primaryWeap = getPrimaryWeapon();
+	Reference<WeaponObject*> defaultWeapon = getSlottedObject("default_weapon").castTo<WeaponObject*>();
 
-	if (primaryWeap != nullptr && primaryWeap != defaultWeap) {
-		Locker primLock(primaryWeap, thisCreature);
+//	float ratio = ((float)newLevel) / (float)baseLevel;
+//	minDmg *= ratio;
+//	maxDmg *= ratio;
 
-		float mod = 1.f - 0.1f*float(primaryWeap->getArmorPiercing());
+	if (readyWeapon != nullptr) {
+		//float mod = 1.f - 0.1f*float(readyWeapon->getArmorPiercing());
 
-		primaryWeap->setMinDamage(minDmg * mod);
-		primaryWeap->setMaxDamage(maxDmg * mod);
+		readyWeapon->setMinDamage(newmaxdmg * .6);
+		readyWeapon->setMaxDamage(newmaxdmg);
 	}
 
-	if (defaultWeap != nullptr) {
-		Locker defLock(defaultWeap, thisCreature);
-
-		defaultWeap->setMinDamage(minDmg);
-		defaultWeap->setMaxDamage(maxDmg);
+	if (defaultWeapon != nullptr) {
+		defaultWeapon->setMinDamage(newmaxdmg * .6);
+		defaultWeapon->setMaxDamage(newmaxdmg);
 	}
 
 	int ham = 0;
 
 	for (int i = 0; i < 9; ++i) {
-		if (i % 3 == 0) {
+//		if (i % 3 == 0) {
 			ham = (getBaseHAM(i) / oldLevel) * newLevel;
 			setBaseHAM(i, ham);
-		} else
-			setBaseHAM(i, ham / 100);
+//		} else
+//			setBaseHAM(i, ham / 100);
 	}
 
 	for (int i = 0; i < 9; ++i) {
@@ -494,22 +539,6 @@ void CreatureImplementation::setPetLevel(int newLevel) {
 	for (int i = 0; i < 9; ++i) {
 		setMaxHAM(i, baseHAM.get(i));
 	}
-}
-
-int CreatureImplementation::getAdultLevel() {
-	auto creatureDeed = getPetDeed();
-
-	// Pet Deed is not null, use the level from that
-	if (creatureDeed != nullptr) {
-		return creatureDeed->getLevel();
-	}
-
-	if (npcTemplate != nullptr) {
-		return npcTemplate->getLevel();
-	}
-
-	// Just use the creatures level
-	return getLevel();
 }
 
 bool CreatureImplementation::isMount() {

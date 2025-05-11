@@ -64,6 +64,8 @@ public:
 	static float determineMinDamage(int droidType, int rating) {
 		if (rating == 0)
 			return 1;
+		if (rating > 600)
+			rating = 600;
 		if(droidType == DroidObject::R_SERIES)
 			return ((int)((rating/600.0) * 80.0)) + 80;
 		if(droidType == DroidObject::LE_REPAIR)
@@ -75,6 +77,8 @@ public:
 	static float determineMaxDamage(int droidType, int rating) {
 		if (rating == 0)
 			return 1;
+		if (rating > 600)
+			rating = 600;
 		if(droidType == DroidObject::R_SERIES)
 			return ((int)((rating/600.0) * 85.0)) + 85;
 		if(droidType == DroidObject::LE_REPAIR)
@@ -85,7 +89,7 @@ public:
 	}
 	/** Used to determine harvest droid and trap droid skill mod*/
 	static int determineDroidSkillBonus(float playerSkill, float droidSkill, float baseAmount) {
-		float p1 = (1.f + (playerSkill / 100.f));
+		float p1 = (playerSkill + 1)/(float)100;
 		float p2 = 3.55 * p1;
 		float p3 = droidSkill/p2;
 		float p4 = p3/100;

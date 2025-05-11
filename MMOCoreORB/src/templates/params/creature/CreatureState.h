@@ -48,9 +48,10 @@ public:
 		PILOTINGSHIP             = 0x20000000,
 		SHIPOPERATIONS           = 0x40000000,
 		SHIPGUNNER               = 0x80000000,
-		SHIPINTERIOR             = 0x100000000,
-		PILOTINGPOBSHIP          = 0x200000000,
 	};
+
+	static const uint64 SHIPINTERIOR = 1ull << 32;
+	static const uint64	PILOTINGPOBSHIP = 1ull << 33;
 
 	void loadStateData() {
 		UniqueReference<IffStream*> iffStream(TemplateManager::instance()->openIffFile("datatables/include/state.iff"));

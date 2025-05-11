@@ -1,6 +1,3 @@
-/*
-* GroupMember.cpp
-*/
 
 #include "server/zone/objects/creature/CreatureObject.h"
 

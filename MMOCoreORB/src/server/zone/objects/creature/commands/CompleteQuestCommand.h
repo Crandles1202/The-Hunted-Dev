@@ -58,43 +58,19 @@ public:
 				if (ghost == nullptr)
 					return INVALIDTARGET;
 
-				String questName = args.getStringToken();
-				int questCRC;
+				int quest = args.getIntToken();
 
-				if (questName.contains("quest")) {
-					questCRC = questName.hashCode();
-				} else {
-					questCRC = Integer::valueOf(questName);
-				}
+				ghost->completeQuest(quest);
 
-				if (!args.hasMoreTokens()) {
-					ghost->completeQuest(questCRC);
-					creature->sendSystemMessage("Completed quest.");
-				} else {
-					int active = args.getIntToken();
-					int completed = args.getIntToken();
-					int finished = args.getIntToken();
-
-					PlayerQuestData data;
-					data.setOwnerId(ghost->getObjectID());
-					data.setActiveStepBitmask(active);
-					data.setCompletedStepBitmask(completed);
-					data.setCompletedFlag(finished);
-
-					ghost->setPlayerQuestData(questCRC, data, true);
-					creature->sendSystemMessage("Updated quest progress.");
-				}
 			} else {
 				creature->sendSystemMessage("SYNTAX: /completeQuest screenplaystate <screenPlayStateName> <state>");
 				creature->sendSystemMessage("SYNTAX: /completeQuest quest <quest>");
-				creature->sendSystemMessage("SYNTAX: /completeQuest quest <questName> <activeQuestBitmask> <completedQuestBitmask> <questCompleted>");
 
 				return INVALIDPARAMETERS;
 			}
 		} catch (Exception& e) {
 			creature->sendSystemMessage("SYNTAX: /completeQuest screenplaystate <screenPlayStateName> <state>");
 			creature->sendSystemMessage("SYNTAX: /completeQuest quest <quest>");
-			creature->sendSystemMessage("SYNTAX: /completeQuest quest <questName> <activeQuestBitmask> <completedQuestBitmask> <questCompleted>");
 
 			return INVALIDPARAMETERS;
 		}

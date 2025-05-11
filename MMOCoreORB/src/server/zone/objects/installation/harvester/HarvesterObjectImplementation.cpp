@@ -12,6 +12,8 @@
 #include "server/zone/packets/harvester/ResourceHarvesterActivatePageMessage.h"
 
 void HarvesterObjectImplementation::fillObjectMenuResponse(ObjectMenuResponse* menuResponse, CreatureObject* player) {
+//	return;//disable harvestor //added to installationobjectimplementation
+
 	if (!isOnAdminList(player))
 		return;
 
@@ -78,10 +80,11 @@ int HarvesterObjectImplementation::handleObjectMenuSelect(CreatureObject* player
 }
 
 String HarvesterObjectImplementation::getRedeedMessage() {
-	if (isActive())
+
+	if(operating)
 		return "destroy_deactivate_first";
 
-	if (getHopperSize() > 0)
+	if(getHopperSize() > 0)
 		return "destroy_empty_hopper";
 
 	return "";

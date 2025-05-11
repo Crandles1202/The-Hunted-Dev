@@ -61,6 +61,11 @@ class Creature extends AiAgent {
 		dnaSampleCount++;
 	}
 
+	@dirty
+	public boolean isCamouflaged(CreatureObject target) {
+		return isAggressiveTo(target) && (isScentMasked(target) || isConcealed(target));
+	}
+
 	@local
 	@dirty
 	public native void fillObjectMenuResponse(ObjectMenuResponse menuResponse, CreatureObject player);
@@ -83,6 +88,8 @@ class Creature extends AiAgent {
 
 	@local
 	public native void loadTemplateDataForBaby(CreatureTemplate templateData);
+
+	public native void scheduleDespawn();
 
 	public native boolean hasOrganics();
 
@@ -204,12 +211,17 @@ class Creature extends AiAgent {
 	}
 
 	public int getBaseXp() {
+		//int newexp = super.npcTemplate.getLevel();
+		
 		if (!super.npcTemplate)
 			return 0;
 
 		if (isBaby() || isEventMob())
+			//return newexp;
 			return 0;
 		else
+			//return newexp * 35;
+			
 			return super.npcTemplate.getBaseXp();
 	}
 
@@ -226,9 +238,14 @@ class Creature extends AiAgent {
 	@local
 	public native void sendMessage(BasePacket msg);
 
-	public native int getAdultLevel();
+	public int getAdultLevel() {
+		if (super.petDeed) {
+			return super.petDeed.getLevel();
+		}
+		if (!super.npcTemplate)
+			return super.getLevel();
 
-	@read
-	public native boolean hasBeenMilked();
+		return super.npcTemplate.getLevel();
+	}
 }
 

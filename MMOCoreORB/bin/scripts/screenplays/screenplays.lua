@@ -38,8 +38,6 @@ includeFile("themepark/conversations/nym_conv_handler.lua")
 includeFile("themepark/conversations/theater_manager_conv_handler.lua")
 includeFile("themepark/conversations/audience_member_conv_handler.lua")
 includeFile("themepark/conversations/record_keeper_conv_handler.lua")
-includeFile("themepark/helper_droid/helper_droid.lua")
-includeFile("themepark/helper_droid/helper_droid_quest.lua")
 includeFile("themepark/imperial/themeParkImperial.lua")
 includeFile("themepark/imperial/emperors_retreat.lua")
 includeFile("themepark/nym/themeParkNym.lua")
@@ -67,8 +65,6 @@ includeFile("trainers/skillTrainer.lua")
 includeFile("trainers/trainerConvHandler.lua")
 
 -- GCW
-includeFile("gcw/city_control_banners.lua")
-includeFile("gcw/city_control_landing.lua")
 includeFile("gcw/newsnet.lua")
 includeFile("gcw/recruiters/recruiterConvoHandler.lua")
 includeFile("gcw/recruiters/recruiterScreenplay.lua")
@@ -169,10 +165,25 @@ includeFile("village/village_jedi_manager_township.lua")
 includeFile("village/village_raids.lua")
 includeFile("village/village_spawn_table.lua")
 includeFile("village/intro/fs_intro.lua")
+includeFile("village/intro/unlock_intro.lua")
+includeFile("village/intro/pvp_bh_intro.lua")
+includeFile("village/intro/pvp_frs_intro.lua")
+includeFile("village/intro/pvp_faction_intro.lua")
 includeFile("village/intro/glowing.lua")
 includeFile("village/intro/go_to_dathomir.lua")
 includeFile("village/intro/old_man_intro_encounter.lua")
 includeFile("village/intro/sith_shadow_encounter.lua")
+includeFile("village/intro/pvp_bh_encounter.lua")
+includeFile("village/intro/pvp_ljk_encounter.lua")
+includeFile("village/intro/pvp_ljk_encounter2.lua")
+includeFile("village/intro/pvp_ljk_encounter3.lua")
+includeFile("village/intro/pvp_ljk_encounter4.lua")
+includeFile("village/intro/pvp_djk_encounter.lua")
+includeFile("village/intro/pvp_djk_encounter2.lua")
+includeFile("village/intro/pvp_djk_encounter3.lua")
+includeFile("village/intro/pvp_djk_encounter4.lua")
+includeFile("village/intro/pvp_reb_encounter.lua")
+includeFile("village/intro/pvp_imp_encounter.lua")
 includeFile("village/intro/sith_shadow_intro_theater.lua")
 includeFile("village/multiple/fs_survey.lua")
 includeFile("village/outro/fs_outro.lua")
@@ -305,7 +316,6 @@ includeFile("events/bestine_election/convos/tour_aryon_conv_handler.lua")
 -- Cries of Alderaan
 includeFile("events/coa/coa.lua")
 includeFile("events/coa/coa2Screenplay.lua")
-includeFile("events/coa/coa3Screenplay.lua")
 includeFile("events/coa/conversations/imperial_commander_conv_handler.lua")
 includeFile("events/coa/conversations/imperial_coordinator_conv_handler.lua")
 includeFile("events/coa/conversations/imperial_informant_conv_handler.lua")
@@ -313,24 +323,6 @@ includeFile("events/coa/conversations/rebel_commander_conv_handler.lua")
 includeFile("events/coa/conversations/rebel_coordinator_conv_handler.lua")
 includeFile("events/coa/conversations/rebel_lyda_conv_handler.lua")
 includeFile("events/coa/conversations/rebel_sympathizer_conv_handler.lua")
-includeFile("events/coa/conversations/coa3_info_officer_conv_handler.lua")
-includeFile("events/coa/conversations/coa3_lookout_conv_handler.lua")
-includeFile("events/coa/conversations/coa3_caravan_leader_conv_handler.lua")
-includeFile("events/coa/conversations/coa3_tact_officer_conv_handler.lua")
-includeFile("events/coa/conversations/coa3_leia_conv_handler.lua")
-includeFile("events/coa/conversations/coa3_veers_conv_handler.lua")
-includeFile("events/coa/components/grav_unit_repair_kit_menu_component.lua")
-includeFile("events/coa/components/coa3_container_component.lua")
-includeFile("events/coa/components/coa3DestroyFacilityMenuComponent.lua")
-
--- Secrets of the Syren
-includeFile("events/syren/syren.lua")
-includeFile("events/syren/conversations/imperial_jevan_monsul_conv_handler.lua")
-includeFile("events/syren/conversations/neutral_tyla_jinn_conv_handler.lua")
-includeFile("events/syren/conversations/rebel_veega_madish_conv_handler.lua")
-includeFile("events/syren/conversations/doctor_edvar_vang_conv_handler.lua")
-includeFile("events/syren/conversations/kaila_min_conv_handler.lua")
-includeFile("events/syren/conversations/tovar_blackmoor_conv_handler.lua")
 
 -- Events
 includeFile("events/conversations/bestine_artist_conv_handler.lua")
@@ -345,6 +337,7 @@ includeFile("events/bestineMuseum.lua")
 includeFile("events/eventPromoter.lua")
 includeFile("events/lifeDay.lua")
 includeFile("events/buffTerminalMenuComponent.lua")
+--includeFile("events/buffTerminalMenuComponent2.lua")
 includeFile("events/race_droid.lua")
 
 -- Hero of Tatooine
@@ -357,34 +350,10 @@ includeFile("tasks/hero_of_tatooine/conversations/heroOfTatMotherConvoHandler.lu
 includeFile("tasks/hero_of_tatooine/conversations/heroOfTatPirateLeaderConvoHandler.lua")
 includeFile("tasks/hero_of_tatooine/conversations/heroOfTatRanchersWifeConvoHandler.lua")
 includeFile("tasks/hero_of_tatooine/heroOfTatooine.lua")
+--includeFile("tasks/hero_of_tatooine/heroOfmyswg.lua")
+--includeFile("tasks/hero_of_tatooine/kraytGYspawns.lua")
 includeFile("tasks/hero_of_tatooine/heroOfTatooineContainerComponents.lua")
 includeFile("tasks/hero_of_tatooine/heroOfTatooineMenuComponents.lua")
-
--- Darndroid Quests
-includeFile("tasks/darndroid/conversations/amarentConvoHandler.lua")
-includeFile("tasks/darndroid/conversations/c3tcConvoHandler.lua")
-includeFile("tasks/darndroid/conversations/selanConvoHandler.lua")
-includeFile("tasks/darndroid/conversations/valanceConvoHandler.lua")
-includeFile("tasks/darndroid/darndroid1.lua")
-includeFile("tasks/darndroid/darndroid2.lua")
-
--- Safety Measures Quests
-includeFile("tasks/safety_measures/safety_measures.lua")
-includeFile("tasks/safety_measures/conversations/gerak_vurtimis_conv_handler.lua")
-
--- Enough Quests
-includeFile("tasks/enough/enough_quest.lua")
-includeFile("tasks/enough/conversations/AcunSolariConvoHandler.lua")
-includeFile("tasks/enough/conversations/CethLaikeConvoHandler.lua")
-
--- Defector Quests
-includeFile("tasks/defector_quests/defector_quest.lua")
-includeFile("tasks/defector_quests/conversations/JomIrimoreConvoHandler.lua")
-includeFile("tasks/defector_quests/conversations/TesloTendooraConvoHandler.lua")
-includeFile("tasks/defector_quests/conversations/ImperialDefectorConvoHandler.lua")
-includeFile("tasks/defector_quests/conversations/JaekVercetConvoHandler.lua")
-includeFile("tasks/defector_quests/conversations/AllardLissaraConvoHandler.lua")
-includeFile("tasks/defector_quests/conversations/RebelDefectorConvoHandler.lua")
 
 -- Task/Quest
 includeFile("tasks/corellia/blk_sun_tasks.lua")
@@ -478,7 +447,6 @@ includeFile("tasks/rori/jaleela_bindoo.lua")
 includeFile("tasks/rori/magur_torigai.lua")
 includeFile("tasks/rori/oxil_sarban.lua")
 includeFile("tasks/rori/raxa_binn.lua")
-includeFile("tasks/rori/risha_sinan.lua")
 includeFile("tasks/rori/sidoras_bey.lua")
 includeFile("tasks/rori/sindra_lintikoor.lua")
 includeFile("tasks/rori/sloan_rusper.lua")
@@ -581,10 +549,6 @@ includeFile("caves/tatooine_hutt_hideout.lua")
 includeFile("caves/tatooine_sennex_cave.lua")
 includeFile("caves/tatooine_squill_cave.lua")
 includeFile("caves/tatooine_tusken_bunker.lua")
-
--- Cantinas
-includeFile("cities/cantinas/bartenders.lua")
-includeFile("cities/cantinas/bartender_conv_handler.lua")
 
 -- Cities
 includeFile("cities/city.lua")
@@ -712,17 +676,13 @@ includeFile("treasure_map/TreasureMapMenuComponent.lua")
 includeFile("racetracks/racetracks.lua")
 
 --Space
-includeFile("space/screenplays.lua")
+--includeFile("space/space_chassis_dealer_conv_handler.lua")
 
 --Record Keepers
 includeFile("record_keepers/record_keepers.lua")
 
---Battlefields
-includeFile("battlefields/battlefield_spawner.lua");
-
 --Tests
 includeFile("tests/tests.lua")
-includeFile("tests/ai_test.lua")
 
 -- Server Event Automation
 includeFile("events/ServerEventAutomation.lua")
@@ -730,5 +690,15 @@ includeFile("events/ServerEventAutomation.lua")
 -- Custom content - Loads last to allow for overrides
 includeFile("../custom_scripts/screenplays/screenplays.lua")
 
-includeFile("custom_screenplays/screenplays.lua")
+--includeFile("tasks/naboo/merch_crazy_larry.lua")
+--includeFile("tasks/naboo/buy_doc_buff.lua")
+--includeFile("tasks/naboo/master_merchant.lua")
+--includeFile("tasks/naboo/master_armor.lua")
+--includeFile("tasks/naboo/master_weapon.lua")
+--includeFile("tasks/naboo/master_chef.lua")
+--includeFile("tasks/naboo/master_arch.lua")
+--includeFile("tasks/naboo/master_artisan.lua")
 includeFile("tasks/naboo/myswg_vendor.lua")
+includeFile("tools/mission_direction_choice.lua")
+includeFile("tools/mission_level_choice.lua")
+

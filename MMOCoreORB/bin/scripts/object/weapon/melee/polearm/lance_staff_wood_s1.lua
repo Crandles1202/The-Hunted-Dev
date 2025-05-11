@@ -42,28 +42,27 @@
 
 
 object_weapon_melee_polearm_lance_staff_wood_s1 = object_weapon_melee_polearm_shared_lance_staff_wood_s1:new {
-	playerRaces = {
-		"object/creature/player/bothan_male.iff",
-		"object/creature/player/bothan_female.iff",
-		"object/creature/player/human_male.iff",
-		"object/creature/player/human_female.iff",
-		"object/creature/player/ithorian_male.iff",
-		"object/creature/player/ithorian_female.iff",
-		"object/creature/player/moncal_male.iff",
-		"object/creature/player/moncal_female.iff",
-		"object/creature/player/rodian_male.iff",
-		"object/creature/player/rodian_female.iff",
-		"object/creature/player/sullustan_male.iff",
-		"object/creature/player/sullustan_female.iff",
-		"object/creature/player/trandoshan_male.iff",
-		"object/creature/player/trandoshan_female.iff",
-		"object/creature/player/twilek_male.iff",
-		"object/creature/player/twilek_female.iff",
-		"object/creature/player/wookiee_male.iff",
-		"object/creature/player/wookiee_female.iff",
-		"object/creature/player/zabrak_male.iff",
-		"object/creature/player/zabrak_female.iff"
-	},
+
+	playerRaces = { "object/creature/player/bothan_male.iff",
+				"object/creature/player/bothan_female.iff",
+				"object/creature/player/human_male.iff",
+				"object/creature/player/human_female.iff",
+				"object/creature/player/ithorian_male.iff",
+				"object/creature/player/ithorian_female.iff",
+				"object/creature/player/moncal_male.iff",
+				"object/creature/player/moncal_female.iff",
+				"object/creature/player/rodian_male.iff",
+				"object/creature/player/rodian_female.iff",
+				"object/creature/player/sullustan_male.iff",
+				"object/creature/player/sullustan_female.iff",
+				"object/creature/player/trandoshan_male.iff",
+				"object/creature/player/trandoshan_female.iff",
+				"object/creature/player/twilek_male.iff",
+				"object/creature/player/twilek_female.iff",
+				"object/creature/player/wookiee_male.iff",
+				"object/creature/player/wookiee_female.iff",
+				"object/creature/player/zabrak_male.iff",
+				"object/creature/player/zabrak_female.iff" },
 
 	-- RANGEDATTACK, MELEEATTACK, FORCEATTACK, TRAPATTACK, GRENADEATTACK, HEAVYACIDBEAMATTACK,
 	-- HEAVYLIGHTNINGBEAMATTACK, HEAVYPARTICLEBEAMATTACK, HEAVYROCKETLAUNCHERATTACK, HEAVYLAUNCHERATTACK
@@ -115,10 +114,10 @@ object_weapon_melee_polearm_lance_staff_wood_s1 = object_weapon_melee_polearm_sh
 	maxRange = 5,
 	maxRangeAccuracy = 20,
 
-	minDamage = 35,
-	maxDamage = 80,
+	minDamage = 25,
+	maxDamage = 56,
 
-	attackSpeed = 4.75,
+	attackSpeed = 5.8,
 
 	woundsRatio = 5,
 

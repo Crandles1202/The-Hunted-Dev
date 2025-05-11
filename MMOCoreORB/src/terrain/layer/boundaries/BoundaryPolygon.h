@@ -8,10 +8,6 @@
 #ifndef BOUNDARYPOLYGON_H_
 #define BOUNDARYPOLYGON_H_
 
-#if defined (__clang__) && (__clang_major__ >= 18)
-	#pragma clang diagnostic push
-	#pragma clang diagnostic ignored "-Wnan-infinity-disabled"
-#endif
 
 #include "../ProceduralRule.h"
 #include "../affectors/AffectorRiver.h"
@@ -338,8 +334,6 @@ public:
 	}
 };
 
-#if defined (__clang__) && (__clang_major__ >= 18)
-	#pragma clang diagnostic pop
-#endif
+
 
 #endif /* BOUNDARYPOLYGON_H_ */

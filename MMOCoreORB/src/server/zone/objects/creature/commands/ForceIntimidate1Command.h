@@ -35,10 +35,7 @@ public:
 			return INVALIDTARGET;
 		}
 
-		CreatureObject* tarCreo = targetObject->asCreatureObject();
-
-		if (tarCreo == nullptr)
-			return GENERALERROR;
+		CreatureObject *tarCreo = targetObject->asCreatureObject();
 
 		int res = doCombatAction(creature, target);
 
@@ -47,7 +44,7 @@ public:
 			Reference<SortedVector<ManagedReference<TangibleObject*> >* > targets = CombatManager::instance()->getAreaTargets(creature, creature->getWeapon(), tarCreo, data);
 			if(targets->size() != 0) {
 				ForceIntimidateTask *task = new ForceIntimidateTask(tarCreo, targets, this);
-				task->schedule(1500);
+				task->schedule(100);
 			}
 		}
 

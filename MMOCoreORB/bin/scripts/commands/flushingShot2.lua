@@ -44,7 +44,7 @@
 FlushingShot2Command = {
         name = "flushingshot2",
 
-	damageMultiplier = 4.0,
+	damageMultiplier = 1.5,
 	speedMultiplier = 2.0,
 	healthCostMultiplier = 0.5,
 	actionCostMultiplier = 0.5,
@@ -82,7 +82,7 @@ FlushingShot2Command = {
 
 	combatSpam = "flushingvolley",
 	
-	weaponType = RIFLEWEAPON,
+	weaponType = RIFLEWEAPON + PISTOLWEAPON + CARBINEWEAPON,
 
 	range = -1
 }

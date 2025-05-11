@@ -7,17 +7,19 @@
 
 #include "engine/service/proto/BaseMessage.h"
 
-class ClientIdMessage : public BaseMessage {
+class ClientIDMessage : public BaseMessage {
 public:
-	ClientIdMessage(uint32 accountID, uint32 sessionKey) : BaseMessage() {
+	ClientIDMessage(uint32 accid, uint32 session) : BaseMessage() {
 		insertShort(0x03);
-		insertInt(STRING_HASHCODE("ClientIdMessage"));
+		insertInt(0xD5899226);
 
-		insertInt(0x00); // Spacer
-		insertInt(0x00); // dataLen
-		insertInt(sessionKey); // Session Key
-		insertInt(accountID); // Account ID
+		insertInt(0); // unk
+		insertInt(0); // dataLen
+		insertInt(session); // session key
+		insertInt(accid);
 	}
+
 };
+
 
 #endif /*CLIENTIDMESSAGE_H_*/

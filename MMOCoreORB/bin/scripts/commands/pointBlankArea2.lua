@@ -44,7 +44,7 @@
 PointBlankArea2Command = {
         name = "pointblankarea2",
 
-	damageMultiplier = 4.0,
+	damageMultiplier = 2.0,
 	speedMultiplier = 1.5,
 	healthCostMultiplier = 0.5,
 	actionCostMultiplier = 1.5,
@@ -59,7 +59,7 @@ PointBlankArea2Command = {
 
 	combatSpam = "areashot",
 	
-	weaponType = PISTOLWEAPON,
+	weaponType = RIFLEWEAPON + PISTOLWEAPON + CARBINEWEAPON,
 
 	range = 12
 }

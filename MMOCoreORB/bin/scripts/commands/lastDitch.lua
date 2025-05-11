@@ -44,7 +44,7 @@
 LastDitchCommand = {
         name = "lastditch",
 
-	damageMultiplier = 6.0,
+	damageMultiplier = 4.0,
 	speedMultiplier = 4.0,
 	healthCostMultiplier = 0.5,
 	actionCostMultiplier = 1.25,
@@ -72,7 +72,7 @@ LastDitchCommand = {
 
 	combatSpam = "lastditch",
 	
-	weaponType = PISTOLWEAPON,
+	weaponType = RIFLEWEAPON + PISTOLWEAPON + CARBINEWEAPON,
 
 	range = -1
 }

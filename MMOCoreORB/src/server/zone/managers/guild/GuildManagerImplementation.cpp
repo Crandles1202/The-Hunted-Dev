@@ -1133,9 +1133,6 @@ void GuildManagerImplementation::sendGuildMemberOptionsTo(CreatureObject* player
 }
 
 void GuildManagerImplementation::sendGuildSetTitleTo(CreatureObject* player, CreatureObject* target) {
-	if (player == nullptr || target == nullptr)
-		return;
-
 	ManagedReference<GuildObject*> guild = player->getGuildObject().get();
 
 	if (guild == nullptr || !guild->hasTitlePermission(player->getObjectID())) {
@@ -1143,30 +1140,22 @@ void GuildManagerImplementation::sendGuildSetTitleTo(CreatureObject* player, Cre
 		return;
 	}
 
-	auto ghost = player->getPlayerObject();
-
-	if (ghost == nullptr)
-		return;
-
-	ghost->closeSuiWindowType(SuiWindowType::GUILD_MEMBER_TITLE);
+	player->getPlayerObject()->closeSuiWindowType(SuiWindowType::GUILD_MEMBER_TITLE);
 
 	ManagedReference<SuiInputBox*> suiBox = new SuiInputBox(player, SuiWindowType::GUILD_MEMBER_TITLE);
 	suiBox->setCallback(new GuildTitleResponseSuiCallback(server));
-
-	// Guild Member Title
-	suiBox->setPromptTitle("@guild:title_title");
+	suiBox->setPromptTitle("@guild:title_title"); // Guild Member Title
 
 	UnicodeString text = StringIdManager::instance()->getStringId("@guild:title_prompt"); // Enter a title to set for %TU.
 	text = text.replaceFirst("%TU", target->getDisplayedName());
 
 	suiBox->setPromptText(text.toString());
 	suiBox->setUsingObject(target);
-	suiBox->setForceCloseDisabled();
+	suiBox->setForceCloseDistance(32);
 	suiBox->setMaxInputSize(24);
 	suiBox->setCancelButton(true, "@cancel");
 
-	ghost->addSuiBox(suiBox);
-
+	player->getPlayerObject()->addSuiBox(suiBox);
 	player->sendMessage(suiBox->generateMessage());
 }
 

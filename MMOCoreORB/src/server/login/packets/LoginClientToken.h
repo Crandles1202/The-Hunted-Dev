@@ -11,55 +11,56 @@
 namespace server {
 namespace login {
 
-namespace account {
-class Account;
-}
+	namespace account {
+		class Account;
+	}
 
-using namespace server::login::account;
+	using namespace server::login::account;
 
 namespace packets {
 
-class LoginClientToken : public BaseMessage {
-public:
-	LoginClientToken(const String& username, const String& sessionToken, uint32 accountid, uint32 stationid) : BaseMessage() {
-		insertShort(0x04);
-		insertInt(STRING_HASHCODE("LoginClientToken"));
+	class LoginClientToken : public BaseMessage {
+	public:
+		LoginClientToken(const String& username, const String& sessionToken,
+				uint32 accountid, uint32 stationid) : BaseMessage() {
+			insertShort(0x04);
+			insertInt(0xAAB296C6);
 
-		insertInt(sessionToken.length() + 4); // embedding accountid
+			insertInt(sessionToken.length() + 4); //embedding accountid
 
-		for (const auto val : sessionToken) {
-			insertByte(val);
+			for (const auto val : sessionToken) {
+				insertByte(val);
+			}
+
+			insertInt(accountid);
+
+			insertInt(stationid);
+			insertAscii(username); //Station Account Name
 		}
 
-		insertInt(accountid);
+		LoginClientToken(Account* account, const String& sessionToken) : BaseMessage() {
+			insertShort(0x04);
+			insertInt(0xAAB296C6);
 
-		insertInt(stationid);
-		insertAscii(username); // Station Account Name
-	}
+			insertInt(sessionToken.length() + 4);
 
-	LoginClientToken(Account* account, const String& sessionToken) : BaseMessage() {
-		insertShort(0x04);
-		insertInt(STRING_HASHCODE("LoginClientToken"));
+			for (const auto val : sessionToken) {
+				insertByte(val);
+			}
 
-		insertInt(sessionToken.length() + 4);
+			insertInt(account->getAccountID());
 
-		for (const auto val : sessionToken) {
-			insertByte(val);
+			insertInt(account->getStationID());
+			insertAscii(account->getUsername());
 		}
 
-		insertInt(account->getAccountID());
-
-		insertInt(account->getStationID());
-		insertAscii(account->getUsername());
-	}
-
-	static void parse(Packet* pack) {
-		uint16 ackSequence = pack->parseShort();
-	}
-};
-} // namespace packets
-} // namespace login
-} // namespace server
+		static void parse(Packet* pack) {
+			uint16 ackSequence = pack->parseShort();
+		}
+	};
+}
+}
+}
 
 using namespace server::login::packets;
 #endif /*LOGINCLIENTTOKEN_H_*/

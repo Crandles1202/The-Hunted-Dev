@@ -42,6 +42,7 @@
 
 
 object_tangible_scout_trap_trap_melee_ranged_def_1 = object_tangible_scout_trap_shared_trap_melee_ranged_def_1:new {
+
 	templateType = TRAP,
 	objectMenuComponent = "TrapMenuComponent",
 
@@ -51,11 +52,10 @@ object_tangible_scout_trap_trap_melee_ranged_def_1 = object_tangible_scout_trap_
 	skillMods = {{"ranged_defense", -60}, {"melee_defense", -60}},
 
 	healthCost = 17,
-	actionCost = 30,
+	actionCost = 30, 
 	mindCost = 17,
 
 	maxRange = 32,
-	areaOfEffect = false,
 
 	poolToDamage = HEALTH,
 	minDamage = 90,

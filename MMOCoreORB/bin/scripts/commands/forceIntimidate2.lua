@@ -66,7 +66,7 @@ ForceIntimidate2Command = {
 	  )
 	},
 
-	animation = "force_intimidate",
+	animation = "force_intimidate_chain",
 
 	combatSpam = "forceintimidate2",
 

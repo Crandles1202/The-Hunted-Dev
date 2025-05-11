@@ -44,7 +44,7 @@
 PolearmLunge2Command = {
 	name = "polearmlunge2",
 
-	damageMultiplier = 2.0,
+	damageMultiplier = 2.5,
 	speedMultiplier = 2.5,
 	accuracyBonus = 10,
 	
@@ -58,7 +58,7 @@ PolearmLunge2Command = {
 
 	range = 20,
 	
-	weaponType = POLEARMWEAPON,
+	weaponType = TWOHANDMELEEWEAPON + ONEHANDMELEEWEAPON + POLEARMWEAPON,
 
 	stateEffects = {
 	  StateEffect( 
