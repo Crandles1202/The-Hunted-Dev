@@ -50,6 +50,7 @@ public:
 	const String& getVisibleAttributeGroup(const int i) const;
 	int getTotalVisibleAttributeGroups() const;
 
+	bool hasProperty(const String& attribute) const;
 	bool isHidden(const String& attribute) const;
 	void setHidden(const String& attribute);
 	void unsetHidden(const String& attribute);
