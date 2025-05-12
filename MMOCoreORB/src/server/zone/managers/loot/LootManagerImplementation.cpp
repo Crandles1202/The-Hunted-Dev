@@ -297,7 +297,7 @@ void LootManagerImplementation::setCustomObjectName(TangibleObject* object, cons
 
 			object->setObjectName(stringId, false);
 		} else {
-			object->setCustomObjectName(customName, false);
+			object->setCustomObjectName(customName, false, excMod);
 		}
 	}
 
@@ -310,7 +310,7 @@ void LootManagerImplementation::setCustomObjectName(TangibleObject* object, cons
 	}
 
 	if (suffixName != "") {
-		object->setCustomObjectName(object->getDisplayedName() + suffixName, false);
+		object->setCustomObjectName(object->getDisplayedName() + suffixName, false, excMod);
 		object->addMagicBit(false);
 	}
 }
@@ -456,7 +456,7 @@ TangibleObject* LootManagerImplementation::createLootObject(TransactionLog& trx,
 
 	setInitialObjectStats(templateObject, craftingValues, prototype);
 
-	setCustomObjectName(prototype, templateObject);
+	setCustomObjectName(prototype, templateObject, excMod);
 
 
 
@@ -474,14 +474,14 @@ TangibleObject* LootManagerImplementation::createLootObject(TransactionLog& trx,
 
 	if (excMod >= 5.4 && (prototype->isComponent() || prototype->isLightsaberCrystalObject() || prototype->isArmorObject() || prototype->isWeaponObject())) {// System::random(25) >= 25
 		UnicodeString newName = prototype->getDisplayedName() + " (Legendary)";
-		prototype->setCustomObjectName(newName, false);
+		prototype->setCustomObjectName(newName, false, excMod);
 		leggy = 1;
 		prototype->addMagicBit(false);
 	}
 
 	if (leggy == 0 && (excMod >= 4.8) && (prototype->isComponent() || prototype->isLightsaberCrystalObject() || prototype->isArmorObject() || prototype->isWeaponObject())) {//})  && !prototype->isLightsaberCrystalObject()) {
 		UnicodeString newName = prototype->getDisplayedName() + " (Exceptional)";
-		prototype->setCustomObjectName(newName, false);
+		prototype->setCustomObjectName(newName, false, excMod);
 		prototype->addMagicBit(false);
 	}
 
