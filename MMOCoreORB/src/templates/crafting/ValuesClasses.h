@@ -241,7 +241,7 @@ public:
 	}
 
 };
-/*
+
 class Subclasses : public Object {
 	VectorMap<String, Reference<Values*> > valueList;
 	float avePercentage;
@@ -401,5 +401,5 @@ public:
 		return str.toString();
 	}
 };
-*/
+
 #endif /*VALUESCLASSES_H_*/

@@ -98,6 +98,14 @@ public:
 		return attributesMap.hasExperimentalAttribute(attribute);
 	}
 
+	int getExperimentalPropertySubtitleSize() const {
+		return attributesMap.getExperimentalPropertySubtitleSize();
+	}
+
+	int getExperimentalPropertySubtitleSize(const String title) const {
+		return attributesMap.getExperimentalPropertySubtitleSize(title);
+	}
+
 	bool hasProperty(const String& attribute) const {
 		return attributesMap.hasProperty(attribute);
 	}

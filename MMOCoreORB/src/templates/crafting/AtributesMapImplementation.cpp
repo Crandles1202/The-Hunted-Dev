@@ -99,6 +99,28 @@ bool AttributesMap::hasProperty(const String& attribute) const {
 	return false;
 }
 
+int AttributesMap::getExperimentalPropertySubtitleSize() const {
+	const Subclasses* subclasses;
+	int subtitleSize = 0;
+
+	for (int j = 0; j < size(); ++j) {
+		subclasses = get(j);
+
+		subtitleSize += subclasses->size();
+	}
+
+	return subtitleSize;
+}
+
+int AttributesMap::getExperimentalPropertySubtitleSize(const String& title) const {
+	const Subclasses* subclasses = get(title);
+
+	if (subclasses != nullptr)
+		return subclasses->size();
+
+	return (int)VALUENOTFOUND;
+}
+
 bool AttributesMap::isHidden(const String& attribute) const {
 	Reference<Values*> values = attributeValues.get(attribute);
 

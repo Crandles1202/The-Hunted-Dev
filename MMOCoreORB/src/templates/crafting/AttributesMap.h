@@ -50,6 +50,9 @@ public:
 	const String& getVisibleAttributeGroup(const int i) const;
 	int getTotalVisibleAttributeGroups() const;
 
+	int getExperimentalPropertySubtitleSize() const;
+	int getExperimentalPropertySubtitleSize(const String& title) const;
+
 	bool hasProperty(const String& attribute) const;
 	bool isHidden(const String& attribute) const;
 	void setHidden(const String& attribute);

@@ -297,7 +297,7 @@ void LootManagerImplementation::setCustomObjectName(TangibleObject* object, cons
 
 			object->setObjectName(stringId, false);
 		} else {
-			object->setCustomObjectName(customName, false, excMod);
+			object->setCustomObjectName(customName, false);
 		}
 	}
 
@@ -310,7 +310,7 @@ void LootManagerImplementation::setCustomObjectName(TangibleObject* object, cons
 	}
 
 	if (suffixName != "") {
-		object->setCustomObjectName(object->getDisplayedName() + suffixName, false, excMod);
+		object->setCustomObjectName(object->getDisplayedName() + suffixName, false);
 		object->addMagicBit(false);
 	}
 }
@@ -456,7 +456,7 @@ TangibleObject* LootManagerImplementation::createLootObject(TransactionLog& trx,
 
 	setInitialObjectStats(templateObject, craftingValues, prototype);
 
-	setCustomObjectName(prototype, templateObject);
+	setCustomObjectName(prototype, templateObject, excMod);
 
 
 
@@ -474,14 +474,14 @@ TangibleObject* LootManagerImplementation::createLootObject(TransactionLog& trx,
 
 	if (excMod >= 5.4 && (prototype->isComponent() || prototype->isLightsaberCrystalObject() || prototype->isArmorObject() || prototype->isWeaponObject())) {// System::random(25) >= 25
 		UnicodeString newName = prototype->getDisplayedName() + " (Legendary)";
-		prototype->setCustomObjectName(newName, false, excMod);
+		prototype->setCustomObjectName(newName, false);
 		leggy = 1;
 		prototype->addMagicBit(false);
 	}
 
 	if (leggy == 0 && (excMod >= 4.8) && (prototype->isComponent() || prototype->isLightsaberCrystalObject() || prototype->isArmorObject() || prototype->isWeaponObject())) {//})  && !prototype->isLightsaberCrystalObject()) {
 		UnicodeString newName = prototype->getDisplayedName() + " (Exceptional)";
-		prototype->setCustomObjectName(newName, false, excMod);
+		prototype->setCustomObjectName(newName, false);
 		prototype->addMagicBit(false);
 	}
 
@@ -497,14 +497,14 @@ TangibleObject* LootManagerImplementation::createLootObject(TransactionLog& trx,
 
 	// Set loot item customization and object name
 	setCustomizationData(templateObject, prototype);
-	setCustomObjectName(prototype, templateObject);
+	setCustomObjectName(prototype, templateObject, excMod);
 
 
 
 	String subtitle;
 	bool yellow = false;
 
-	for (int i = 0; i < craftingValues->getExperimentalPropertySubtitleSize(); ++i) {
+	for (int i = 0; i < craftingValues->getExperimentalAttributeSubtitleSize(); ++i) {
 		subtitle = craftingValues->getExperimentalPropertySubtitle(i);
 
 		if (subtitle == "hitpoints" && !prototype->isComponent()) {
@@ -765,7 +765,7 @@ void LootManagerImplementation::addConditionDamage(TangibleObject* prototype) {
 		return;
 	}
 
-	int conditionDmg = std::round(conditionMax / 3.f);
+	int conditionDmg = std::round(conditionMax / 4.f);
 
 	if (conditionDmg > 1) {
 		prototype->setConditionDamage(System::random(conditionDmg), false);
