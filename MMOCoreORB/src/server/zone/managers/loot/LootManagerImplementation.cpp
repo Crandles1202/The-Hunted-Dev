@@ -497,7 +497,7 @@ TangibleObject* LootManagerImplementation::createLootObject(TransactionLog& trx,
 	info(true) << "Exceptional Modifier (excMod) = " << excMod << "  chance = " << chance;
 #endif
 
-	// Set loot item customization and object name
+	// Set loot item customization and object name`
 	setCustomizationData(templateObject, prototype);
 	setCustomObjectName(prototype, templateObject, excMod);
 
@@ -507,7 +507,7 @@ TangibleObject* LootManagerImplementation::createLootObject(TransactionLog& trx,
 	bool yellow = false;
 
 	for (int i = 0; i < craftingValues->getExperimentalPropertySubtitleSize(); ++i) {
-		subtitle = craftingValues->getExperimentalPropertyAttribute(i);
+		subtitle = craftingValues->getExperimentalPropertySubtitle(i);
 
 		if (subtitle == "hitpoints" && !prototype->isComponent()) {
 			continue;

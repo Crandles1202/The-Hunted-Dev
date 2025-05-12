@@ -114,14 +114,6 @@ public:
 		return attributesMap.getExperimentalPropertySubtitlesTitle(i);
 	}
 
-	const String& getExperimentalPropertySubtitle(const int i) const {
-		return attributesMap.getExperimentalPropertySubtitle(i);
-	}
-
-	const String& getExperimentalPropertySubtitle(const String title, const int i) const {
-		return attributesMap.getExperimentalPropertySubtitle(title, i);
-	}
-
 	int getExperimentalPropertySubtitleSize() const {
 		return attributesMap.getExperimentalPropertySubtitleSize();
 	}
