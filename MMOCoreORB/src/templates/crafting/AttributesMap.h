@@ -50,6 +50,14 @@ public:
 	const String& getVisibleAttributeGroup(const int i) const;
 	int getTotalVisibleAttributeGroups() const;
 
+	const String& getExperimentalPropertyTitle(const String& subtitle) const;
+	const String& getExperimentalPropertyTitle(const int i) const;
+	const String& getVisibleExperimentalPropertyTitle(const int i) const;
+
+	const String& getExperimentalPropertySubtitlesTitle(const int i) const;
+	const String& getExperimentalPropertySubtitle(const int i) const;
+	const String& getExperimentalPropertySubtitle(const String& title, const int i) const;
+
 	int getExperimentalPropertySubtitleSize() const;
 	int getExperimentalPropertySubtitleSize(const String& title) const;
 

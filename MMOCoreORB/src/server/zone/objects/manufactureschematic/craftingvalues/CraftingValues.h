@@ -98,12 +98,44 @@ public:
 		return attributesMap.hasExperimentalAttribute(attribute);
 	}
 
+		const String& getExperimentalPropertyTitle(const String& subtitle) const {
+		return attributesMap.getExperimentalPropertyTitle(subtitle);
+	}
+
+	const String& getExperimentalPropertyTitle(const int i) const {
+		return attributesMap.getExperimentalPropertyTitle(i);
+	}
+
+	const String& getVisibleExperimentalPropertyTitle(const int i) const {
+		return attributesMap.getVisibleExperimentalPropertyTitle(i);
+	}
+
+	const String& getExperimentalPropertySubtitlesTitle(const int i) const {
+		return attributesMap.getExperimentalPropertySubtitlesTitle(i);
+	}
+
+	const String& getExperimentalPropertySubtitle(const int i) const {
+		return attributesMap.getExperimentalPropertySubtitle(i);
+	}
+
+	const String& getExperimentalPropertySubtitle(const String title, const int i) const {
+		return attributesMap.getExperimentalPropertySubtitle(title, i);
+	}
+
 	int getExperimentalPropertySubtitleSize() const {
 		return attributesMap.getExperimentalPropertySubtitleSize();
 	}
 
 	int getExperimentalPropertySubtitleSize(const String title) const {
 		return attributesMap.getExperimentalPropertySubtitleSize(title);
+	}
+
+	const String& getExperimentalPropertySubtitle(const int i) const {
+		return attributesMap.getExperimentalPropertySubtitle(i);
+	}
+
+	const String& getExperimentalPropertySubtitle(const String title, const int i) const {
+		return attributesMap.getExperimentalPropertySubtitle(title, i);
 	}
 
 	bool hasProperty(const String& attribute) const {
