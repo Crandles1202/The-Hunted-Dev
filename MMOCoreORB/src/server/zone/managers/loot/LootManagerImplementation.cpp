@@ -359,7 +359,20 @@ TangibleObject* LootManagerImplementation::createLootObject(TransactionLog& trx,
 #endif
 
 	const String& directTemplateObject = templateObject->getDirectObjectTemplate();
-	level = Math::clamp((int)LEVELMIN, level, (int)LEVELMAX);
+	//level = Math::clamp((int)LEVELMIN, level, (int)LEVELMAX);
+
+	int uncappedLevel = level;
+
+	if(level < 1)
+		level = 1;
+
+	if(level > 100)
+		level = 100;
+
+	level *= 5;//3.5 + (System::random(150) * .01);
+
+	if(level > 500)
+		level = 500;
 
 	trx.addState("lootVersion", 2);
 	trx.addState("lootTemplate", directTemplateObject);
@@ -399,13 +412,34 @@ TangibleObject* LootManagerImplementation::createLootObject(TransactionLog& trx,
 
 	// Calculate level rank value chance
 	float chance = LootValues::getLevelRankValue(Math::max(level - 50, 0), 0.f, 0.35f) * levelChance;
-	float excMod = baseModifier;
+	//float excMod = baseModifier;
+	float excMod = .7 + (System::random(3000) * .0001) + (System::random(level * .8) * .01) + (level * .2 * .01); //exc now 6.0max
+	int leggy = 0;
 
-	if (System::random(legendaryChance) <= chance) {
-		excMod = legendaryModifier;
-	} else if (System::random(exceptionalChance) <= chance) {
-		excMod = exceptionalModifier;
+	// if (System::random(legendaryChance) <= chance) {
+	// 	excMod = legendaryModifier;
+	// } else if (System::random(exceptionalChance) <= chance) {
+	// 	excMod = exceptionalModifier;
+	// }
+
+	if (excMod >= 5.4 && (prototype->isComponent() || prototype->isLightsaberCrystalObject() || prototype->isArmorObject() || prototype->isWeaponObject())) {// System::random(25) >= 25
+		UnicodeString newName = prototype->getDisplayedName() + " (Legendary)";
+		prototype->setCustomObjectName(newName, false);
+		leggy = 1;
+		prototype->addMagicBit(false);
 	}
+
+	if (leggy == 0 && (excMod >= 4.8) && (prototype->isComponent() || prototype->isLightsaberCrystalObject() || prototype->isArmorObject() || prototype->isWeaponObject())) {//})  && !prototype->isLightsaberCrystalObject()) {
+		UnicodeString newName = prototype->getDisplayedName() + " (Exceptional)";
+		prototype->setCustomObjectName(newName, false);
+		prototype->addMagicBit(false);
+	}
+
+	if (prototype->isWeaponObject()) excMod /= 1.2;
+
+	if (prototype->isArmorObject()) excMod /= 1.5;
+
+	if (prototype->isComponent()) excMod *= 1.1;
 
 #ifdef DEBUG_LOOT_MAN
 	info(true) << "Exceptional Modifier (excMod) = " << excMod << "  chance = " << chance;
@@ -661,11 +695,12 @@ bool LootManagerImplementation::createLoot(TransactionLog& trx, SceneObject* con
 		return false;
 	}
 
-	if (lootCollection->count() == 0) {
-		trx.abort() << "Empty loot collection.";
-		trx.discard();
-		return false;
-	}
+	//TODO CHANGE HERE 
+	// if (lootCollection->count() == 0) {
+	// 	trx.abort() << "Empty loot collection.";
+	// 	trx.discard();
+	// 	return false;
+	// }
 
 	return createLootFromCollection(trx, container, lootCollection, creature->getLevel());
 }
@@ -703,17 +738,22 @@ bool LootManagerImplementation::createLootFromCollection(TransactionLog& trx, Sc
 
 	for (int i = 0; i < lootCollection->count(); ++i) {
 		const LootGroupCollectionEntry* collectionEntry = lootCollection->get(i);
-		int lootChance = collectionEntry->getLootChance();
+		int lootChance = collectionEntry->getLootChance() * 2.0;
+
+		int holochance = 1000;
+		if (System::random(holochance) >= holochance) {
+			createLoot(trx, container, "holocron_3", level);
+		}
 
 		if (lootChance <= 0)
 			continue;
 
 		int roll = System::random(10000000);
 
-		rolls.add(roll);
+		//rolls.add(roll);
 
-		if (roll > lootChance)
-			continue;
+		//if (roll > lootChance)
+		//	continue;
 
  		// Start at 0
 		int tempChance = 0;
@@ -723,7 +763,7 @@ bool LootManagerImplementation::createLootFromCollection(TransactionLog& trx, Sc
 		//Now we do the second roll to determine loot group.
 		roll = System::random(10000000);
 
-		rolls.add(roll);
+		//rolls.add(roll);
 
 		//Select the loot group to use.
 		for (int k = 0; k < lootGroups->count(); ++k) {

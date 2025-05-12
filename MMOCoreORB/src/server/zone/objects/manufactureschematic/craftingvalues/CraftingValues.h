@@ -214,7 +214,7 @@ public:
 		return attributesMap.getTotalVisibleAttributeGroups();
 	}
 
-	void recalculateValues(bool initial);
+	void recalculateValues(bool initial, bool looted = false, int level = 0);
 
 	String toString() const;
 
