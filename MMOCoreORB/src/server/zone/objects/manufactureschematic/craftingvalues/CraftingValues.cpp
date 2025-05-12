@@ -102,33 +102,33 @@ void CraftingValues::recalculateValues(bool initial, bool looted, int level) {
 				//SET THE PROTECTION FOR LOOTED ITEMS
 		//The attributes below correspond the the special protection values
 		//armor effectivness holds the value for all non special protection values
-		if (attributeName == "armor_effectiveness" || attributeName == "blasteffectiveness" || attributeName == "heateffectiveness" ||
-			attributeName == "kineticeffectiveness" || attributeName == "energyeffectiveness" || attributeName == "electricaleffectiveness" ||
-			attributeName == "coldeffectiveness" || attributeName == "acideffectiveness")
-		{
-			if (level >= 300)
-			{
-				float generateRandomNumber = (float) System::random(65);
-				newValue = generateRandomNumber;
-			}
-			else if (level >= 85 && level < 300)
-			{
-				float generateRandomNumber = (float) System::random(55);
-				newValue = generateRandomNumber;
-			}
-			else if (level >= 1 && level < 85)
-			{
-				float generateRandomNumber = (float) System::random(35);
-				newValue = generateRandomNumber;
-			}
-		}
+		// if (attributeName == "armor_effectiveness" || attributeName == "blasteffectiveness" || attributeName == "heateffectiveness" ||
+		// 	attributeName == "kineticeffectiveness" || attributeName == "energyeffectiveness" || attributeName == "electricaleffectiveness" ||
+		// 	attributeName == "coldeffectiveness" || attributeName == "acideffectiveness")
+		// {
+		// 	if (level >= 300)
+		// 	{
+		// 		float generateRandomNumber = (float) System::random(65);
+		// 		newValue = generateRandomNumber;
+		// 	}
+		// 	else if (level >= 85 && level < 300)
+		// 	{
+		// 		float generateRandomNumber = (float) System::random(55);
+		// 		newValue = generateRandomNumber;
+		// 	}
+		// 	else if (level >= 1 && level < 85)
+		// 	{
+		// 		float generateRandomNumber = (float) System::random(35);
+		// 		newValue = generateRandomNumber;
+		// 	}
+		// }
 
-		//There is no need for this if we are setting the percintages above
-		//This only needs to be done to looted items
-		if (attributeName == "armor_special_effectiveness" && looted == true)
-		{
-			newValue = 0;
-		}
+		// //There is no need for this if we are setting the percintages above
+		// //This only needs to be done to looted items
+		// if (attributeName == "armor_special_effectiveness" && looted == true)
+		// {
+		// 	newValue = 0;
+		// }
 
 
 		if (initial || (newValue != oldValue && !initial && !hidden)) {
