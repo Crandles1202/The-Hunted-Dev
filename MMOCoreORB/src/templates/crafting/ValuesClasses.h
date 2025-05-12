@@ -246,8 +246,8 @@ class Subclasses : public Object {
 	VectorMap<String, Reference<Values*> > valueList;
 	float avePercentage;
 	String name, classTitle;
-
 	bool hidden;
+	int cap = 100000000;
 
 public:
 	Subclasses() = delete;
@@ -257,7 +257,7 @@ public:
 
 		name = subtitle;
 
-		Values* values = new Values(subtitle, min, max, precision, filler, combine);
+		Values* values = new Values(subtitle, min, max, cap, precision, filler, combine);
 
 		valueList.setNullValue(nullptr);
 		valueList.put(subtitle, values);
@@ -300,7 +300,7 @@ public:
 			valueList.drop(s);
 		}
 
-		Values* values = new Values(s, min, max, precision, filler, combine);
+		Values* values = new Values(s, min, max, cap, precision, filler, combine);
 		valueList.put(s, values);
 	}
 
