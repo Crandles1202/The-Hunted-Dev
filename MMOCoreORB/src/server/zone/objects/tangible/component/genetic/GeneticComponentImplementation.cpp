@@ -238,15 +238,23 @@ void GeneticComponentImplementation::updateCraftingValues(CraftingValues* values
 #endif
 
 	// Calculate damage
-	float damage = (power * 0.8f) / 10.0f;
+	//float damage = (power * 0.8f) / 10.0f;
 
 	// Calculate damage variable
-	float damageVar = ((power / 10000.0f) * 2.0f);
+	//float damageVar = ((power / 10000.0f) * 2.0f);
+	int dps = ceil((ceil(15.0 + (775.0 * ( ((float)power)/1000.0))))/3.5);
+	maxDam = round(((float)dps * speed) * 1.5);
+	//minDam = round(((float)dps * speed) * 0.5);
+  	// round maxDam down to the closest multiple of 5
+	maxDam = maxDam - (maxDam % 5);
+  	// subtract either 5 or 10 from maxDam to get the minDam
+	minDam = maxDam - ((System::random(1) + 1) * 5);
 
-	maxDam = ceil((damage * (1.0f + damageVar)) + 1.0f) * 10.0f;
-	minDam = damage * (1.0f - damageVar) * 10.0f;
+	
+	//maxDam = ceil((damage * (1.0f + damageVar)) + 1.0f) * 10.0f;
+	//minDam = damage * (1.0f - damageVar) * 10.0f;
 
-	minDam += (5 - (minDam % 5));
+	//minDam += (5 - (minDam % 5));
 
 #ifdef DEBUG_GENETIC_LAB
 	info(true) << "Damage: " << damage << " Damage Variable: " << damageVar;

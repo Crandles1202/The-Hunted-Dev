@@ -99,7 +99,7 @@ void CraftingValues::recalculateValues(bool initial, bool looted, int level) {
 
 		// info(true) << "Setting Attribute: " << attribute << " New Value: " << newValue;
 
-				//SET THE PROTECTION FOR LOOTED ITEMS
+		//SET THE PROTECTION FOR LOOTED ITEMS
 		//The attributes below correspond the the special protection values
 		//armor effectivness holds the value for all non special protection values
 		// if (attributeName == "armor_effectiveness" || attributeName == "blasteffectiveness" || attributeName == "heateffectiveness" ||
