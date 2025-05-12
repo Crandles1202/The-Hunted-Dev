@@ -126,7 +126,9 @@ public:
 			}
 		}
 
-		LuaObject craftvals = templateData->getObjectField("craftingValues");
+		LuaObject craftvals = templateData->getObjectField("attributesMap");
+
+		//LuaObject craftvals = templateData->getObjectField("craftingValues");
 
 		// if (craftvals.isValidTable()) {
 		// 	for (int i = 1; i <= craftvals.getTableSize(); ++i) {
@@ -200,9 +202,9 @@ public:
 					if (row.getTableSize() > 5)
 						combineType = row.getIntAt(6);
 
-					craftingValues.addExperimentalProperty(property, property,
+					attributesMap.addExperimentalProperty(property, property,
 							min, max, prec, hidden, combineType);
-					craftingValues.setMaxPercentage(property, 1.0f);
+					attributesMap.setMaxPercentage(property, 1.0f);
 				}
 
 				row.pop();
