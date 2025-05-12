@@ -56,7 +56,7 @@ exceptionalModifier = 8
 legendaryModifier = 9
 
 --The chance for random skill mods to be on looted weapons/wearables
-skillModChance = 1000 -- 1 in 1000
+skillModChance = 500 -- 1 in 1000
 
 -- Dot Distribution chance by DOT type. They must equate to 1.0
 poisonDotChance = 0.50
@@ -71,14 +71,19 @@ mindDotChance = 0.15
 -- Value ranges for random dots on looted weapons (chance is set individually on the loot items)
 randomDotAttribute = {0, 8} -- See CreatureAttributes.h in src for numbers.
 randomDotStrength = {10, 100} -- poison x1.5, disease x0.5
-randomDotDuration = {30, 120} -- disease x4.0, fire x1.5
-randomDotPotency = {1, 50}
-randomDotUses = {250, 4999}
+randomDotDuration = {30, 240} -- disease x4.0, fire x1.5
+randomDotPotency = {1, 100}
+randomDotUses = {250, 9999}
 
 -- Modifier applied to min/max junk values found in loot item lua
 junkValueModifier = 5;
 
 lootableArmorAttachmentStatMods = {
+	"heavy_flame_thrower_accuracy",
+	"heavy_flame_thrower_speed",
+	"heavy_rifle_acid_accuracy",
+	"heavy_rifle_acid_speed",
+	"unarmed_passive_defense",
 	"aim",
 	"alert",
 	"berserk",
@@ -110,7 +115,7 @@ lootableArmorAttachmentStatMods = {
 	"knockdown_defense",
 	"melee_defense",
 	"onehandmelee_accuracy",
-	"onehandmelee_damage",
+--	"onehandmelee_damage",
 	"onehandmelee_speed",
 	"pistol_accuracy",
 	"pistol_aim",
@@ -142,16 +147,36 @@ lootableArmorAttachmentStatMods = {
 	"thrown_accuracy",
 	"thrown_speed",
 	"twohandmelee_accuracy",
-	"twohandmelee_damage",
+--	"twohandmelee_damage",
 	"twohandmelee_speed",
 	"unarmed_accuracy",
-	"unarmed_damage",
+--	"unarmed_damage",
 	"unarmed_speed",
 	"volley",
 	"warcry"
 }
 
 lootableClothingAttachmentStatMods = {
+--"force_experimentation",
+--"force_assembly",
+--"force_repair_bonus",
+--"force_failure_reduction",
+
+	"heavy_flame_thrower_accuracy",
+	"heavy_flame_thrower_speed",
+	"heavy_rifle_acid_accuracy",
+	"heavy_rifle_acid_speed",
+	"unarmed_passive_defense",
+	"bio_engineer_assembly",
+	"bio_engineer_experimentation",
+	"jedi_saber_assembly",
+	"jedi_saber_experimentation",
+	"twohandlightsaber_accuracy",
+	"twohandlightsaber_speed",
+	"polearmlightsaber_accuracy",
+	"polearmlightsaber_speed",
+	"onehandlightsaber_accuracy",
+	"onehandlightsaber_speed",
 	"aim",
 	"alert",
 	"armor_assembly",
@@ -219,7 +244,7 @@ lootableClothingAttachmentStatMods = {
 	"medicine_experimentation",
 	"melee_defense",
 	"onehandmelee_accuracy",
-	"onehandmelee_damage",
+--	"onehandmelee_damage",
 	"onehandmelee_speed",
 	"pistol_accuracy",
 	"pistol_aim",
@@ -255,10 +280,10 @@ lootableClothingAttachmentStatMods = {
 	"thrown_accuracy",
 	"thrown_speed",
 	"twohandmelee_accuracy",
-	"twohandmelee_damage",
+--	"twohandmelee_damage",
 	"twohandmelee_speed",
 	"unarmed_accuracy",
-	"unarmed_damage",
+--	"unarmed_damage",
 	"unarmed_speed",
 	"volley",
 	"warcry",
@@ -268,6 +293,13 @@ lootableClothingAttachmentStatMods = {
 }
 
 lootableArmorStatMods = {
+	"heavy_flame_thrower_accuracy",
+	"heavy_flame_thrower_speed",
+	"heavy_rifle_acid_accuracy",
+	"heavy_rifle_acid_speed",
+	"unarmed_passive_defense",
+	"bio_engineer_assembly",
+	"bio_engineer_experimentation",
 	"aim",
 	"alert",
 	"armor_assembly",
@@ -332,7 +364,7 @@ lootableArmorStatMods = {
 	"medicine_experimentation",
 	"melee_defense",
 	"onehandmelee_accuracy",
-	"onehandmelee_damage",
+--	"onehandmelee_damage",
 	"onehandmelee_speed",
 	"pistol_accuracy",
 	"pistol_aim",
@@ -366,10 +398,10 @@ lootableArmorStatMods = {
 	"thrown_accuracy",
 	"thrown_speed",
 	"twohandmelee_accuracy",
-	"twohandmelee_damage",
+--	"twohandmelee_damage",
 	"twohandmelee_speed",
 	"unarmed_accuracy",
-	"unarmed_damage",
+--	"unarmed_damage",
 	"unarmed_speed",
 	"volley",
 	"warcry",
@@ -379,6 +411,21 @@ lootableArmorStatMods = {
 }
 
 lootableClothingStatMods = {
+	"heavy_flame_thrower_accuracy",
+	"heavy_flame_thrower_speed",
+	"heavy_rifle_acid_accuracy",
+	"heavy_rifle_acid_speed",
+	"unarmed_passive_defense",
+	"bio_engineer_assembly",
+	"bio_engineer_experimentation",
+	"jedi_saber_assembly",
+	"jedi_saber_experimentation",
+	"twohandlightsaber_accuracy",
+	"twohandlightsaber_speed",
+	"polearmlightsaber_accuracy",
+	"polearmlightsaber_speed",
+	"onehandlightsaber_accuracy",
+	"onehandlightsaber_speed",
 	"aim",
 	"alert",
 	"armor_assembly",
@@ -443,7 +490,7 @@ lootableClothingStatMods = {
 	"medicine_experimentation",
 	"melee_defense",
 	"onehandmelee_accuracy",
-	"onehandmelee_damage",
+--	"onehandmelee_damage",
 	"onehandmelee_speed",
 	"pistol_accuracy",
 	"pistol_aim",
@@ -477,10 +524,10 @@ lootableClothingStatMods = {
 	"thrown_accuracy",
 	"thrown_speed",
 	"twohandmelee_accuracy",
-	"twohandmelee_damage",
+--	"twohandmelee_damage",
 	"twohandmelee_speed",
 	"unarmed_accuracy",
-	"unarmed_damage",
+--	"unarmed_damage",
 	"unarmed_speed",
 	"volley",
 	"warcry",
@@ -488,6 +535,7 @@ lootableClothingStatMods = {
 	"weapon_experimentation",
 	"weapon_repair"
 }
+
 
 lootableOneHandedMeleeStatMods = {
 	"berserk",
