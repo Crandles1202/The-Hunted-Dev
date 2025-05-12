@@ -53,7 +53,7 @@ Saber2hPhantomCommand = {
 	coneAngle = 360,
 	coneAction = true,
 	coneRange = 24,
-	forceCostMultiplier = 3.0,
+	forceCostMultiplier = 2.5,
 	visMod = 25,
 
 	stateEffects = {
