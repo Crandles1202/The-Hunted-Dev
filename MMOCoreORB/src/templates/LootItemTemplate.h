@@ -202,7 +202,7 @@ public:
 					if (row.getTableSize() > 5)
 						combineType = row.getIntAt(6);
 
-					attributesMap.addExperimentalProperty(property, property,
+					attributesMap.addExperimentalAttribute(property, property,
 							min, max, prec, hidden, combineType);
 					attributesMap.setMaxPercentage(property, 1.0f);
 				}
