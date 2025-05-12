@@ -318,6 +318,7 @@ void LootManagerImplementation::setCustomObjectName(TangibleObject* object, cons
 void LootManagerImplementation::setJunkValue(TangibleObject* prototype, const LootItemTemplate* itemTemplate, int level, float excMod) {
 	float valueMin = itemTemplate->getJunkMinValue() * junkValueModifier;
 	float valueMax = itemTemplate->getJunkMaxValue() * junkValueModifier;
+	float fJunkValue = junkMinValue+System::random(junkMaxValue-junkMinValue) * 2;
 
 	int junkType = itemTemplate->getJunkDealerTypeNeeded();
 	int junkValue = System::random(valueMax - valueMin) + valueMin;
