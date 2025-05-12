@@ -80,6 +80,25 @@ int AttributesMap::getTotalVisibleAttributeGroups() const {
 	return visibleGroups.size();
 }
 
+bool AttributesMap::hasProperty(const String& attribute) const {
+	const Subclasses* subclasses;
+	const Values* values;
+
+	for (int j = 0; j < size(); ++j) {
+		subclasses = get(j);
+
+		for (int i = 0; i < subclasses->size(); ++i) {
+			values = subclasses->get(i);
+
+			if (values->getName() == attribute) {
+				return true;
+			}
+		}
+	}
+
+	return false;
+}
+
 bool AttributesMap::isHidden(const String& attribute) const {
 	Reference<Values*> values = attributeValues.get(attribute);
 

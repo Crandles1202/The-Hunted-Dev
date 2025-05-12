@@ -450,7 +450,7 @@ TangibleObject* LootManagerImplementation::createLootObject(TransactionLog& trx,
 
 
 
-	ValuesMap valuesMap = templateObject->getAttributesMapCopy();
+	AttributesMap valuesMap = templateObject->getAttributesMapCopy();
 	CraftingValues* craftingValues = new CraftingValues(valuesMap);
 
 	setInitialObjectStats(templateObject, craftingValues, prototype);
@@ -603,7 +603,7 @@ TangibleObject* LootManagerImplementation::createLootObject(TransactionLog& trx,
 
 		}
 	}
-	
+
 	// Set the values for the random attributes to be modified if there are any
 	setRandomLootValues(trx, prototype, templateObject, level, excMod);
 

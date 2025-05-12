@@ -98,6 +98,10 @@ public:
 		return attributesMap.hasExperimentalAttribute(attribute);
 	}
 
+	bool hasProperty(const String& attribute) const {
+		return attributesMap.hasProperty(attribute);
+	}
+
 	bool isHidden(const String& attribute) const {
 		return attributesMap.isHidden(attribute);
 	}
