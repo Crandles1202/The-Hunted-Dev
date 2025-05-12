@@ -128,52 +128,88 @@ public:
 
 		LuaObject craftvals = templateData->getObjectField("craftingValues");
 
+		// if (craftvals.isValidTable()) {
+		// 	for (int i = 1; i <= craftvals.getTableSize(); ++i) {
+		// 		LuaObject row = craftvals.getObjectAt(i);
+
+		// 		if (row.isValidTable() && row.getTableSize() >= 3) {
+		// 			String attribute = row.getStringAt(1);
+		// 			String group = attribute;
+
+		// 			float min = row.getFloatAt(2);
+		// 			float max = row.getFloatAt(3);
+
+		// 			int precision = 0;
+		// 			bool hidden = false;
+		// 			int combine = LootAttributeType::getAttributeType(objectType, attribute);
+
+		// 			if (attributesMap.hasExperimentalAttribute(attribute)) {
+		// 				group = attributesMap.getAttributeGroup(attribute);
+		// 				precision = attributesMap.getPrecision(attribute);
+		// 			}
+
+		// 			if (row.getTableSize() >= 4) {
+		// 				precision = row.getIntAt(4);
+		// 			}
+
+		// 			if (row.getTableSize() >= 5) {
+		// 				hidden = row.getBooleanAt(5);
+		// 			}
+
+		// 			if (row.getTableSize() >= 6) {
+		// 				combine = row.getIntAt(6);
+		// 			}
+
+		// 			if (min == max && max == 0.f) {
+		// 				combine = LootAttributeType::STATIC;
+		// 				hidden = true;
+		// 			}
+
+		// 			attributesMap.addExperimentalAttribute(attribute, group, min, max, precision, hidden, combine);
+		// 			attributesMap.setCurrentPercentage(attribute, 0.f, 1.f);
+
+		// 			row.pop();
+		// 		}
+		// 	}
+
+		// 	craftvals.pop();
+		// }
+
+		lua_State* L = craftvals.getLuaState();
+
 		if (craftvals.isValidTable()) {
 			for (int i = 1; i <= craftvals.getTableSize(); ++i) {
-				LuaObject row = craftvals.getObjectAt(i);
+				lua_rawgeti(L, -1, i);
 
-				if (row.isValidTable() && row.getTableSize() >= 3) {
-					String attribute = row.getStringAt(1);
-					String group = attribute;
+				LuaObject row(L);
 
+				if (row.isValidTable()) {
+					String property = row.getStringAt(1);
 					float min = row.getFloatAt(2);
 					float max = row.getFloatAt(3);
-
-					int precision = 0;
+					float prec = 0;
 					bool hidden = false;
-					int combine = LootAttributeType::getAttributeType(objectType, attribute);
+					short combineType = AttributesMap:LINEARCOMBINE;
 
-					if (attributesMap.hasExperimentalAttribute(attribute)) {
-						group = attributesMap.getAttributeGroup(attribute);
-						precision = attributesMap.getPrecision(attribute);
-					}
+					if (row.getTableSize() > 3)
+						prec = row.getFloatAt(4);
 
-					if (row.getTableSize() >= 4) {
-						precision = row.getIntAt(4);
-					}
-
-					if (row.getTableSize() >= 5) {
+					if (row.getTableSize() > 4)
 						hidden = row.getBooleanAt(5);
-					}
 
-					if (row.getTableSize() >= 6) {
-						combine = row.getIntAt(6);
-					}
+					if (row.getTableSize() > 5)
+						combineType = row.getIntAt(6);
 
-					if (min == max && max == 0.f) {
-						combine = LootAttributeType::STATIC;
-						hidden = true;
-					}
-
-					attributesMap.addExperimentalAttribute(attribute, group, min, max, precision, hidden, combine);
-					attributesMap.setCurrentPercentage(attribute, 0.f, 1.f);
-
-					row.pop();
+					craftingValues.addExperimentalProperty(property, property,
+							min, max, prec, hidden, combineType);
+					craftingValues.setMaxPercentage(property, 1.0f);
 				}
-			}
 
-			craftvals.pop();
+				row.pop();
+			}
 		}
+
+		craftvals.pop();
 
 		LuaObject customizationStringNamesList = templateData->getObjectField("customizationStringNames");
 

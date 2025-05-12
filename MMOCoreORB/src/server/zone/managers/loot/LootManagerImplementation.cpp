@@ -267,7 +267,7 @@ void LootManagerImplementation::setInitialObjectStats(const LootItemTemplate* te
 			if (craftingValues->hasProperty(property))
 				continue;
 
-			craftingValues->addExperimentalProperty(property, property, mins->get(i), maxs->get(i), prec->get(i), false, ValuesMap::LINEARCOMBINE);
+			craftingValues->addExperimentalProperty(property, property, mins->get(i), maxs->get(i), prec->get(i), false, AttributesMap::LINEARCOMBINE);
 			if (title == "null")
 				craftingValues->setHidden(property);
 		}
@@ -587,7 +587,7 @@ TangibleObject* LootManagerImplementation::createLootObject(TransactionLog& trx,
 
 	// Use percentages to recalculate the values
 	craftingValues->recalculateValues(false, true, level);
-	craftingValues->addExperimentalProperty("creatureLevel", "creatureLevel", level, level, 0, false, ValuesMap::LINEARCOMBINE);
+	craftingValues->addExperimentalProperty("creatureLevel", "creatureLevel", level, level, 0, false, AttributesMap::LINEARCOMBINE);
 	craftingValues->setHidden("creatureLevel");
 
 		//check weapons and weapon components for min damage > max damage
