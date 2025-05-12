@@ -114,7 +114,7 @@ object_tangible_component_armor_shield_generator_personal_b = object_tangible_co
 			},
 	
 	-- Damage types in WeaponObject
-	vulnerability = ACID + BLAST + KINETIC + LIGHTSABER,
+	vulnerability = LIGHTSABER,
 
 	-- These are default Blue Frog stats
 	healthEncumbrance = 0,
