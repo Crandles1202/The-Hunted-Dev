@@ -941,187 +941,393 @@ bool LootManagerImplementation::createLootSet(TransactionLog& trx, SceneObject* 
 	return true;
 }
 
+// void LootManagerImplementation::addStaticDots(TangibleObject* object, const LootItemTemplate* templateObject, int level) {
+// 	if (object == nullptr) {
+// 		return;
+// 	}
+
+// 	auto weapon = dynamic_cast<WeaponObject*>(object);
+
+// 	if (weapon == nullptr) {
+// 		return;
+// 	}
+
+// 	float staticDotChance = templateObject->getStaticDotChance();
+
+// 	if (staticDotChance < 0.f) {
+// 		return;
+// 	}
+
+// 	int levelRank = LootValues::getLevelRankValue(level, 0.f, 0.15f) * levelChance;
+// 	int staticDots = 0;
+
+// 	if (staticDotChance == 0 || System::random(staticDotChance) <= levelRank) {
+// 		staticDots = 1;
+// 	}
+
+// 	if (staticDots == 0) {
+// 		return;
+// 	}
+
+// 	int dotType = templateObject->getStaticDotType();
+
+// 	if (dotType < LootManager::DOT_POISON || dotType > LootManager::DOT_BLEEDING) {
+// 		return;
+// 	}
+
+// 	const auto dotValues = templateObject->getStaticDotValues();
+
+// 	if (dotValues == nullptr || dotValues->size() < 5) {
+// 		return;
+// 	}
+
+// 	int attribute = 0;
+// 	int strength = 0;
+// 	int duration = 0;
+// 	int potency = 0;
+// 	int uses = 0;
+
+// 	for (int i = 0; i < dotValues->size(); ++i) {
+// 		const auto& property = dotValues->elementAt(i).getKey();
+// 		const auto& values = dotValues->elementAt(i).getValue();
+
+// 		int min = values.get(0);
+// 		int max = values.get(1);
+
+// 		if (property == "attribute") {
+// 			attribute = System::random(max - min) + min;
+
+// 			if (dotType != LootManager::DOT_DISEASE) {
+// 				attribute = (int)(attribute / 3.f) * 3;
+// 			}
+// 		} else if (property == "strength") {
+// 			strength = LootValues::getDistributedValue(min, max, level);
+// 		} else if (property == "duration") {
+// 			duration = LootValues::getDistributedValue(min, max, level);
+// 		} else if (property == "potency") {
+// 			potency = LootValues::getDistributedValue(min, max, level);
+// 		} else if (property == "uses") {
+// 			uses = LootValues::getDistributedValue(min, max, level);
+// 		}
+// 	}
+
+// 	if (strength <= 0 || duration <= 0 || potency <= 0 || uses <= 0) {
+// 		return;
+// 	}
+
+// 	weapon->addDotType(dotType);
+// 	weapon->addDotAttribute(attribute);
+// 	weapon->addDotStrength(strength);
+// 	weapon->addDotDuration(duration);
+// 	weapon->addDotPotency(potency);
+// 	weapon->addDotUses(uses);
+
+// 	weapon->addMagicBit(false);
+// }
+
 void LootManagerImplementation::addStaticDots(TangibleObject* object, const LootItemTemplate* templateObject, int level) {
-	if (object == nullptr) {
+	//disable dot loot
+	//return;
+
+	if (object == nullptr)
 		return;
-	}
 
-	auto weapon = dynamic_cast<WeaponObject*>(object);
-
-	if (weapon == nullptr) {
+	if (!object->isWeaponObject())
 		return;
-	}
 
-	float staticDotChance = templateObject->getStaticDotChance();
+	ManagedReference<WeaponObject*> weapon = cast<WeaponObject*>(object);
 
-	if (staticDotChance < 0.f) {
+	bool shouldGenerateDots = false;
+
+	float dotChance = templateObject->getStaticDotChance();
+
+	if (dotChance < 0)
 		return;
+
+	// Apply the Dot if the chance roll equals the number or is zero.
+	if (dotChance == 0 || System::random(dotChance) == 0) { // Defined in loot item script.
+		shouldGenerateDots = true;
 	}
 
-	int levelRank = LootValues::getLevelRankValue(level, 0.f, 0.15f) * levelChance;
-	int staticDots = 0;
+	if (shouldGenerateDots) {
 
-	if (staticDotChance == 0 || System::random(staticDotChance) <= levelRank) {
-		staticDots = 1;
-	}
+		int dotType = templateObject->getStaticDotType();
 
-	if (staticDots == 0) {
-		return;
-	}
+		if (dotType < 1 || dotType > 4)
+			return;
 
-	int dotType = templateObject->getStaticDotType();
+		const VectorMap<String, SortedVector<int> >* dotValues = templateObject->getStaticDotValues();
+		int size = dotValues->size();
 
-	if (dotType < LootManager::DOT_POISON || dotType > LootManager::DOT_BLEEDING) {
-		return;
-	}
+		// Check if they specified correct vals.
+		if (size > 0) {
+			weapon->addDotType(dotType);
 
-	const auto dotValues = templateObject->getStaticDotValues();
+			for (int i = 0; i < size; i++) {
 
-	if (dotValues == nullptr || dotValues->size() < 5) {
-		return;
-	}
+				const String& property = dotValues->elementAt(i).getKey();
+				const SortedVector<int>& theseValues = dotValues->elementAt(i).getValue();
+				int min = theseValues.elementAt(0);
+				int max = theseValues.elementAt(1);
+				float value = 0;
 
-	int attribute = 0;
-	int strength = 0;
-	int duration = 0;
-	int potency = 0;
-	int uses = 0;
+				if (max != min) {
+					value = calculateDotValue(min, max, level);
+				}
+				else { value = max; }
 
-	for (int i = 0; i < dotValues->size(); ++i) {
-		const auto& property = dotValues->elementAt(i).getKey();
-		const auto& values = dotValues->elementAt(i).getValue();
+				if(property == "attribute") {
+					if (min != max)
+						value = System::random(max - min) + min;
 
-		int min = values.get(0);
-		int max = values.get(1);
+					if (dotType != 2 && (value != 0 && value != 3 && value != 6)) {
+						int numbers[] = { 0, 3, 6 }; // The main pool attributes.
+						int choose = System::random(2);
+						value = numbers[choose];
+					}
 
-		if (property == "attribute") {
-			attribute = System::random(max - min) + min;
-
-			if (dotType != LootManager::DOT_DISEASE) {
-				attribute = (int)(attribute / 3.f) * 3;
+					weapon->addDotAttribute(value);
+				} else if (property == "strength") {
+					weapon->addDotStrength(value);
+				} else if (property == "duration") {
+					weapon->addDotDuration(value);
+				} else if (property == "potency") {
+					weapon->addDotPotency(value);
+				} else if (property == "uses") {
+					weapon->addDotUses(value);
+				}
 			}
-		} else if (property == "strength") {
-			strength = LootValues::getDistributedValue(min, max, level);
-		} else if (property == "duration") {
-			duration = LootValues::getDistributedValue(min, max, level);
-		} else if (property == "potency") {
-			potency = LootValues::getDistributedValue(min, max, level);
-		} else if (property == "uses") {
-			uses = LootValues::getDistributedValue(min, max, level);
+
+			weapon->addMagicBit(false);
 		}
 	}
-
-	if (strength <= 0 || duration <= 0 || potency <= 0 || uses <= 0) {
-		return;
-	}
-
-	weapon->addDotType(dotType);
-	weapon->addDotAttribute(attribute);
-	weapon->addDotStrength(strength);
-	weapon->addDotDuration(duration);
-	weapon->addDotPotency(potency);
-	weapon->addDotUses(uses);
-
-	weapon->addMagicBit(false);
 }
 
+// void LootManagerImplementation::addRandomDots(TangibleObject* object, const LootItemTemplate* templateObject, int level, float excMod) {
+// 	if (object == nullptr) {
+// 		return;
+// 	}
+
+// 	auto weapon = dynamic_cast<WeaponObject*>(object);
+
+// 	if (weapon == nullptr) {
+// 		return;
+// 	}
+
+// 	float randomDotChance = templateObject->getRandomDotChance();
+
+// 	if (randomDotChance < 0.f) {
+// 		return;
+// 	}
+
+// 	float modifier = Math::max(getRandomModifier(templateObject, level, excMod), baseModifier);
+// 	int levelRank = LootValues::getLevelRankValue(level, 0.f, 0.15f) * modifier * levelChance;
+// 	int randomDots = 0;
+
+// 	if (randomDotChance == 0 || System::random(randomDotChance) <= levelRank) {
+// 		randomDots = 1;
+
+// 		if (randomDotChance != 0 && System::random(randomDotChance) <= levelRank) {
+// 			randomDots = System::random(1) + 1;
+// 		}
+// 	}
+
+// 	if (randomDots == 0) {
+// 		return;
+// 	}
+
+// 	int fireChance = fireDotChance * LootManager::DOTROLLCHANCE;
+// 	int diseaseChance = (diseaseDotChance * LootManager::DOTROLLCHANCE) + fireChance;
+// 	// int poisonChance = poisonDotChance * LootManager::DOTROLLCHANCE;
+
+// 	int mindChance = mindDotChance * LootManager::DOTROLLCHANCE;
+// 	int actionChance = (actionDotChance * LootManager::DOTROLLCHANCE) + mindChance;
+// 	// int healthChance = healthDotChance * LootManager::DOTROLLCHANCE;
+
+// 	for (int i = 0; i < randomDots; i++) {
+// 		// Determine DOT type
+// 		int typeChance = System::random(LootManager::DOTROLLCHANCE);
+// 		int dotType = LootManager::DOT_POISON;
+
+// 		if (typeChance < fireChance) {
+// 			dotType = LootManager::DOT_FIRE;
+// 		} else if (typeChance < diseaseChance) {
+// 			dotType = LootManager::DOT_DISEASE;
+// 		} // DOT Type is poison
+
+// 		// Determine DOT HAM attribute
+// 		int attributeChance = System::random(LootManager::DOTROLLCHANCE);
+// 		int attribute = CreatureAttribute::HEALTH;
+
+// 		if (attributeChance < mindChance) {
+// 			attribute = CreatureAttribute::MIND;
+// 		} else if (attributeChance < actionChance) {
+// 			attribute = CreatureAttribute::ACTION;
+// 		} // DOT is a HEALTH attribute
+
+// 		// Chance for HAM attribute to be a secondary for disease DOTs
+// 		if (dotType == LootManager::DOT_DISEASE) {
+// 			attribute += System::random(2);
+// 		}
+
+// 		float strMod = 1.f;
+// 		float durMod = 1.f;
+
+// 		if (dotType == LootManager::DOT_POISON) {
+// 			strMod = 1.5f;
+// 		} else if (dotType == LootManager::DOT_DISEASE) {
+// 			strMod = 0.5f;
+// 			durMod = 4.f;
+// 		} else if (dotType == LootManager::DOT_FIRE) {
+// 			durMod = 1.5f;
+// 		}
+
+// 		int strength = LootValues::getDistributedValue(randomDotStrength.get(0), randomDotStrength.get(1), level) * modifier * strMod;
+// 		int duration = LootValues::getDistributedValue(randomDotDuration.get(0), randomDotDuration.get(1), level) * modifier * durMod;
+// 		int potency = LootValues::getDistributedValue(randomDotPotency.get(0), randomDotPotency.get(1), level) * modifier;
+// 		int uses = LootValues::getDistributedValue(randomDotUses.get(0), randomDotUses.get(1), level) * modifier;
+
+// 		if (strength <= 0 || duration <= 0 || potency <= 0 || uses <= 0) {
+// 			continue;
+// 		}
+
+// 		weapon->addDotType(dotType);
+// 		weapon->addDotAttribute(attribute);
+// 		weapon->addDotStrength(strength);
+// 		weapon->addDotDuration(duration);
+// 		weapon->addDotPotency(potency);
+// 		weapon->addDotUses(uses);
+// 	}
+
+// 	weapon->addMagicBit(false);
+// }
+
 void LootManagerImplementation::addRandomDots(TangibleObject* object, const LootItemTemplate* templateObject, int level, float excMod) {
-	if (object == nullptr) {
+	//disable dot loot
+	//return;
+
+	if (object == nullptr)
 		return;
-	}
 
-	auto weapon = dynamic_cast<WeaponObject*>(object);
-
-	if (weapon == nullptr) {
+	if (!object->isWeaponObject())
 		return;
-	}
 
-	float randomDotChance = templateObject->getRandomDotChance();
+	ManagedReference<WeaponObject*> weapon = cast<WeaponObject*>(object);
 
-	if (randomDotChance < 0.f) {
+	bool shouldGenerateDots = false;
+
+	float dotChance = templateObject->getRandomDotChance();
+
+	if (dotChance < 0)
 		return;
+
+//	float modSqr = excMod * excMod;
+
+	// Apply the Dot if the chance roll equals the number or is zero.
+	if (System::random(10) == 10) { // Defined in loot item script.//not anymore
+		shouldGenerateDots = true;
 	}
 
-	float modifier = Math::max(getRandomModifier(templateObject, level, excMod), baseModifier);
-	int levelRank = LootValues::getLevelRankValue(level, 0.f, 0.15f) * modifier * levelChance;
-	int randomDots = 0;
+	if (shouldGenerateDots) {
 
-	if (randomDotChance == 0 || System::random(randomDotChance) <= levelRank) {
-		randomDots = 1;
+		int number = 1;
 
-		if (randomDotChance != 0 && System::random(randomDotChance) <= levelRank) {
-			randomDots = System::random(1) + 1;
+//		if (System::random(250 / modSqr) == 0)
+//			number = 2;//no double dots
+
+		for (int i = 0; i < number; i++) {
+			int dotType = System::random(2) + 1;
+
+			weapon->addDotType(dotType);
+
+			int attMin = randomDotAttribute.elementAt(0);
+			int attMax = randomDotAttribute.elementAt(1);
+			float att = 0;
+
+			if (attMin != attMax)
+				att= System::random(attMax - attMin) + attMin;
+
+			if (dotType != 2 && (att != 0 && att != 3 && att != 6)) {
+				int numbers[] = { 0, 3, 6 }; // The main pool attributes.
+				int choose = System::random(2);
+				att = numbers[choose];
+			}
+
+			weapon->addDotAttribute(att);
+
+			int strMin = randomDotStrength.elementAt(0);
+			int strMax = randomDotStrength.elementAt(1);
+			float str = 0;
+
+			if (strMax != strMin)
+				str = calculateDotValue(strMin, strMax, level);
+			else
+				str = strMax;
+
+//			if (excMod == 1.0 && (yellowChance == 0 || System::random(yellowChance) == 0)) {
+//				str *= yellowModifier;
+//			}
+
+			if (dotType == 1)
+				str = str * 2;
+			else if (dotType == 3)
+				str = str * 1.5;
+
+			weapon->addDotStrength(str * excMod);
+
+			int durMin = randomDotDuration.elementAt(0);
+			int durMax = randomDotDuration.elementAt(1);
+			float dur = 0;
+
+			if (durMax != durMin)
+				dur = calculateDotValue(durMin, durMax, level);
+			else
+				dur = durMax;
+
+//			if (excMod == 1.0 && (yellowChance == 0 || System::random(yellowChance) == 0)) {
+//				dur *= yellowModifier;
+//			}
+
+			if (dotType == 2)
+				dur = dur * 5;
+			else if (dotType == 3)
+				dur = dur * 1.5;
+
+			weapon->addDotDuration(dur * excMod);
+
+			int potMin = randomDotPotency.elementAt(0);
+			int potMax = randomDotPotency.elementAt(1);
+			float pot = 0;
+
+			if (potMax != potMin)
+				pot = calculateDotValue(potMin, potMax, level);
+			else
+				pot = potMax;
+
+//			if (excMod == 1.0 && (yellowChance == 0 || System::random(yellowChance) == 0)) {
+//				pot *= yellowModifier;
+//			}
+
+			weapon->addDotPotency(pot * excMod);
+
+			int useMin = randomDotUses.elementAt(0);
+			int useMax = randomDotUses.elementAt(1);
+			float use = 0;
+
+			if (useMax != useMin)
+				use = calculateDotValue(useMin, useMax, level);
+			else
+				use = useMax;
+
+//			if (excMod == 1.0 && (yellowChance == 0 || System::random(yellowChance) == 0)) {
+//				use *= yellowModifier;
+//			}
+
+			weapon->addDotUses(use * excMod);
 		}
+
+		weapon->addMagicBit(false);
 	}
-
-	if (randomDots == 0) {
-		return;
-	}
-
-	int fireChance = fireDotChance * LootManager::DOTROLLCHANCE;
-	int diseaseChance = (diseaseDotChance * LootManager::DOTROLLCHANCE) + fireChance;
-	// int poisonChance = poisonDotChance * LootManager::DOTROLLCHANCE;
-
-	int mindChance = mindDotChance * LootManager::DOTROLLCHANCE;
-	int actionChance = (actionDotChance * LootManager::DOTROLLCHANCE) + mindChance;
-	// int healthChance = healthDotChance * LootManager::DOTROLLCHANCE;
-
-	for (int i = 0; i < randomDots; i++) {
-		// Determine DOT type
-		int typeChance = System::random(LootManager::DOTROLLCHANCE);
-		int dotType = LootManager::DOT_POISON;
-
-		if (typeChance < fireChance) {
-			dotType = LootManager::DOT_FIRE;
-		} else if (typeChance < diseaseChance) {
-			dotType = LootManager::DOT_DISEASE;
-		} // DOT Type is poison
-
-		// Determine DOT HAM attribute
-		int attributeChance = System::random(LootManager::DOTROLLCHANCE);
-		int attribute = CreatureAttribute::HEALTH;
-
-		if (attributeChance < mindChance) {
-			attribute = CreatureAttribute::MIND;
-		} else if (attributeChance < actionChance) {
-			attribute = CreatureAttribute::ACTION;
-		} // DOT is a HEALTH attribute
-
-		// Chance for HAM attribute to be a secondary for disease DOTs
-		if (dotType == LootManager::DOT_DISEASE) {
-			attribute += System::random(2);
-		}
-
-		float strMod = 1.f;
-		float durMod = 1.f;
-
-		if (dotType == LootManager::DOT_POISON) {
-			strMod = 1.5f;
-		} else if (dotType == LootManager::DOT_DISEASE) {
-			strMod = 0.5f;
-			durMod = 4.f;
-		} else if (dotType == LootManager::DOT_FIRE) {
-			durMod = 1.5f;
-		}
-
-		int strength = LootValues::getDistributedValue(randomDotStrength.get(0), randomDotStrength.get(1), level) * modifier * strMod;
-		int duration = LootValues::getDistributedValue(randomDotDuration.get(0), randomDotDuration.get(1), level) * modifier * durMod;
-		int potency = LootValues::getDistributedValue(randomDotPotency.get(0), randomDotPotency.get(1), level) * modifier;
-		int uses = LootValues::getDistributedValue(randomDotUses.get(0), randomDotUses.get(1), level) * modifier;
-
-		if (strength <= 0 || duration <= 0 || potency <= 0 || uses <= 0) {
-			continue;
-		}
-
-		weapon->addDotType(dotType);
-		weapon->addDotAttribute(attribute);
-		weapon->addDotStrength(strength);
-		weapon->addDotDuration(duration);
-		weapon->addDotPotency(potency);
-		weapon->addDotUses(uses);
-	}
-
-	weapon->addMagicBit(false);
 }
 
 float LootManagerImplementation::getRandomModifier(const LootItemTemplate* itemTemplate, int level, float excMod) {
@@ -1159,4 +1365,16 @@ float LootManagerImplementation::getRandomModifier(const LootItemTemplate* itemT
 	}
 
 	return modMax == modMin ? modMin : LootValues::getDistributedValue(modMin, modMax, level) + baseModifier;
+}
+
+
+float LootManagerImplementation::calculateDotValue(float min, float max, float level) {
+	float randVal = (float)System::random(max - min);
+	float value = Math::max(min, Math::min(max, randVal * (1 + (level / 1000)))); // Used for Str, Pot, Dur, Uses.
+
+	if (value < min) {
+		value = min;
+	}
+
+	return value;
 }
