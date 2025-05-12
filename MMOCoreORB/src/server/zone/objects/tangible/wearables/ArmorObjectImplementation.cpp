@@ -115,7 +115,7 @@ void ArmorObjectImplementation::fillAttributeList(AttributeListMessage* alm, Cre
 	// else if (rating == HEAVY)
 	// 	alm->insertAttribute("armorrating", "@obj_attr_n:armor_pierce_heavy"); //Heavy
 	// else
-	// 	alm->insertAttribute("armorrating", "@obj_attr_n:armor_pierce_none"); //None
+	// 	alm->insertAttribute("armorrating`", "@obj_attr_n:armor_pierce_none"); //None
 
 	//Check for special protections
 	if ((isSpecial(SharedWeaponObjectTemplate::KINETIC) || isVulnerable(SharedWeaponObjectTemplate::KINETIC)) && getKinetic() > 0) {
@@ -255,8 +255,8 @@ void ArmorObjectImplementation::fillAttributeList(AttributeListMessage* alm, Cre
 	if (isVulnerable(SharedWeaponObjectTemplate::ACID) && getAcid() < 0.5)
 		alm->insertAttribute("cat_armor_vulnerability.armor_eff_elemental_acid", "-");
 
-	if (isVulnerable(SharedWeaponObjectTemplate::LIGHTSABER) && getLightSaber() < 0.5)
-		alm->insertAttribute("cat_armor_vulnerability.armor_eff_restraint", "-");
+	// if (isVulnerable(SharedWeaponObjectTemplate::LIGHTSABER) && getLightSaber() < 0.5)
+	// 	alm->insertAttribute("cat_armor_vulnerability.armor_eff_restraint", "-");
 
 	//Encumbrances
 	// alm->insertAttribute("cat_armor_encumbrance.health", getHealthEncumbrance());

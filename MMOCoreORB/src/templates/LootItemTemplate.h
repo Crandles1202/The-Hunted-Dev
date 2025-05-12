@@ -272,6 +272,7 @@ public:
 		return suppressSerialNumber;
 	}
 
+
 	AttributesMap getAttributesMapCopy() const {
 		return attributesMap;
 	}

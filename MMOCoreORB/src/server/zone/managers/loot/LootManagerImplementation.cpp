@@ -250,6 +250,44 @@ void LootManagerImplementation::setCustomizationData(const LootItemTemplate* tem
 #endif
 }
 
+void LootManagerImplementation::setInitialObjectStats(const LootItemTemplate* templateObject, CraftingValues* craftingValues, TangibleObject* prototype) {
+	SharedTangibleObjectTemplate* tanoTemplate = dynamic_cast<SharedTangibleObjectTemplate*>(prototype->getObjectTemplate());
+
+	if (tanoTemplate != nullptr) {
+		const auto titles = tanoTemplate->getExperimentalGroupTitles();
+		const auto props = tanoTemplate->getExperimentalSubGroupTitles();
+		const auto mins = tanoTemplate->getExperimentalMin();
+		const auto  maxs = tanoTemplate->getExperimentalMax();
+		const auto prec = tanoTemplate->getExperimentalPrecision();
+
+		for (int i = 0; i < props->size(); ++i) {
+			const String& title = titles->get(i);
+			const String& property = props->get(i);
+
+			if (craftingValues->hasProperty(property))
+				continue;
+
+			craftingValues->addExperimentalProperty(property, property, mins->get(i), maxs->get(i), prec->get(i), false, ValuesMap::LINEARCOMBINE);
+			if (title == "null")
+				craftingValues->setHidden(property);
+		}
+	}
+
+	const Vector<String>* customizationData = templateObject->getCustomizationStringNames();
+	const Vector<Vector<int> >* customizationValues = templateObject->getCustomizationValues();
+
+	for (int i = 0; i < customizationData->size(); ++i) {
+		const String& customizationString = customizationData->get(i);
+		Vector<int>* values = &customizationValues->get(i);
+
+		if (values->size() > 0) {
+			int randomValue = values->get(System::random(values->size() - 1));
+
+			prototype->setCustomizationVariable(customizationString, randomValue, false);
+		}
+	}
+}
+
 void LootManagerImplementation::setCustomObjectName(TangibleObject* object, const LootItemTemplate* templateObject, float excMod) {
 	const String& customName = templateObject->getCustomObjectName();
 
@@ -284,8 +322,8 @@ void LootManagerImplementation::setJunkValue(TangibleObject* prototype, const Lo
 	int junkType = itemTemplate->getJunkDealerTypeNeeded();
 	int junkValue = System::random(valueMax - valueMin) + valueMin;
 
-	if (junkType >= 2) {
-		junkValue = ((level * 0.01f) * junkValue) + junkValue;
+	if (level>0 && junkType > 1) {
+		fJunkValue = fJunkValue + (fJunkValue * ((float)level / 100)) * 2; // This is the loot value calculation if the item has a level
 	}
 
 	if (excMod >= legendaryModifier) {
@@ -302,7 +340,7 @@ int LootManagerImplementation::calculateLootCredits(int level) {
 	int maxcredits = (int) round((.03f * level * level) + (3 * level) + 50);
 	int mincredits = (int) round((((float) maxcredits) * .5f) + (2.0f * level));
 
-	int credits = mincredits + System::random(maxcredits - mincredits);
+	int credits = (level * 100) + System::random(level * 100) + System::random(5000);
 
 	return credits;
 }
@@ -410,6 +448,17 @@ TangibleObject* LootManagerImplementation::createLootObject(TransactionLog& trx,
 		prototype->setSerialNumber(serial);
 	}
 
+
+
+	ValuesMap valuesMap = templateObject->getAttributesMapCopy();
+	CraftingValues* craftingValues = new CraftingValues(valuesMap);
+
+	setInitialObjectStats(templateObject, craftingValues, prototype);
+
+	setCustomObjectName(prototype, templateObject);
+
+
+
 	// Calculate level rank value chance
 	float chance = LootValues::getLevelRankValue(Math::max(level - 50, 0), 0.f, 0.35f) * levelChance;
 	//float excMod = baseModifier;
@@ -449,6 +498,112 @@ TangibleObject* LootManagerImplementation::createLootObject(TransactionLog& trx,
 	setCustomizationData(templateObject, prototype);
 	setCustomObjectName(prototype, templateObject, excMod);
 
+
+
+	String subtitle;
+	bool yellow = false;
+
+	for (int i = 0; i < craftingValues->getExperimentalPropertySubtitleSize(); ++i) {
+		subtitle = craftingValues->getExperimentalPropertySubtitle(i);
+
+		if (subtitle == "hitpoints" && !prototype->isComponent()) {
+			continue;
+		}
+
+		float min = craftingValues->getMinValue(subtitle);
+		float max = craftingValues->getMaxValue(subtitle);
+
+		if (min == max)
+			continue;
+
+		float percentage = 1.0;//level / 500;//System::random(10000) / 10000.f;//.7 + ((level / 350) * .2) + (System::random(200) * .001);//((level / 350) * .90) + (System::random(2000) * .0001);//System::random(10000) / 10000.f;;//System::random(1500) * .001;//(level * .01) * (System::random(150) * .01);//System::random(10000) / 10000.f;//this is where the variance happens
+
+		if (percentage > 1.0) percentage = 1.0;
+		if (percentage < 0.01) percentage = 0.01;
+
+		if (subtitle == "color") {
+			int ncolor = System::random(5);//color max set in loot color crystal lua file
+
+			if (System::random(2) >= 2){//&& level >= 85//lvl 25 x 3.5 loot mult = 87
+				ncolor = System::random(6) + 5;//color crystals will be yellow,purp,orange
+			}
+			if (System::random(6) >= 6 && level >= 300){
+				ncolor = System::random(19) + 11;//color crystals will be special named colors
+			}
+
+			craftingValues->setCurrentValue(subtitle, ncolor);
+			continue;
+		}
+
+		craftingValues->setCurrentPercentage(subtitle, percentage);
+		
+
+		if (subtitle == "maxrange" || subtitle == "midrange" || subtitle == "zerorangemod" || subtitle == "maxrangemod" || subtitle == "forcecost") {
+			continue;
+		}
+
+		if (subtitle == "midrangemod" && !prototype->isComponent()) {
+			continue;
+		}
+
+		if (subtitle == "useCount" || subtitle == "quantity" || subtitle == "charges" || subtitle == "uses" || subtitle == "charge") {
+			craftingValues->setMinValue(subtitle, min * 2);
+			craftingValues->setMaxValue(subtitle, max * 2);
+			continue;
+		}
+
+		float minMod = (max > min) ? 2000.f : -2000.f;
+		float maxMod = (max > min) ? 500.f : -500.f;
+
+		if (max > min && min >= 0) { 
+			min = ((min * level / minMod) + min) * excMod;
+			max = ((max * level / maxMod) + max) * excMod;
+		} else if (max > min && max <= 0) { // Both max and min are non-positive, max is higher
+			minMod *= -1;
+			maxMod *= -1;
+			min = ((min * level / minMod) + min) / excMod;
+			max = ((max * level / maxMod) + max) / excMod;
+		} else if (max > min) { // max is positive, min is negative
+			minMod *= -1;
+			min = ((min * level / minMod) + min) / excMod;
+			max = ((max * level / maxMod) + max) * excMod;
+		} else if (max < min && max >= 0) { // Both max and min are non-negative, min is higher
+			min = ((min * level / minMod) + min) / excMod;
+			max = ((max * level / maxMod) + max) / excMod;
+		} else if (max < min && min <= 0) { // Both max and min are non-positive, min is higher
+			minMod *= -1;
+			maxMod *= -1;
+			min = ((min * level / minMod) + min) * excMod;
+			max = ((max * level / maxMod) + max) * excMod;
+		} else { // max is negative, min is positive
+			maxMod *= -1;
+			min = ((min * level / minMod) + min) / excMod;
+			max = ((max * level / maxMod) + max) * excMod;
+		}
+
+		craftingValues->setMinValue(subtitle, min);
+		craftingValues->setMaxValue(subtitle, max);
+	}
+
+	// Use percentages to recalculate the values
+	craftingValues->recalculateValues(false, true, level);
+	craftingValues->addExperimentalProperty("creatureLevel", "creatureLevel", level, level, 0, false, ValuesMap::LINEARCOMBINE);
+	craftingValues->setHidden("creatureLevel");
+
+		//check weapons and weapon components for min damage > max damage
+	if (prototype->isComponent() || prototype->isWeaponObject()) {
+		if (craftingValues->hasProperty("mindamage") && craftingValues->hasProperty("maxdamage")) {
+			float oldMin = craftingValues->getCurrentValue("mindamage");
+			float oldMax = craftingValues->getCurrentValue("maxdamage");
+
+			if (oldMin > oldMax) {
+				craftingValues->setCurrentValue("mindamage", oldMax);
+				craftingValues->setCurrentValue("maxdamage", oldMin);
+			}
+
+		}
+	}
+	
 	// Set the values for the random attributes to be modified if there are any
 	setRandomLootValues(trx, prototype, templateObject, level, excMod);
 
@@ -471,6 +626,18 @@ TangibleObject* LootManagerImplementation::createLootObject(TransactionLog& trx,
 		addConditionDamage(prototype);
 	}
 
+	if (System::random(3) == 3)// || prototype->isRobeObject())
+	setSockets(prototype, craftingValues);
+
+	// Update the Tano with new values
+	prototype->updateCraftingValues(craftingValues, true);
+
+	//add some condition damage where appropriate
+	if (!maxCondition)
+		addConditionDamage(prototype, craftingValues);
+
+	prototype->updateCraftingValues(craftingValues, true);
+
 	trx.addState("lootAdjustment", chance);
 	trx.addState("lootExcMod", excMod);
 	trx.addState("lootJunkValue", prototype->getJunkValue());
@@ -480,6 +647,8 @@ TangibleObject* LootManagerImplementation::createLootObject(TransactionLog& trx,
 #ifdef DEBUG_LOOT_MAN
 	info(true) << " ---------- LootManagerImplementation::createLootObject -- COMPLETE ----------";
 #endif
+
+	delete craftingValues;
 
 	return prototype;
 }
@@ -715,7 +884,13 @@ String LootManagerImplementation::getRandomLootableMod( unsigned int sceneObject
 	else{
 		return "";
 	}
+}
 
+void LootManagerImplementation::setSockets(TangibleObject* object, CraftingValues* craftingValues) {
+	if (object->isWearableObject()) { 
+		ManagedReference<WearableObject*> wearableObject = cast<WearableObject*>(object);
+		wearableObject->setMaxSockets(System::random(8));
+	}
 }
 
 bool LootManagerImplementation::createLoot(TransactionLog& trx, SceneObject* container, AiAgent* creature) {

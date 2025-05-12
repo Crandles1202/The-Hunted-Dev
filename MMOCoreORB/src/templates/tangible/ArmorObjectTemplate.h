@@ -146,6 +146,10 @@ public:
 		return vulnerabilites;
 	}
 
+	ValuesMap getValuesMapCopy() const {
+		return craftingValues;
+	}
+	
 	int getSpecialResists() const {
 		return specialResists;
 	}
