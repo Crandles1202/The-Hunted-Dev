@@ -189,7 +189,7 @@ public:
 					float max = row.getFloatAt(3);
 					float prec = 0;
 					bool hidden = false;
-					short combineType = AttributesMap:LINEARCOMBINE;
+					short combineType = AttributesMap::LINEARCOMBINE;
 
 					if (row.getTableSize() > 3)
 						prec = row.getFloatAt(4);
