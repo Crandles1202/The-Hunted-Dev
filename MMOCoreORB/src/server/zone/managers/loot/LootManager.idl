@@ -18,6 +18,7 @@ import server.zone.objects.tangible.TangibleObject;
 include server.zone.managers.loot.LootGroupMap;
 include server.zone.managers.loot.lootgroup.LootGroupCollection;
 include templates.LootItemTemplate;
+include server.zone.objects.manufactureschematic.craftingvalues.CraftingValues;
 include server.zone.managers.loot.CrystalData;
 include system.lang.ref.Reference;
 include engine.log.Logger;
