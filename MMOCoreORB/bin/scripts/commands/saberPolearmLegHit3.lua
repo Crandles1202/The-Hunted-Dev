@@ -50,7 +50,7 @@ SaberPolearmLegHit3Command = {
 	healthCostMultiplier = 0,
 	actionCostMultiplier = 0,
 	mindCostMultiplier = 0,
-	forceCostMultiplier = 1.75,
+	forceCostMultiplier = 1.25,
 	visMod = 25,
 
 	animation = "combo_3d",
