@@ -456,7 +456,7 @@ TangibleObject* LootManagerImplementation::createLootObject(TransactionLog& trx,
 
 	setInitialObjectStats(templateObject, craftingValues, prototype);
 
-	setCustomObjectName(prototype, templateObject, excMod);
+	setCustomObjectName(prototype, templateObject);
 
 
 
@@ -497,7 +497,7 @@ TangibleObject* LootManagerImplementation::createLootObject(TransactionLog& trx,
 
 	// Set loot item customization and object name
 	setCustomizationData(templateObject, prototype);
-	setCustomObjectName(prototype, templateObject, excMod);
+	setCustomObjectName(prototype, templateObject);
 
 
 
