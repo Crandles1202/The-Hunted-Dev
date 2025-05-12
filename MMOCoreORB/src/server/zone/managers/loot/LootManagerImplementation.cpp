@@ -506,8 +506,8 @@ TangibleObject* LootManagerImplementation::createLootObject(TransactionLog& trx,
 	String subtitle;
 	bool yellow = false;
 
-	for (int i = 0; i < craftingValues->getExperimentalAttributeSubtitleSize(); ++i) {
-		subtitle = craftingValues->getExperimentalPropertySubtitle(i);
+	for (int i = 0; i < craftingValues->getExperimentalPropertySubtitleSize(); ++i) {
+		subtitle = craftingValues->getExperimentalPropertyAttribute(i);
 
 		if (subtitle == "hitpoints" && !prototype->isComponent()) {
 			continue;
@@ -637,7 +637,7 @@ TangibleObject* LootManagerImplementation::createLootObject(TransactionLog& trx,
 
 	//add some condition damage where appropriate
 	if (!maxCondition)
-		addConditionDamage(prototype, craftingValues);
+		addConditionDamage(prototype);
 
 	prototype->updateCraftingValues(craftingValues, true);
 
