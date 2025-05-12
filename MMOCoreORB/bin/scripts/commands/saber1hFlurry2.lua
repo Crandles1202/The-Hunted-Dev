@@ -52,7 +52,7 @@ Saber1hFlurry2Command = {
 	mindCostMultiplier = 0,
 	areaRange = 16,
 	areaAction = true,
-	forceCostMultiplier = 3.0,
+	forceCostMultiplier = 2.5,
 	visMod = 25,
 
 		stateEffects = {
