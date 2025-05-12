@@ -456,7 +456,6 @@ TangibleObject* LootManagerImplementation::createLootObject(TransactionLog& trx,
 
 	setInitialObjectStats(templateObject, craftingValues, prototype);
 
-	setCustomObjectName(prototype, templateObject, excMod);
 
 
 
@@ -465,6 +464,9 @@ TangibleObject* LootManagerImplementation::createLootObject(TransactionLog& trx,
 	//float excMod = baseModifier;
 	float excMod = .7 + (System::random(3000) * .0001) + (System::random(level * .8) * .01) + (level * .2 * .01); //exc now 6.0max
 	int leggy = 0;
+
+	
+	setCustomObjectName(prototype, templateObject, excMod);
 
 	// if (System::random(legendaryChance) <= chance) {
 	// 	excMod = legendaryModifier;
