@@ -40,7 +40,7 @@ CraftingValues::CraftingValues(const CraftingValues& values) : Object(), Seriali
 // }
 
 CraftingValues::CraftingValues(const AttributesMap& values) : Object(), Serializable(), Logger() {
-	experimentalValuesMap.setNullValue(nullptr);
+	attributesMap.setNullValue(nullptr);
 	doHide = true;
 
 	for (int i = 0; i < values.size(); ++i) {
@@ -50,7 +50,7 @@ CraftingValues::CraftingValues(const AttributesMap& values) : Object(), Serializ
 
 		Subclasses* subclasses = new Subclasses(*subclass);
 
-		experimentalValuesMap.put(entry.getKey(), subclasses);
+		attributesMap.put(entry.getKey(), subclasses);
 	}
 
 	setLoggingName("CraftingValues");
