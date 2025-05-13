@@ -81,6 +81,7 @@ CreatureObject* CraftingValues::getPlayer() {
 }
 
 void CraftingValues::recalculateValues(bool initial, bool looted, int level) {
+	String experimentalPropTitle, attribute;
 	info(true) << "---------- CraftingValues::recalculateValues ----------";
 
 	float percentage = 0.f, min = 0.f, max = 0.f, newValue = 0.f, oldValue = 0.f;
@@ -90,9 +91,9 @@ void CraftingValues::recalculateValues(bool initial, bool looted, int level) {
 
 	for (int i = 0; i < getSubtitleCount(); ++i) {
 
-		attributeName = getExperimentalPropertySubtitle(i);
+		attribute = getExperimentalPropertySubtitle(i);
 
-		experimentalPropTitle = getExperimentalPropertyTitle(attributeName);
+		experimentalPropTitle = getExperimentalPropertyTitle(attribute);
 
 		String attribute = getAttribute(i);
 		String group = getAttributeGroup(attribute);
