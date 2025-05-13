@@ -79,12 +79,12 @@ CreatureObject* CraftingValues::getPlayer() {
 }
 
 void CraftingValues::recalculateValues(bool initial, bool looted, int level) {
-	// info(true) << "---------- CraftingValues::recalculateValues ----------";
+	info(true) << "---------- CraftingValues::recalculateValues ----------";
 
 	float percentage = 0.f, min = 0.f, max = 0.f, newValue = 0.f, oldValue = 0.f;
 	bool hidden = false;
 
-	// info(true) << " Total Experimental Attributes: " << getTotalExperimentalAttributes();
+	info(true) << " Total Experimental Attributes: " << getTotalExperimentalAttributes();
 
 	for (int i = 0; i < getTotalExperimentalAttributes(); ++i) {
 		String attribute = getAttribute(i);
@@ -99,7 +99,7 @@ void CraftingValues::recalculateValues(bool initial, bool looted, int level) {
 
 		oldValue = getCurrentValue(attribute);
 
-		// info(true) << "Attribute: " << attribute <<  " Group: " << group << " Old Value: " << oldValue << " Min: " << min << " Max: " << max;
+		info(true) << "Attribute: " << attribute <<  " Group: " << group << " Old Value: " << oldValue << " Min: " << min << " Max: " << max;
 
 		if (group == "") {
 			if (max > min)
@@ -115,7 +115,7 @@ void CraftingValues::recalculateValues(bool initial, bool looted, int level) {
 			newValue = max;
 		}
 
-		// info(true) << "Setting Attribute: " << attribute << " New Value: " << newValue;
+		info(true) << "Setting Attribute: " << attribute << " New Value: " << newValue;
 
 		//SET THE PROTECTION FOR LOOTED ITEMS
 		//The attributes below correspond the the special protection values
