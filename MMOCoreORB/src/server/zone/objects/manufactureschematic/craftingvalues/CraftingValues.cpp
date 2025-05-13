@@ -23,20 +23,38 @@ CraftingValues::CraftingValues(const CraftingValues& values) : Object(), Seriali
 	setLogging(false);
 }
 
+// CraftingValues::CraftingValues(const AttributesMap& values) : Object(), Serializable(), Logger() {
+// 	doHide = true;
+
+// 	int totalAttributes = values.getSize();
+
+// 	for (int i = 0; i < totalAttributes; ++i) {
+// 		String attribute = values.getAttribute(i);
+
+// 		attributesMap.addExperimentalAttribute(attribute, values.getAttributeGroup(attribute), values.getMinValue(attribute), values.getMaxValue(attribute), values.getPrecision(attribute), values.isHidden(attribute), values.getCombineType(attribute));
+// 		attributesMap.setMaxPercentage(attribute, 1.f);
+// 	}
+
+// 	setLoggingName("CraftingValues");
+// 	setLogging(false);
+// }
+
 CraftingValues::CraftingValues(const AttributesMap& values) : Object(), Serializable(), Logger() {
+	experimentalValuesMap.setNullValue(nullptr);
 	doHide = true;
 
-	int totalAttributes = values.getSize();
+	for (int i = 0; i < values.size(); ++i) {
+		VectorMapEntry<String, Reference<Subclasses*> > entry = values.elementAt(i);
 
-	for (int i = 0; i < totalAttributes; ++i) {
-		String attribute = values.getAttribute(i);
+		Subclasses* subclass = entry.getValue();
 
-		attributesMap.addExperimentalAttribute(attribute, values.getAttributeGroup(attribute), values.getMinValue(attribute), values.getMaxValue(attribute), values.getPrecision(attribute), values.isHidden(attribute), values.getCombineType(attribute));
-		attributesMap.setMaxPercentage(attribute, 1.f);
+		Subclasses* subclasses = new Subclasses(*subclass);
+
+		experimentalValuesMap.put(entry.getKey(), subclasses);
 	}
 
 	setLoggingName("CraftingValues");
-	setLogging(false);
+	setLogging(true);
 }
 
 CraftingValues::~CraftingValues() {
