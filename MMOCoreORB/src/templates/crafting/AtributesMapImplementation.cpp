@@ -99,6 +99,100 @@ bool AttributesMap::hasProperty(const String& attribute) const {
 	return false;
 }
 
+const String& AttributesMap::getExperimentalPropertyTitle(const String& subtitle) const {
+	Subclasses* subclasses;
+	Values* values;
+
+	for (int j = 0; j < size(); ++j) {
+		subclasses = get(j);
+
+		for (int j = 0; j < subclasses->size(); ++j) {
+			values = subclasses->get(j);
+
+			if (values->getName() == subtitle) {
+				return subclasses->getClassTitle();
+			}
+		}
+	}
+
+	return EMPTY;
+}
+
+const String& AttributesMap::getExperimentalPropertyTitle(const int i) const {
+	auto subclasses = get(i);
+
+	if (subclasses != nullptr) {
+		return subclasses->getClassTitle();
+	}
+
+	return EMPTY;
+}
+
+const String& AttributesMap::getVisibleExperimentalPropertyTitle(const int i) const {
+	const Subclasses* subclasses;
+	int counter = -1;
+	String title;
+
+	for (int j = 0; j < size(); ++j) {
+		subclasses = get(j);
+
+		if (!subclasses->hasAllHiddenItems())
+			counter++;
+
+		if (counter == i)
+			return subclasses->getClassTitle();
+	}
+
+	return EMPTY;
+}
+
+const String& ValuesMap::getExperimentalPropertySubtitlesTitle(const int i) const {
+	const Subclasses* subclasses;
+	int count = 0;
+
+	for (int j = 0; j < size(); ++j) {
+		subclasses = get(j);
+
+		if (count + subclasses->size() <= i) {
+			count += subclasses->size();
+		} else {
+			return subclasses->getClassTitle();
+		}
+	}
+
+	return EMPTY;
+}
+
+const String& AttributesMap::getExperimentalPropertySubtitle(const int i) const {
+	const Subclasses* subclasses;
+	int count = 0;
+
+	for (int j = 0; j < size(); ++j) {
+		subclasses = get(j);
+
+		if (count + subclasses->size() <= i) {
+			count += subclasses->size();
+		} else {
+			count = i - count;
+
+			const Values* values = subclasses->get(count);
+
+			return values->getName();
+		}
+	}
+
+	return EMPTY;
+}
+
+const String& AttributesMap::getExperimentalPropertySubtitle(const String& title, const int i) const {
+	const Subclasses* subclasses = get(title);
+
+	if (subclasses != nullptr)
+		return subclasses->get(i)->getName();
+	else
+		return EMPTY;
+}
+
 int AttributesMap::getExperimentalPropertySubtitleSize() const {
 	const Subclasses* subclasses;
 	int subtitleSize = 0;
