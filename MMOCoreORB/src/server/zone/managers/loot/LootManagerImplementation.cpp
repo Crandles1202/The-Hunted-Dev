@@ -260,6 +260,7 @@ void LootManagerImplementation::setInitialObjectStats(const LootItemTemplate* te
 		const auto  maxs = tanoTemplate->getExperimentalMax();
 		const auto prec = tanoTemplate->getExperimentalPrecision();
 
+		info(true) << "********************PROPS SIZE ***" << props->size();
 		for (int i = 0; i < props->size(); ++i) {
 			const String& title = titles->get(i);
 			const String& property = props->get(i);
