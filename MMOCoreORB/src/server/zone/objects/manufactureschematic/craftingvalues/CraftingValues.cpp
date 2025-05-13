@@ -169,11 +169,11 @@ void CraftingValues::recalculateValues(bool initial, bool looted, int level) {
 
 void CraftingValues::clearAll() {
 	doHide = true;
-	attributesMap.removeAll();
-	valuesToSend.removeAll();
+	//attributesMap.removeAll();
+	//valuesToSend.removeAll();
 	schematic = nullptr;
 	player = nullptr;
-	clearSlots();
+	//clearSlots();
 }
 
 String CraftingValues::toString() const {

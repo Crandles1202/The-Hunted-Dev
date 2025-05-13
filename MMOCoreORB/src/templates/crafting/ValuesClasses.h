@@ -247,7 +247,7 @@ class Subclasses : public Object {
 	float avePercentage;
 	String name, classTitle;
 	bool hidden;
-	int cap = 100000000;
+	int cap;
 
 public:
 	Subclasses() = delete;

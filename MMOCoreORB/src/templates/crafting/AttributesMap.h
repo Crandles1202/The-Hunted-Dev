@@ -174,10 +174,10 @@ public:
 	inline void removeAll() {
 		Locker lock(&mutex);
 
-		attributes.removeAll();
-		visibleGroups.removeAll();
-		attributeGroups.removeAll();
-		attributeValues.removeAll();
+		//attributes.removeAll();
+		//visibleGroups.removeAll();
+		//attributeGroups.removeAll();
+		//attributeValues.removeAll();
 	}
 
 	inline int getVisibleExperimentalPropertyTitleSize() const {
