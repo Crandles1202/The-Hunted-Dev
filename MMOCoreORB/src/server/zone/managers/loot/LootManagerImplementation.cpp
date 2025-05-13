@@ -252,6 +252,7 @@ void LootManagerImplementation::setCustomizationData(const LootItemTemplate* tem
 
 void LootManagerImplementation::setInitialObjectStats(const LootItemTemplate* templateObject, CraftingValues* craftingValues, TangibleObject* prototype) {
 	SharedTangibleObjectTemplate* tanoTemplate = dynamic_cast<SharedTangibleObjectTemplate*>(prototype->getObjectTemplate());
+		info(true) << "********************tanoTemplate ***" << tanoTemplate;
 
 	if (tanoTemplate != nullptr) {
 		const auto titles = tanoTemplate->getExperimentalGroupTitles();
@@ -260,7 +261,6 @@ void LootManagerImplementation::setInitialObjectStats(const LootItemTemplate* te
 		const auto  maxs = tanoTemplate->getExperimentalMax();
 		const auto prec = tanoTemplate->getExperimentalPrecision();
 
-		info(true) << "********************PROPS SIZE ***" << props->size();
 		for (int i = 0; i < props->size(); ++i) {
 			const String& title = titles->get(i);
 			const String& property = props->get(i);
