@@ -86,9 +86,14 @@ void CraftingValues::recalculateValues(bool initial, bool looted, int level) {
 	float percentage = 0.f, min = 0.f, max = 0.f, newValue = 0.f, oldValue = 0.f;
 	bool hidden = false;
 
-	info(true) << " Total Experimental Attributes: " << getTotalExperimentalAttributes();
+	info(true) << " Total Experimental Attributes: " << getSubtitleCount();
 
-	for (int i = 0; i < getTotalExperimentalAttributes(); ++i) {
+	for (int i = 0; i < getSubtitleCount(); ++i) {
+
+		attributeName = getExperimentalPropertySubtitle(i);
+
+		experimentalPropTitle = getExperimentalPropertyTitle(attributeName);
+
 		String attribute = getAttribute(i);
 		String group = getAttributeGroup(attribute);
 
@@ -152,6 +157,7 @@ void CraftingValues::recalculateValues(bool initial, bool looted, int level) {
 
 
 		if (initial || (newValue != oldValue && !initial && !hidden)) {
+			info(true) << "*****newValue***** " << newValue << " Attribute Name: " << attribute << " Initial? " << initial;
 			setCurrentValue(attribute, newValue);
 			valuesToSend.add(attribute);
 		}

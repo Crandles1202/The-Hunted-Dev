@@ -179,6 +179,56 @@ public:
 		attributeGroups.removeAll();
 		attributeValues.removeAll();
 	}
+
+	inline int getVisibleExperimentalPropertyTitleSize() const {
+		int tempSize = 0;
+		const Subclasses* subclasses;
+
+		for(int i = 0; i < size(); ++i) {
+			subclasses = get(i);
+
+			if(!subclasses->hasAllHiddenItems())
+				tempSize++;
+		}
+
+		return tempSize;
+	}
+
+	inline int getSubtitleCount() const {
+		const Subclasses* subclasses;
+
+		int count = 0;
+
+		for (int j = 0; j < size(); ++j) {
+			subclasses = get(j);
+
+			count += subclasses->size();
+		}
+
+		return count;
+	}
+
+	inline int getTitleLine(const String& title) const {
+		const Subclasses* subClasses;
+		String exptitle;
+		int counter = 0;
+
+		for (int j = 0; j < size(); ++j) {
+
+			subClasses = get(j);
+
+			exptitle = subClasses->getClassTitle();
+
+			if (!subClasses->isClassHidden()) {
+				if (title == exptitle)
+					return counter;
+
+				counter++;
+			}
+		}
+
+		return -1;
+	}
 };
 
 #endif /*ATTRIBUTESMAP_H_*/

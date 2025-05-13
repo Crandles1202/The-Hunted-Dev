@@ -98,7 +98,7 @@ public:
 		return attributesMap.hasExperimentalAttribute(attribute);
 	}
 
-		const String& getExperimentalPropertyTitle(const String& subtitle) const {
+	const String& getExperimentalPropertyTitle(const String& subtitle) const {
 		return attributesMap.getExperimentalPropertyTitle(subtitle);
 	}
 
@@ -128,6 +128,10 @@ public:
 
 	const String& getExperimentalPropertySubtitle(const String title, const int i) const {
 		return attributesMap.getExperimentalPropertySubtitle(title, i);
+	}
+
+	inline int getSubtitleCount() const {
+		return attributesMap.getSubtitleCount();
 	}
 
 	bool hasProperty(const String& attribute) const {
