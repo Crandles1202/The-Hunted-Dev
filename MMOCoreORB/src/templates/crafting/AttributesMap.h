@@ -10,7 +10,7 @@
 
 //#define DEBUG_ATTRIBUTES_MAP
 
-class AttributesMap : public VectorMap<String, Reference<Subclasses*> > {
+class AttributesMap : public Object, public Logger, public VectorMap<String, Reference<Subclasses*> > {
 	Mutex mutex;
 
 	Vector<String> attributes;
