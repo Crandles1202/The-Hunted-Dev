@@ -52,6 +52,7 @@ ForceArmor2Command = {
 	frsLightExtraForceCostModifier = -0.003,
 	frsLightBuffModifier = 0.35,
 	frsDarkBuffModifier = 0.35,
+	skillMods.put("force_armor", 70);
 }
 
 AddCommand(ForceArmor2Command)
