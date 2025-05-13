@@ -10,7 +10,7 @@
 
 float AttributesMap::VALUENOTFOUND = -999999;
 const String AttributesMap::EMPTY;
-
+ #define DEBUG_ATTRIBUTES_MAP
 /*
 	The Attributes Map Constsist of the following:
 
