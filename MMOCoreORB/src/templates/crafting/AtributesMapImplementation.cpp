@@ -146,7 +146,7 @@ const String& AttributesMap::getVisibleExperimentalPropertyTitle(const int i) co
 	return EMPTY;
 }
 
-const String& ValuesMap::getExperimentalPropertySubtitlesTitle(const int i) const {
+const String& AttributesMap::getExperimentalPropertySubtitlesTitle(const int i) const {
 	const Subclasses* subclasses;
 	int count = 0;
 
