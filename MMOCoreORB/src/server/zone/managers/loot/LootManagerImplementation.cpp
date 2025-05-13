@@ -22,7 +22,7 @@
 #include "server/zone/objects/ship/components/ShipComponent.h"
 #include "server/zone/objects/ship/ai/ShipAiAgent.h"
 
-// #define DEBUG_LOOT_MAN
+ #define DEBUG_LOOT_MAN
 
 void LootManagerImplementation::initialize() {
 	info(true) << "Loading configuration...";
