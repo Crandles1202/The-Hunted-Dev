@@ -1,6 +1,6 @@
 package.path = package.path .. ";scripts/managers/name/?.lua"
 
-DECLINED_DEVELOPER = 1;
+--DECLINED_DEVELOPER = 1;
 DECLINED_FICT_RESERVED = 2;
 DECLINED_PROFANE = 3;
 DECLINED_RESERVED = 6;
@@ -302,7 +302,7 @@ oldFilterWords = {
 	{ "Antidar Williams", DECLINED_FICT_RESERVED },
 	{ "Ark Roose", DECLINED_FICT_RESERVED },
 	{ "Aron Peacebringer", DECLINED_FICT_RESERVED },
-	{ "Asajj Ventress", DECLINED_FICT_RESERVED },
+	--{ "Asajj Ventress", DECLINED_FICT_RESERVED },
 	{ "Ask Aak", DECLINED_FICT_RESERVED },
 	{ "Augara Jowil", DECLINED_FICT_RESERVED },
 	{ "Auren Yomm", DECLINED_FICT_RESERVED },
