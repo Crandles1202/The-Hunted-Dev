@@ -250,29 +250,29 @@ void LootManagerImplementation::setCustomizationData(const LootItemTemplate* tem
 #endif
 }
 
-void LootManagerImplementation::setInitialObjectStats(const LootItemTemplate* templateObject, CraftingValues* craftingValues, TangibleObject* prototype) {
-	SharedTangibleObjectTemplate* tanoTemplate = dynamic_cast<SharedTangibleObjectTemplate*>(prototype->getObjectTemplate());
-	if (tanoTemplate != nullptr) {
-		const auto titles = tanoTemplate->getExperimentalGroupTitles();
-		const auto props = tanoTemplate->getExperimentalSubGroupTitles();
-		const auto mins = tanoTemplate->getExperimentalMin();
-		const auto  maxs = tanoTemplate->getExperimentalMax();
-		const auto prec = tanoTemplate->getExperimentalPrecision();
+// void LootManagerImplementation::setInitialObjectStats(const LootItemTemplate* templateObject, CraftingValues* craftingValues, TangibleObject* prototype) {
+// 	SharedTangibleObjectTemplate* tanoTemplate = dynamic_cast<SharedTangibleObjectTemplate*>(prototype->getObjectTemplate());
+// 	if (tanoTemplate != nullptr) {
+// 		const auto titles = tanoTemplate->getExperimentalGroupTitles();
+// 		const auto props = tanoTemplate->getExperimentalSubGroupTitles();
+// 		const auto mins = tanoTemplate->getExperimentalMin();
+// 		const auto  maxs = tanoTemplate->getExperimentalMax();
+// 		const auto prec = tanoTemplate->getExperimentalPrecision();
 
-		for (int i = 0; i < props->size(); ++i) {
-			const String& title = titles->get(i);
-			const String& property = props->get(i);
+// 		for (int i = 0; i < props->size(); ++i) {
+// 			const String& title = titles->get(i);
+// 			const String& property = props->get(i);
 
-			info(true) << "********************property ***" << property << "Does crafting value haver property? " << craftingValues->hasProperty(property);
+// 			info(true) << "********************property ***" << property << "Does crafting value haver property? " << craftingValues->hasProperty(property);
 
-			if (craftingValues->hasProperty(property))
-				continue;
+// 			if (craftingValues->hasProperty(property))
+// 				continue;
 
-			craftingValues->addExperimentalAttribute(property, property, mins->get(i), maxs->get(i), prec->get(i), false, AttributesMap::LINEARCOMBINE);
-			if (title == "null")
-				craftingValues->setHidden(property);
-		}
-	}
+// 			craftingValues->addExperimentalAttribute(property, property, mins->get(i), maxs->get(i), prec->get(i), false, AttributesMap::LINEARCOMBINE);
+// 			if (title == "null")
+// 				craftingValues->setHidden(property);
+// 		}
+// 	}
 
 	const Vector<String>* customizationData = templateObject->getCustomizationStringNames();
 	const Vector<Vector<int> >* customizationValues = templateObject->getCustomizationValues();
@@ -455,7 +455,7 @@ TangibleObject* LootManagerImplementation::createLootObject(TransactionLog& trx,
 	AttributesMap valuesMap = templateObject->getAttributesMapCopy();
 	CraftingValues* craftingValues = new CraftingValues(valuesMap);
 
-	setInitialObjectStats(templateObject, craftingValues, prototype);
+	//setInitialObjectStats(templateObject, craftingValues, prototype);
 
 
 
