@@ -263,7 +263,7 @@ void LootManagerImplementation::setInitialObjectStats(const LootItemTemplate* te
 			const String& title = titles->get(i);
 			const String& property = props->get(i);
 
-			info(true) << "********************property ***" << tanoTpropertyemplate << "Does crafting value haver property? " << craftingValues->hasProperty(property);
+			info(true) << "********************property ***" << property << "Does crafting value haver property? " << craftingValues->hasProperty(property);
 
 			if (craftingValues->hasProperty(property))
 				continue;
