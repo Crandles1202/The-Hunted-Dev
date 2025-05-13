@@ -43,7 +43,7 @@
 
 ForceArmor2Command = {
     name = "forcearmor2",
-    forceCost = 75,
+    forceCost = 50,
     duration = 12600,
     --animationCRC = hashCode()
     clientEffect = "clienteffect/pl_force_armor_self.cef",
