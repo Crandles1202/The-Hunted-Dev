@@ -23,39 +23,41 @@ CraftingValues::CraftingValues(const CraftingValues& values) : Object(), Seriali
 	setLogging(false);
 }
 
-// CraftingValues::CraftingValues(const AttributesMap& values) : Object(), Serializable(), Logger() {
-// 	doHide = true;
-
-// 	int totalAttributes = values.getSize();
-
-// 	for (int i = 0; i < totalAttributes; ++i) {
-// 		String attribute = values.getAttribute(i);
-
-// 		attributesMap.addExperimentalAttribute(attribute, values.getAttributeGroup(attribute), values.getMinValue(attribute), values.getMaxValue(attribute), values.getPrecision(attribute), values.isHidden(attribute), values.getCombineType(attribute));
-// 		attributesMap.setMaxPercentage(attribute, 1.f);
-// 	}
-
-// 	setLoggingName("CraftingValues");
-// 	setLogging(false);
-// }
-
 CraftingValues::CraftingValues(const AttributesMap& values) : Object(), Serializable(), Logger() {
+	
 	attributesMap.setNullValue(nullptr);
 	doHide = true;
 
-	for (int i = 0; i < values.size(); ++i) {
-		VectorMapEntry<String, Reference<Subclasses*> > entry = values.elementAt(i);
+	int totalAttributes = values.getSize();
 
-		Subclasses* subclass = entry.getValue();
+	for (int i = 0; i < totalAttributes; ++i) {
+		String attribute = values.getAttribute(i);
 
-		Subclasses* subclasses = new Subclasses(*subclass);
-
-		attributesMap.put(entry.getKey(), subclasses);
+		attributesMap.addExperimentalAttribute(attribute, values.getAttributeGroup(attribute), values.getMinValue(attribute), values.getMaxValue(attribute), values.getPrecision(attribute), values.isHidden(attribute), values.getCombineType(attribute));
+		attributesMap.setMaxPercentage(attribute, 1.f);
 	}
 
 	setLoggingName("CraftingValues");
-	setLogging(true);
+	setLogging(false);
 }
+
+// CraftingValues::CraftingValues(const AttributesMap& values) : Object(), Serializable(), Logger() {
+// 	attributesMap.setNullValue(nullptr);
+// 	doHide = true;
+
+// 	for (int i = 0; i < values.size(); ++i) {
+// 		VectorMapEntry<String, Reference<Subclasses*> > entry = values.elementAt(i);
+
+// 		Subclasses* subclass = entry.getValue();
+
+// 		Subclasses* subclasses = new Subclasses(*subclass);
+
+// 		attributesMap.put(entry.getKey(), subclasses);
+// 	}
+
+// 	setLoggingName("CraftingValues");
+// 	setLogging(true);
+// }
 
 CraftingValues::~CraftingValues() {
 	schematic = nullptr;
