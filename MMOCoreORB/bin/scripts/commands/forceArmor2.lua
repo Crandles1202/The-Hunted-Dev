@@ -42,6 +42,7 @@
 --true = 1, false = 0
 
 ForceArmor2Command = {
+
 	name = "forcearmor2",
 	forceCost = 100,
 	duration = 1800,
