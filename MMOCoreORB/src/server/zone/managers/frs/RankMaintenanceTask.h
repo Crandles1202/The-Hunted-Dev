@@ -61,11 +61,16 @@ public:
 						strongRef->deductMaintenanceXp(player);
 					}
 				}
+
+			// Commit once after all players processed
+			ObjectDatabaseManager::instance()->commitLocalTransaction();
+
 			}, "frsMaintenanceTask", (i + 1) * 500);
 		}
 
 		reschedule(strongRef->getMaintenanceInterval());
 	}
+
 };
 
 }
