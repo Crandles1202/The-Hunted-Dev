@@ -274,20 +274,20 @@ void LootManagerImplementation::setCustomizationData(const LootItemTemplate* tem
 // 		}
 // 	}
 
-	const Vector<String>* customizationData = templateObject->getCustomizationStringNames();
-	const Vector<Vector<int> >* customizationValues = templateObject->getCustomizationValues();
+// 	const Vector<String>* customizationData = templateObject->getCustomizationStringNames();
+// 	const Vector<Vector<int> >* customizationValues = templateObject->getCustomizationValues();
 
-	for (int i = 0; i < customizationData->size(); ++i) {
-		const String& customizationString = customizationData->get(i);
-		Vector<int>* values = &customizationValues->get(i);
+// 	for (int i = 0; i < customizationData->size(); ++i) {
+// 		const String& customizationString = customizationData->get(i);
+// 		Vector<int>* values = &customizationValues->get(i);
 
-		if (values->size() > 0) {
-			int randomValue = values->get(System::random(values->size() - 1));
+// 		if (values->size() > 0) {
+// 			int randomValue = values->get(System::random(values->size() - 1));
 
-			prototype->setCustomizationVariable(customizationString, randomValue, false);
-		}
-	}
-}
+// 			prototype->setCustomizationVariable(customizationString, randomValue, false);
+// 		}
+// 	}
+// }
 
 void LootManagerImplementation::setCustomObjectName(TangibleObject* object, const LootItemTemplate* templateObject, float excMod) {
 	const String& customName = templateObject->getCustomObjectName();
