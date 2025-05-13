@@ -31,14 +31,14 @@ public:
 	static const short OVERRIDECOMBINE = 0x04;
 	static const short LIMITEDCOMBINE = 0x05;
 
-	AttributesMap() {
-		setLoggingName("AttributesMap");
+	// AttributesMap() {
+	// 	setLoggingName("AttributesMap");
 
-		attributeValues.setNullValue(nullptr);
-	}
+	// 	attributeValues.setNullValue(nullptr);
+	// }
 
-	~AttributesMap() {
-	}
+	// ~AttributesMap() {
+	// }
 
 	void addExperimentalAttribute(const String& attribute, const String& group, const float min, const float max, const int precision, const bool filler, const int combine);
 
