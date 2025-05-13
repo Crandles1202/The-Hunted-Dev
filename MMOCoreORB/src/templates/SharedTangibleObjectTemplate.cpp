@@ -16,6 +16,8 @@ SharedTangibleObjectTemplate::SharedTangibleObjectTemplate() {
 	experimentalWeights = new Vector<short>();
 	experimentalAttributes = new Vector<String>();
 	experimentalGroups = new Vector<String>();
+	experimentalGroupTitles = new Vector<String>();
+	experimentalSubGroupTitles = new Vector<String>();
 	experimentalMin = new Vector<float>();
 	experimentalMax = new Vector<float>();
 	experimentalPrecision = new Vector<short>();
