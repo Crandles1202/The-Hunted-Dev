@@ -1,3 +1,4 @@
+
 #ifndef LOOTVALUES_H_
 #define LOOTVALUES_H_
 
@@ -7,7 +8,7 @@
 #include "templates/LootItemTemplate.h"
 
 #ifndef LOOTVALUES_DEBUG
-#define LOOTVALUES_DEBUG
+//#define LOOTVALUES_DEBUG
 #endif // LOOTVALUES_DEBUG
 
 class LootValues: public CraftingValues, public LootAttributeType {

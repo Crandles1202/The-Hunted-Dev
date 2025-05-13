@@ -1,122 +1,233 @@
-/*
- * SharedStructureObjectTemplate.h
+ /*
+ * SharedTangibleObjectTemplate.h
  *
- *  Created on: May 22, 2010
- *      Author: crush
+ *  Created on: 30/04/2010
+ *      Author: victor
  */
 
-#ifndef SHAREDSTRUCTUREOBJECTTEMPLATE_H_
-#define SHAREDSTRUCTUREOBJECTTEMPLATE_H_
+#ifndef SHAREDTANGIBLEOBJECTTEMPLATE_H_
+#define SHAREDTANGIBLEOBJECTTEMPLATE_H_
 
-#include "templates/SharedTangibleObjectTemplate.h"
+#include "templates/crafting/resourceweight/ResourceWeight.h"
 
-class SharedStructureObjectTemplate : public SharedTangibleObjectTemplate {
+#include "templates/SharedObjectTemplate.h"
+
+class StructureFootprint;
+
+class SharedTangibleObjectTemplate : public SharedObjectTemplate {
 protected:
-	SortedVector<String> allowedZones;
+	/*PaletteColorCustomizationVariables paletteColorCustomizationVariables;
+	RangedIntCustomizationVariables rangedIntCustomizationVariables;
 
-	String constructionMarkerTemplate;
-	String abilityRequired;
+	SocketDestinations socketDestinations;*/
 
-	int baseMaintenanceRate;
-	int basePowerRate;
+	Reference<const StructureFootprint*> structureFootprint;
 
-	uint8 lotSize;
-	uint8 cityRankRequired;
+	BoolParam targetable;
 
-	bool uniqueStructure;
+	uint16 playerUseMask;
 
-	//If it has a maintenance rate, then it is a civic structure.
-	int cityMaintenanceBase;
-	int cityMaintenanceRate;
+	int level;
+
+	Vector<String> certificationsRequired;
+
+	int maxCondition;
+
+	uint32 optionsBitmask;
+	uint32 pvpStatusBitmask;
+
+	int useCount;
+
+	bool sliceable;
+
+	bool insurable;
+	bool jediRobe;
+
+	bool invisible;
+
+	unsigned int faction;
+
+	int junkDealerNeeded;
+	int junkValue;
+
+	VectorMap<String, int> skillMods;
+
+	Vector<short>* numberExperimentalProperties;
+	Vector<String>* experimentalProperties;
+	Vector<short>* experimentalWeights;
+	Vector<String>* experimentalAttributes;
+	Vector<String>* experimentalGroups;
+	Vector<float>* experimentalMin;
+	Vector<float>* experimentalMax;
+	Vector<short>* experimentalPrecision;
+	Vector<short>* experimentalCombineType;
+	Vector<uint32>* playerRaces;
+
+	Vector<Reference<ResourceWeight* > >* resourceWeights;
+	//CustomizationVariableMapping customizationVariableMapping;
 
 public:
-	SharedStructureObjectTemplate() {
-		baseMaintenanceRate = 0;
-		basePowerRate = 0;
+	SharedTangibleObjectTemplate();
 
-		lotSize = 0;
-		cityRankRequired = 0;
+	~SharedTangibleObjectTemplate();
 
-		uniqueStructure = false;
+	void readObject(LuaObject* templateData) override;
+	void readObject(IffStream* iffStream) override;
 
-		//If it has a maintenance rate, then it is a civic structure.
-		cityMaintenanceBase = 0;
-		cityMaintenanceRate = 0;
+	void parseFileData(IffStream* str);
+
+	void parseVariableData(const String& varName, Chunk* data);
+	void parseVariableData(const String& varName, LuaObject* data);
+
+	inline int getMaxCondition() const {
+		return maxCondition;
 	}
 
-	~SharedStructureObjectTemplate() {
-
+	inline uint32 getOptionsBitmask() const {
+		return optionsBitmask;
 	}
 
-	void readObject(LuaObject* templateData);
-
-	inline uint8 getLotSize() const {
-		return lotSize;
+	inline uint32 getPvpStatusBitmask() const {
+		return pvpStatusBitmask;
 	}
 
-	inline bool isAllowedZone(const String& zoneName) {
-		return allowedZones.contains(zoneName);
+	void setMaxCondition(int maxCondition) {
+		this->maxCondition = maxCondition;
 	}
 
-	inline bool isCivicStructure() const {
-		return (cityMaintenanceBase > 0);
+	void setOptionsBitmask(uint32 optionsBitmask) {
+		this->optionsBitmask = optionsBitmask;
 	}
 
-	inline bool isCommercialStructure() const {
-		return (baseMaintenanceRate > 0 && cityRankRequired > 0);
+	void setPvpStatusBitmask(uint32 pvpStatusBitmask) {
+		this->pvpStatusBitmask = pvpStatusBitmask;
 	}
 
-	inline bool isUniqueStructure() const {
-		return uniqueStructure;
+	inline const Vector<String>& getCertificationsRequired() const {
+		return certificationsRequired;
 	}
 
-	inline int getCityMaintenanceBase() const {
-		return cityMaintenanceBase;
+	inline int getLevel() const {
+		return level;
 	}
 
-	inline int getCityMaintenanceRate() const {
-		return cityMaintenanceRate;
+	inline bool isInvisible() const {
+		return invisible;
 	}
 
-	inline int getCityMaintenanceAtRank(int rank) const {
-		return cityMaintenanceBase + cityMaintenanceRate * rank;
+	inline int getUseCount() const {
+		return useCount;
 	}
 
-	inline int getTotalAllowedZones() const {
-		return allowedZones.size();
+	inline uint16 getPlayerUseMask() const {
+		return playerUseMask;
 	}
 
-	inline String getAllowedZone(int i) const {
-		return allowedZones.get(i);
+	inline unsigned int getFaction() const {
+		return faction;
 	}
 
-	inline int getBaseMaintenanceRate() const {
-		return baseMaintenanceRate;
+	inline int getJunkDealerNeeded() const {
+		return junkDealerNeeded;
 	}
 
-	inline int getBasePowerRate() const {
-		return basePowerRate;
+	inline int getJunkValue() const {
+		return junkValue;
 	}
 
-	inline const String& getAbilityRequired() const {
-		return abilityRequired;
+	inline const StructureFootprint* getStructureFootprint() const {
+		return structureFootprint;
 	}
 
-	inline uint8 getCityRankRequired() const {
-		return cityRankRequired;
+	inline bool getTargetable() const {
+		return targetable;
 	}
 
-	inline const String& getConstructionMarkerTemplate() const {
-		return constructionMarkerTemplate;
+	void setCertificationsRequired(Vector<String> certificationsRequired) {
+		this->certificationsRequired = certificationsRequired;
 	}
 
-	inline virtual bool isPublicStructure() const {
-		return false;
+	void setPlayerUseMask(uint16 playerUseMask) {
+		this->playerUseMask = playerUseMask;
 	}
 
-	virtual bool isSharedStructureObjectTemplate() {
+	void setTargetable(bool targetable) {
+		this->targetable = targetable;
+	}
+
+	inline bool getSliceable() const {
+		return sliceable;
+	}
+
+	inline bool isInsurable() const {
+		return insurable;
+	}
+
+	void setInsurable(bool val) {
+		this->insurable = val;
+	}
+
+	inline bool isJediRobe() const {
+		return jediRobe;
+	}
+
+	void setJediRobe(bool val) {
+		this->jediRobe = val;
+	}
+
+	const Vector<short >* getNumberExperimentalProperties() const {
+		return numberExperimentalProperties;
+	}
+
+	const Vector<String>* getExperimentalProperties() const {
+		return experimentalProperties;
+	}
+
+	const Vector<short >* getExperimentalWeights() const {
+		return experimentalWeights;
+	}
+
+	const Vector<String>* getExperimentalGroups() const {
+		return experimentalGroups;
+	}
+
+	const Vector<String>* getExperimentalAttributes() const {
+		return experimentalAttributes;
+	}
+
+	const Vector<float>* getExperimentalMin() const {
+		return experimentalMin;
+	}
+
+	const Vector<float>* getExperimentalMax() const {
+		return experimentalMax;
+	}
+
+	const Vector<short >* getExperimentalPrecision() const {
+		return experimentalPrecision;
+	}
+
+	const Vector<uint32>* getPlayerRaces() const {
+		return playerRaces;
+	}
+
+	const Vector<Reference<ResourceWeight* > >* getResourceWeights() const {
+		return resourceWeights;
+	}
+
+	const VectorMap<String, int>* getSkillMods() const {
+		return &skillMods;
+	}
+
+	int getSkillMod(const String& mod) const {
+		return skillMods.get(mod);
+	}
+
+	bool isSharedTangibleObjectTemplate() const override {
 		return true;
 	}
 };
 
-#endif /* SHAREDSTRUCTUREOBJECTTEMPLATE_H_ */
+
+
+#endif /* SHAREDTANGIBLEOBJECTTEMPLATE_H_ */

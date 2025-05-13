@@ -24,8 +24,6 @@ CraftingValues::CraftingValues(const CraftingValues& values) : Object(), Seriali
 }
 
 CraftingValues::CraftingValues(const AttributesMap& values) : Object(), Serializable(), Logger() {
-	
-	attributesMap.setNullValue(nullptr);
 	doHide = true;
 
 	int totalAttributes = values.getSize();
@@ -40,24 +38,6 @@ CraftingValues::CraftingValues(const AttributesMap& values) : Object(), Serializ
 	setLoggingName("CraftingValues");
 	setLogging(false);
 }
-
-// CraftingValues::CraftingValues(const AttributesMap& values) : Object(), Serializable(), Logger() {
-// 	attributesMap.setNullValue(nullptr);
-// 	doHide = true;
-
-// 	for (int i = 0; i < values.size(); ++i) {
-// 		VectorMapEntry<String, Reference<Subclasses*> > entry = values.elementAt(i);
-
-// 		Subclasses* subclass = entry.getValue();
-
-// 		Subclasses* subclasses = new Subclasses(*subclass);
-
-// 		attributesMap.put(entry.getKey(), subclasses);
-// 	}
-
-// 	setLoggingName("CraftingValues");
-// 	setLogging(true);
-// }
 
 CraftingValues::~CraftingValues() {
 	schematic = nullptr;
@@ -80,21 +60,15 @@ CreatureObject* CraftingValues::getPlayer() {
 	return player.get();
 }
 
-void CraftingValues::recalculateValues(bool initial, bool looted, int level) {
-	String experimentalPropTitle, attribute;
-	info(true) << "---------- CraftingValues::recalculateValues ----------";
+void CraftingValues::recalculateValues(bool initial) {
+	// info(true) << "---------- CraftingValues::recalculateValues ----------";
 
 	float percentage = 0.f, min = 0.f, max = 0.f, newValue = 0.f, oldValue = 0.f;
 	bool hidden = false;
 
-	info(true) << " Total Experimental Attributes: " << getSubtitleCount();
+	// info(true) << " Total Experimental Attributes: " << getTotalExperimentalAttributes();
 
-	for (int i = 0; i < getSubtitleCount(); ++i) {
-
-		attribute = getExperimentalPropertySubtitle(i);
-
-		experimentalPropTitle = getExperimentalPropertyTitle(attribute);
-
+	for (int i = 0; i < getTotalExperimentalAttributes(); ++i) {
 		String attribute = getAttribute(i);
 		String group = getAttributeGroup(attribute);
 
@@ -107,7 +81,7 @@ void CraftingValues::recalculateValues(bool initial, bool looted, int level) {
 
 		oldValue = getCurrentValue(attribute);
 
-		info(true) << "Attribute: " << attribute <<  " Group: " << group << " Old Value: " << oldValue << " Min: " << min << " Max: " << max;
+		// info(true) << "Attribute: " << attribute <<  " Group: " << group << " Old Value: " << oldValue << " Min: " << min << " Max: " << max;
 
 		if (group == "") {
 			if (max > min)
@@ -123,42 +97,9 @@ void CraftingValues::recalculateValues(bool initial, bool looted, int level) {
 			newValue = max;
 		}
 
-		info(true) << "Setting Attribute: " << attribute << " New Value: " << newValue;
-
-		//SET THE PROTECTION FOR LOOTED ITEMS
-		//The attributes below correspond the the special protection values
-		//armor effectivness holds the value for all non special protection values
-		// if (attributeName == "armor_effectiveness" || attributeName == "blasteffectiveness" || attributeName == "heateffectiveness" ||
-		// 	attributeName == "kineticeffectiveness" || attributeName == "energyeffectiveness" || attributeName == "electricaleffectiveness" ||
-		// 	attributeName == "coldeffectiveness" || attributeName == "acideffectiveness")
-		// {
-		// 	if (level >= 300)
-		// 	{
-		// 		float generateRandomNumber = (float) System::random(65);
-		// 		newValue = generateRandomNumber;
-		// 	}
-		// 	else if (level >= 85 && level < 300)
-		// 	{
-		// 		float generateRandomNumber = (float) System::random(55);
-		// 		newValue = generateRandomNumber;
-		// 	}
-		// 	else if (level >= 1 && level < 85)
-		// 	{
-		// 		float generateRandomNumber = (float) System::random(35);
-		// 		newValue = generateRandomNumber;
-		// 	}
-		// }
-
-		// //There is no need for this if we are setting the percintages above
-		// //This only needs to be done to looted items
-		// if (attributeName == "armor_special_effectiveness" && looted == true)
-		// {
-		// 	newValue = 0;
-		// }
-
+		// info(true) << "Setting Attribute: " << attribute << " New Value: " << newValue;
 
 		if (initial || (newValue != oldValue && !initial && !hidden)) {
-			info(true) << "*****newValue***** " << newValue << " Attribute Name: " << attribute << " Initial? " << initial;
 			setCurrentValue(attribute, newValue);
 			valuesToSend.add(attribute);
 		}
@@ -169,11 +110,11 @@ void CraftingValues::recalculateValues(bool initial, bool looted, int level) {
 
 void CraftingValues::clearAll() {
 	doHide = true;
-	//attributesMap.removeAll();
-	//valuesToSend.removeAll();
+	attributesMap.removeAll();
+	valuesToSend.removeAll();
 	schematic = nullptr;
 	player = nullptr;
-	//clearSlots();
+	clearSlots();
 }
 
 String CraftingValues::toString() const {

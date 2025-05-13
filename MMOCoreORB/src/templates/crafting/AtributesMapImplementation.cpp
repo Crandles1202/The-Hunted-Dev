@@ -7,10 +7,11 @@
 */
 
 #include "AttributesMap.h"
+#define DEBUG_ATTRIBUTES_MAP
 
 float AttributesMap::VALUENOTFOUND = -999999;
 const String AttributesMap::EMPTY;
- #define DEBUG_ATTRIBUTES_MAP
+
 /*
 	The Attributes Map Constsist of the following:
 
@@ -78,141 +79,6 @@ const String& AttributesMap::getVisibleAttributeGroup(const int i) const {
 
 int AttributesMap::getTotalVisibleAttributeGroups() const {
 	return visibleGroups.size();
-}
-
-bool AttributesMap::hasProperty(const String& attribute) const {
-	const Subclasses* subclasses;
-	const Values* values;
-
-	for (int j = 0; j < size(); ++j) {
-		subclasses = get(j);
-
-		for (int i = 0; i < subclasses->size(); ++i) {
-			values = subclasses->get(i);
-
-			if (values->getName() == attribute) {
-				return true;
-			}
-		}
-	}
-
-	return false;
-}
-
-const String& AttributesMap::getExperimentalPropertyTitle(const String& subtitle) const {
-	Subclasses* subclasses;
-	Values* values;
-
-	for (int j = 0; j < size(); ++j) {
-		subclasses = get(j);
-
-		for (int j = 0; j < subclasses->size(); ++j) {
-			values = subclasses->get(j);
-
-			if (values->getName() == subtitle) {
-				return subclasses->getClassTitle();
-			}
-		}
-	}
-
-	return EMPTY;
-}
-
-const String& AttributesMap::getExperimentalPropertyTitle(const int i) const {
-	auto subclasses = get(i);
-
-	if (subclasses != nullptr) {
-		return subclasses->getClassTitle();
-	}
-
-	return EMPTY;
-}
-
-const String& AttributesMap::getVisibleExperimentalPropertyTitle(const int i) const {
-	const Subclasses* subclasses;
-	int counter = -1;
-	String title;
-
-	for (int j = 0; j < size(); ++j) {
-		subclasses = get(j);
-
-		if (!subclasses->hasAllHiddenItems())
-			counter++;
-
-		if (counter == i)
-			return subclasses->getClassTitle();
-	}
-
-	return EMPTY;
-}
-
-const String& AttributesMap::getExperimentalPropertySubtitlesTitle(const int i) const {
-	const Subclasses* subclasses;
-	int count = 0;
-
-	for (int j = 0; j < size(); ++j) {
-		subclasses = get(j);
-
-		if (count + subclasses->size() <= i) {
-			count += subclasses->size();
-		} else {
-			return subclasses->getClassTitle();
-		}
-	}
-
-	return EMPTY;
-}
-
-const String& AttributesMap::getExperimentalPropertySubtitle(const int i) const {
-	const Subclasses* subclasses;
-	int count = 0;
-
-	for (int j = 0; j < size(); ++j) {
-		subclasses = get(j);
-
-		if (count + subclasses->size() <= i) {
-			count += subclasses->size();
-		} else {
-			count = i - count;
-
-			const Values* values = subclasses->get(count);
-
-			return values->getName();
-		}
-	}
-
-	return EMPTY;
-}
-
-const String& AttributesMap::getExperimentalPropertySubtitle(const String& title, const int i) const {
-	const Subclasses* subclasses = get(title);
-
-	if (subclasses != nullptr)
-		return subclasses->get(i)->getName();
-	else
-		return EMPTY;
-}
-
-int AttributesMap::getExperimentalPropertySubtitleSize() const {
-	const Subclasses* subclasses;
-	int subtitleSize = 0;
-
-	for (int j = 0; j < size(); ++j) {
-		subclasses = get(j);
-
-		subtitleSize += subclasses->size();
-	}
-
-	return subtitleSize;
-}
-
-int AttributesMap::getExperimentalPropertySubtitleSize(const String& title) const {
-	const Subclasses* subclasses = get(title);
-
-	if (subclasses != nullptr)
-		return subclasses->size();
-
-	return (int)VALUENOTFOUND;
 }
 
 bool AttributesMap::isHidden(const String& attribute) const {

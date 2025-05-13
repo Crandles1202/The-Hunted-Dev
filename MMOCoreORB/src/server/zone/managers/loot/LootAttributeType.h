@@ -1,3 +1,4 @@
+
 #ifndef LOOTATTRIBUTETYPE_H_
 #define LOOTATTRIBUTETYPE_H_
 

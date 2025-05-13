@@ -145,7 +145,7 @@ public:
 	int getVulnerabilites() const {
 		return vulnerabilites;
 	}
-	
+
 	int getSpecialResists() const {
 		return specialResists;
 	}

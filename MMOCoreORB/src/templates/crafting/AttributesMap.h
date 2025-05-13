@@ -1,16 +1,18 @@
+
 /*
 				Copyright <SWGEmu>
 		See file COPYING for copying conditions.*/
 
 #ifndef ATTRIBUTESMAP_H_
 #define ATTRIBUTESMAP_H_
+#define DEBUG_ATTRIBUTES_MAP
 
 #include "ValuesClasses.h"
 #include "system/util/Vector.h"
 
 //#define DEBUG_ATTRIBUTES_MAP
 
-class AttributesMap : public Logger, public VectorMap<String, Reference<Subclasses*> > {
+class AttributesMap : public Object, public Logger {
 	Mutex mutex;
 
 	Vector<String> attributes;
@@ -31,14 +33,14 @@ public:
 	static const short OVERRIDECOMBINE = 0x04;
 	static const short LIMITEDCOMBINE = 0x05;
 
-	// AttributesMap() {
-	// 	setLoggingName("AttributesMap");
+	AttributesMap() {
+		setLoggingName("AttributesMap");
 
-	// 	attributeValues.setNullValue(nullptr);
-	// }
+		attributeValues.setNullValue(nullptr);
+	}
 
-	// ~AttributesMap() {
-	// }
+	~AttributesMap() {
+	}
 
 	void addExperimentalAttribute(const String& attribute, const String& group, const float min, const float max, const int precision, const bool filler, const int combine);
 
@@ -50,18 +52,6 @@ public:
 	const String& getVisibleAttributeGroup(const int i) const;
 	int getTotalVisibleAttributeGroups() const;
 
-	const String& getExperimentalPropertyTitle(const String& subtitle) const;
-	const String& getExperimentalPropertyTitle(const int i) const;
-	const String& getVisibleExperimentalPropertyTitle(const int i) const;
-
-	const String& getExperimentalPropertySubtitlesTitle(const int i) const;
-	const String& getExperimentalPropertySubtitle(const int i) const;
-	const String& getExperimentalPropertySubtitle(const String& title, const int i) const;
-
-	int getExperimentalPropertySubtitleSize() const;
-	int getExperimentalPropertySubtitleSize(const String& title) const;
-
-	bool hasProperty(const String& attribute) const;
 	bool isHidden(const String& attribute) const;
 	void setHidden(const String& attribute);
 	void unsetHidden(const String& attribute);
@@ -174,60 +164,10 @@ public:
 	inline void removeAll() {
 		Locker lock(&mutex);
 
-		//attributes.removeAll();
-		//visibleGroups.removeAll();
-		//attributeGroups.removeAll();
-		//attributeValues.removeAll();
-	}
-
-	inline int getVisibleExperimentalPropertyTitleSize() const {
-		int tempSize = 0;
-		const Subclasses* subclasses;
-
-		for(int i = 0; i < size(); ++i) {
-			subclasses = get(i);
-
-			if(!subclasses->hasAllHiddenItems())
-				tempSize++;
-		}
-
-		return tempSize;
-	}
-
-	inline int getSubtitleCount() const {
-		const Subclasses* subclasses;
-
-		int count = 0;
-
-		for (int j = 0; j < size(); ++j) {
-			subclasses = get(j);
-
-			count += subclasses->size();
-		}
-
-		return count;
-	}
-
-	inline int getTitleLine(const String& title) const {
-		const Subclasses* subClasses;
-		String exptitle;
-		int counter = 0;
-
-		for (int j = 0; j < size(); ++j) {
-
-			subClasses = get(j);
-
-			exptitle = subClasses->getClassTitle();
-
-			if (!subClasses->isClassHidden()) {
-				if (title == exptitle)
-					return counter;
-
-				counter++;
-			}
-		}
-
-		return -1;
+		attributes.removeAll();
+		visibleGroups.removeAll();
+		attributeGroups.removeAll();
+		attributeValues.removeAll();
 	}
 };
 
