@@ -25,8 +25,8 @@ void LightsaberCrystalComponentImplementation::initializeTransientMembers() {
 }
 
 void LightsaberCrystalComponentImplementation::notifyLoadFromDatabase() {
-	Randomize item level and stats for existing crystals based on original quality value
-	TODO: Remove this on a server wipe when old variables are removed
+	//Randomize item level and stats for existing crystals based on original quality value
+	//TODO: Remove this on a server wipe when old variables are removed
 	if (color == 31 && (minimumDamage != maximumDamage || itemLevel == 0)) {
 		if (quality == POOR)
 			itemLevel = 1 + System::random(38); // 1-39
@@ -296,10 +296,10 @@ void LightsaberCrystalComponentImplementation::fillAttributeList(AttributeListMe
 }
 
 void LightsaberCrystalComponentImplementation::fillObjectMenuResponse(ObjectMenuResponse* menuResponse, CreatureObject* player) {
-	// if (ownerID == 0 && player->hasSkill("force_title_jedi_rank_01") && hasPlayerAsParent(player)) {
-	// 	String text = "@jedi_spam:tune_crystal";
-	// 	menuResponse->addRadialMenuItem(128, 3, text);
-	// }
+	if (ownerID == 0 && player->hasSkill("force_title_jedi_rank_01") && hasPlayerAsParent(player)) {
+		String text = "@jedi_spam:tune_crystal";
+		menuResponse->addRadialMenuItem(128, 3, text);
+	}
 
 	PlayerObject* ghost = player->getPlayerObject();
 	if (ghost != nullptr && ghost->isPrivileged()) {

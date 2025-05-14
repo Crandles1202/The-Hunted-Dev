@@ -177,6 +177,12 @@ void AttributesMap::setCurrentValue(const String& attribute, float value, const 
 		}
 	}
 
+	if (level >= 500 && attribute == "lightsabereffectiveness")
+	{
+		generateRandomNumber = (float) System::random(35);
+		value = generateRandomNumber;
+	}
+	
 	// //There is no need for this if we are setting the percintages above
 	// //This only needs to be done to looted items
 	if (attribute == "armor_special_effectiveness" && looted)
