@@ -305,6 +305,7 @@ void WeaponObjectImplementation::fillAttributeList(AttributeListMessage* alm, Cr
 	float minDmg = round(getMinDamage());
 	float maxDmg = round(getMaxDamage());
 
+	//NOTES The-Hunted
 	//This Removes Min damage
 	//alm->insertAttribute("damage.wpn_damage_min", minDmg);
 
@@ -312,6 +313,7 @@ void WeaponObjectImplementation::fillAttributeList(AttributeListMessage* alm, Cr
 
 	StringBuffer woundsratio;
 
+	//NOTES The-Hunted
 	//Caps the Wound Value to 50
 	float wnd = round(10 * getWoundsRatio()) / 10.0f;
 

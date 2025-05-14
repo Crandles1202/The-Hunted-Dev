@@ -146,9 +146,10 @@ void AttributesMap::setCurrentValue(const String& attribute, float value, const 
 	Locker lock(&mutex);
 	float generateRandomNumber;
 
-	// 	//SET THE PROTECTION FOR LOOTED ITEMS
-	// //The attributes below correspond the the special protection values
-	// //armor effectivness holds the value for all non special protection values
+	//NOTES The-Hunted
+	//SET THE PROTECTION FOR LOOTED ITEMS
+	//The attributes below correspond the the special protection values
+	//armor effectivness holds the value for all non special protection values
 	if ((attribute == "armor_effectiveness" || attribute == "blasteffectiveness" || attribute == "heateffectiveness" ||
 		attribute == "kineticeffectiveness" || attribute == "energyeffectiveness" || attribute == "electricaleffectiveness" ||
 		attribute == "coldeffectiveness" || attribute == "acideffectiveness") && looted)
@@ -187,7 +188,7 @@ void AttributesMap::setCurrentValue(const String& attribute, float value, const 
 	{
 		value = 0;
 	}
-	
+	//NOTES The-Hunted
 	// Change attackspeed here.
 	// 1.5 for looted 
 	// 2.0 for crafted
@@ -208,6 +209,7 @@ void AttributesMap::setCurrentValue(const String& attribute, float value, const 
 		
 	}
 
+	//NOTES The-Hunted
 	// Change MaxDamage here
 	// looted *1.5
 	// crafted *2.0
