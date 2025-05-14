@@ -226,6 +226,9 @@ void AttributesMap::setCurrentValue(const String& attribute, float value, const 
 	if (values == nullptr)
 		return;
 
+
+	info(true) << " AttributesMap::getCurrentValue called for " << attribute << " with a value of " << values->getValue();
+
 	values->setValue(value);
 	values->setMaxValue(max);
 	values->setMinValue(min);
