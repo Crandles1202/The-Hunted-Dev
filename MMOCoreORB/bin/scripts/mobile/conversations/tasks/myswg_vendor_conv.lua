@@ -29,7 +29,7 @@ myswg_vendor_conv:addScreen(myswg_vendor_first_screen);
 weaps1 = ConvoScreen:new {    
     id = "weaps1",
     leftDialog = "",
-    customDialogText = "Selling random loot weapons and high end weapons.",
+    customDialogText = "Selling random loot weapons.",
     stopConversation = "false",
     options = { 
 --        {"Proton Grenades (150damage, 4.4speed) - 100k", "option11"},
@@ -60,17 +60,17 @@ myswg_vendor_conv:addScreen(weaps1);
 armor1 = ConvoScreen:new {    
     id = "armor1",
     leftDialog = "",
-    customDialogText = "Selling Chitin Armor 65% kinetic, 25% base eff\n\nUbese armor with 80% kinetic and 50% base eff.\n\nComposite with 80%kinetic/electic and 65% base 0% stun",
+    customDialogText = "Selling Composite with 80%kinetic/electic and 65% base 0% stun",
     stopConversation = "false",
     options = { 
-        {"Chitin Leggings - 25k", "option16"},
-        {"Chitin Chest Plate - 25k", "option17"},
-        {"Chitin Helmet - 25k", "option18"},
-        {"Chitin left Bracer - 25k", "option19"},
-        {"Ubese Leggings - 100k", "option12"},
-        {"Ubese Chest Plate - 100k", "option13"},
-        {"Ubese Helmet - 100k", "option14"},
-        {"Ubese Left Bracer - 100k", "option15"},
+ --       {"Chitin Leggings - 25k", "option16"},
+ --       {"Chitin Chest Plate - 25k", "option17"},
+ --       {"Chitin Helmet - 25k", "option18"},
+ --       {"Chitin left Bracer - 25k", "option19"},
+ --       {"Ubese Leggings - 100k", "option12"},
+ --       {"Ubese Chest Plate - 100k", "option13"},
+ --       {"Ubese Helmet - 100k", "option14"},
+ --       {"Ubese Left Bracer - 100k", "option15"},
         {"Composite Leggings - 250k", "option20"},
         {"Composite Chest Plate - 250k", "option21"},
         {"Composite Helmet - 250k", "option22"},
@@ -227,11 +227,11 @@ newbuff1 = ConvoScreen:new {
     stopConversation = "false",
     options = { 
 
-        {"100% Doctor Buffs 4hr - 10k", "buff1"},
-        {"200% Doctor Buffs 5hr - 20k", "buff2"},
-        {"300% Doctor Buffs 6hr - 30k", "buff3"},
-        {"200% Entertainer Buffs 4hr - 10k", "buff4"},
-        {"300% Entertainer Buffs 6hr - 20k", "buff5"},
+        {"2500 Doctor Buffs 2hr - 10k", "buff1"},
+   --     {"200% Doctor Buffs 5hr - 20k", "buff2"},
+   --     {"300% Doctor Buffs 6hr - 30k", "buff3"},
+   --     {"200% Entertainer Buffs 4hr - 10k", "buff4"},
+    --    {"300% Entertainer Buffs 6hr - 20k", "buff5"},
  
 --        {"125%/3hr Mind Buffs - 5k", "buff5"},
 --        {"StimPack A - 500", "option50"},

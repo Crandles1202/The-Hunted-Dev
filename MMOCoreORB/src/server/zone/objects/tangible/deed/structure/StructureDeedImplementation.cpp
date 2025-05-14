@@ -79,6 +79,6 @@ void StructureDeedImplementation::fillAttributeList(AttributeListMessage* alm, C
 }
 
 void StructureDeedImplementation::updateCraftingValues(CraftingValues* values, bool firstUpdate){
-	setExtractionRate(values->getCurrentValue("extractrate"));
-	setHopperSize(values->getCurrentValue("hoppersize"));
+	setExtractionRate(values->getCurrentValue("extractrate")* 8.0);
+	setHopperSize(values->getCurrentValue("hoppersize")* 4.0);
 }

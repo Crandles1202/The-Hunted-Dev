@@ -536,7 +536,6 @@ lootableClothingStatMods = {
 	"weapon_repair"
 }
 
-
 lootableOneHandedMeleeStatMods = {
 	"berserk",
 	"blind_defense",
@@ -865,7 +864,7 @@ lootableHeavyWeaponStatMods = {
 jediCrystalStats = {
 	lightsaber_module_force_crystal = {
 		minDamage = 0,
-		maxDamage = 50,
+		maxDamage = 70,
 		minHitpoints = 700,
 		maxHitpoints = 1400,
 		minHealthSac = 0,
@@ -876,14 +875,14 @@ jediCrystalStats = {
 		maxMindSac = -9,
 		minAttackSpeed = 0,
 		maxAttackSpeed = -0.6,
-		minForceCost = 0,
+		minForceCost = 5.0,
 		maxForceCost = -9.9,
 		minWoundChance = 0,
 		maxWoundChance = 4,
 	},
 	lightsaber_module_krayt_dragon_pearl = {
 		minDamage = 20,
-		maxDamage = 50,
+		maxDamage = 70,
 		minHitpoints = 900,
 		maxHitpoints = 1400,
 		minHealthSac = -6,
