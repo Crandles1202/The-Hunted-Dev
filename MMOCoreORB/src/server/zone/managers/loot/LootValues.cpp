@@ -19,10 +19,10 @@ LootValues::LootValues(const LootItemTemplate* lootTemplate, int lootLevel, floa
 	recalculateValues(true);
 
 	addExperimentalAttribute("creatureLevel", "null", level, level, 0, true, RandomType::STATIC);
-	setCurrentValue("creatureLevel", level, true, level, true);
+	setCurrentValue("creatureLevel", level, level, true);
 
 	addExperimentalAttribute("modifier", "null", modifier, modifier, 0, true, RandomType::STATIC);
-	setCurrentValue("modifier", modifier, true, level, true);
+	setCurrentValue("modifier", modifier, level, true);
 }
 
 void LootValues::setLevel(const LootItemTemplate* lootTemplate, int lootLevel) {
@@ -205,10 +205,10 @@ void LootValues::setDamageValues() {
 			float minPercent = getCurrentPercentage("mindamage");
 			float minPercentMax = getMaxPercentage("mindamage");
 
-			setCurrentValue("maxdamage", minValue, true, level, true);
+			setCurrentValue("maxdamage", minValue, level, true);
 			setCurrentPercentage("maxdamage", minPercent, minPercentMax);
 
-			setCurrentValue("mindamage", maxValue, true, level, true);
+			setCurrentValue("mindamage", maxValue, level, true);
 			setCurrentPercentage("mindamage", maxPercent, maxPercentMax);
 		}
 	}
