@@ -115,11 +115,11 @@ public:
 		return attributesMap.getCombineType(attribute);
 	}
 
-	void setCurrentValue(const String& attribute, const float value, int level, bool looted) {
+	void setCurrentValue(const String& attribute, const float value, int level = 0, bool looted = false) {
 		attributesMap.setCurrentValue(attribute, value, level, looted);
 	}
 
-	void setCurrentValue(const String& attribute, const float value, const float min, const float max, int level, bool looted) {
+	void setCurrentValue(const String& attribute, const float value, const float min, const float max, int level = 0, bool looted = false) {
 		attributesMap.setCurrentValue(attribute, value, min, max, level, looted);
 	}
 
