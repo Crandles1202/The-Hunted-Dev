@@ -132,7 +132,7 @@ short AttributesMap::getCombineType(const String& attribute) const {
 	return values->getCombineType();
 }
 
-void AttributesMap::setCurrentValue(const String& attribute, const float value, int level, bool looted) {
+void AttributesMap::setCurrentValue(const String& attribute, float value, int level, bool looted) {
 	Locker lock(&mutex);
 
 	Reference<Values*> values = attributeValues.get(attribute);
@@ -143,7 +143,7 @@ void AttributesMap::setCurrentValue(const String& attribute, const float value, 
 	values->setValue(value);
 }
 
-void AttributesMap::setCurrentValue(const String& attribute, const float value, const float min, const float max, int level, bool looted) {
+void AttributesMap::setCurrentValue(const String& attribute, float value, const float min, const float max, int level, bool looted) {
 	Locker lock(&mutex);
 
 	// 	//SET THE PROTECTION FOR LOOTED ITEMS
