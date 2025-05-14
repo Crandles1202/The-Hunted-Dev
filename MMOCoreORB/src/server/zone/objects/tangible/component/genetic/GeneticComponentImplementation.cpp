@@ -398,10 +398,8 @@ float GeneticComponentImplementation::getEffectiveArmor() {
 	if (fortitude == 500)
 		return 0;
 	return fortitude/50;
-	
+
 #ifdef DEBUG_GENETIC_LAB
 	info(true) << "--- GeneticComponentImplementation::getEffectiveArmor -- Returning: " << effectiveCalc;
 #endif
-
-	return effectiveCalc;
 }
