@@ -217,9 +217,9 @@ void AttributesMap::setCurrentValue(const String& attribute, float value, const 
 	{
 		if (looted)
 		{
-			value = value - 1.5f;
+			value = value * 1.5f;
 		} else {
-			value = value - 2.0f;
+			value = value * 2.0f;
 		}
 	}
 

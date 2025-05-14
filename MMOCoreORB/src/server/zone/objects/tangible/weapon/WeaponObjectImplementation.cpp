@@ -368,9 +368,11 @@ void WeaponObjectImplementation::fillAttributeList(AttributeListMessage* alm, Cr
 		setCustomizationVariable("/private/index_color_blade", getBladeColor(), true);
 	}
 
+	//NOTES The-Hunted
 	// Force Cost
-	// if (getForceCost() > 0)
-	// 	alm->insertAttribute("forcecost", (int)getForceCost());
+	// remove here if you want to remove fs cost from sabers
+	if (getForceCost() > 0)
+		alm->insertAttribute("forcecost", (int)getForceCost());
 
 	for (int i = 0; i < getNumberOfDots(); i++) {
 
