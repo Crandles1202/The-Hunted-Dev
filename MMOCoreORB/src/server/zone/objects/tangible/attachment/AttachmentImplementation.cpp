@@ -58,30 +58,23 @@ void AttachmentImplementation::updateCraftingValues(CraftingValues* values, bool
 	}
 
 	float level = values->hasExperimentalAttribute("creatureLevel") ? values->getCurrentValue("creatureLevel") : 1;
-	float bonus = values->hasExperimentalAttribute("modifier") ? values->getCurrentValue("modifier") : 1;
-	float rank = LootValues::getLevelRankValue(level, 0.2f, 0.9f);
 
-	int chance = rank * bonus * 100.f;
-	int roll = System::random(1000);
+	//NOTES The-Hunted
+	//This sets the skill Mod Cap to 50
 	int modCount = 1;
 
-	int pivot = chance - roll;
+	for(int i = 0; i < modCount; ++i) {
 
-	if (pivot < 40) {
-		modCount = 1;
-	} else if (pivot < 70) {
-		modCount = System::random(1) + 1;
-	} else if (pivot < 100) {
-		modCount = System::random(2) + 1;
-	} else {
-		modCount = System::random(1) + 2;
-	}
+		int max = (level / 12);
+		int min = (level / 10) / 2;
 
-	for (int i = 0; i < modCount; ++i) {
-		float step = 1.f - ((i / (float)modCount) * 0.5f);
-		int min = Math::clamp(-1, (int)round(0.075f * level) - 1, 25) * step;
-		int max = Math::clamp(-1, (int)round(0.125f * level) + 1, 25);
-		int mod = System::random(max - min) + min;
+		int mod = System::random(max) + min;
+
+		if(mod > 50)
+			mod = 50;
+
+		if(mod < 1)
+			mod = 1;
 
 		String modName = lootManager->getRandomLootableMod(gameObjectType);
 
@@ -101,6 +94,29 @@ void AttachmentImplementation::fillAttributeList(AttributeListMessage* msg, Crea
 		name << "cat_skill_mod_bonus.@stat_n:" << key;
 
 		msg->insertAttribute(name.toString(), value);
+
+		if (customName.isEmpty()){
+
+			StringId SEAName;
+
+			SEAName.setStringId("stat_n", key);
+
+			setCustomObjectName("", false);
+
+			setObjectName(SEAName, false);
+
+			setCustomObjectName(getDisplayedName() + " +" + String::valueOf(value), true);
+
+			StringId originalName;
+
+			if (isArmorAttachment())
+				originalName.setStringId("item_n", "socket_gem_armor");
+
+			else
+				originalName.setStringId("item_n", "socket_gem_clothing");
+
+			setObjectName(originalName, true);
+		}
 
 		name.deleteAll();
 	}

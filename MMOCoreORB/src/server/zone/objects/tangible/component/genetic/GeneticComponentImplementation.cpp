@@ -23,11 +23,11 @@ void GeneticComponentImplementation::resetResists(CraftingValues* values) {
 		values->setCurrentValue("dna_comp_armor_kinetic", 0);
 		values->setCurrentPercentage("dna_comp_armor_kinetic",0);
 	}
-	/*if (saberResist > 0 && !isSpecialResist(SharedWeaponObjectTemplate::LIGHTSABER)) {
+	if (saberResist > 0 && !isSpecialResist(SharedWeaponObjectTemplate::LIGHTSABER)) {
 		saberResist = 0;
 		values->setCurrentValue("dna_comp_armor_saber", 0);
 		values->setCurrentPercentage("dna_comp_armor_saber",0);
-	}*/
+	}
 	if (elecResist > 0 && !isSpecialResist(SharedWeaponObjectTemplate::ELECTRICITY)){
 		elecResist = 0;
 		values->setCurrentValue("dna_comp_armor_electric", 0);
@@ -86,7 +86,7 @@ void GeneticComponentImplementation::updateCraftingValues(CraftingValues* values
 	elecResist = values->getCurrentValue("dna_comp_armor_electric");
 	acidResist = values->getCurrentValue("dna_comp_armor_acid");
 	stunResist = values->getCurrentValue("dna_comp_armor_stun");
-	//saberResist = values->getCurrentValue("dna_comp_armor_saber");
+	saberResist = values->getCurrentValue("dna_comp_armor_saber");
 
 #ifdef DEBUG_GENETIC_LAB
 	info(true) << "Kinetic = " << kinResist << " Enery = " << energyResist << " Blast = " << blastResist << " Heat = " << heatResist << " Cold = " << coldResist;
@@ -109,8 +109,8 @@ void GeneticComponentImplementation::updateCraftingValues(CraftingValues* values
 		setSpecialResist(SharedWeaponObjectTemplate::ACID);
 	if (values->getMinValue("stuneffectiveness") > 0)
 		setSpecialResist(SharedWeaponObjectTemplate::STUN);
-	/*if (values->getMinValue("lightsabereffectiveness") > 0)
-		setSpecialResist(SharedWeaponObjectTemplate::LIGHTSABER);*/
+	if (values->getMinValue("lightsabereffectiveness") > 0)
+		setSpecialResist(SharedWeaponObjectTemplate::LIGHTSABER);
 
 	if (fortitude > 500) {
 		armorRating = 1;
@@ -193,8 +193,8 @@ void GeneticComponentImplementation::updateCraftingValues(CraftingValues* values
 		acidResist = 100;
 	if (stunResist > 100)
 		stunResist = 100;
-	//if (saberResist > 100)
-		//saberResist = 10;
+	if (saberResist > 100)
+		saberResist = 10;
 
 	// Determine other factors
 	// HAM, attack speed, min/max damage toHit
@@ -218,6 +218,7 @@ void GeneticComponentImplementation::updateCraftingValues(CraftingValues* values
 	focus = (intellect * 15) + (dependability * 3);
 	strength = (hardiness * 15) + (dependability * 3);
 	quickness = (dexterity * 15) + (dependability * 3);
+	hit = 0.19 + (0.55 * ((float)cleverness/1000.0));
 
 #ifdef DEBUG_GENETIC_LAB
 	info(true) << "Health: " << health << " Action: " << action << " Mind: " << mind;
@@ -225,13 +226,13 @@ void GeneticComponentImplementation::updateCraftingValues(CraftingValues* values
 #endif
 
 	// toHit Calculation
-	hit = 0.19 + (cleverness / 1500.0f);
+	//hit = 0.19 + (cleverness / 1500.0f);
 
 #ifdef DEBUG_GENETIC_LAB
 	info(true) << "ToHit: " << hit;
 #endif
 
-	speed = 2.5f - (ceil(courage / 10.0f) * 10.0f) / 1000;
+	speed = 2.5-((ceil(((float)courage)/10)*10)/1000);
 
 #ifdef DEBUG_GENETIC_LAB
 	info(true) << "Speed: " << speed;
@@ -359,7 +360,7 @@ void GeneticComponentImplementation::fillAttributeList(AttributeListMessage* alm
 	alm->insertAttribute("dna_comp_armor_electric",resistValue(elecResist));
 	alm->insertAttribute("dna_comp_armor_acid",resistValue(acidResist));
 	alm->insertAttribute("dna_comp_armor_stun",resistValue(stunResist));
-	//alm->insertAttribute("dna_comp_armor_saber",resistValue(saberResist));
+	alm->insertAttribute("dna_comp_armor_saber",resistValue(saberResist));
 
 	if (godMode) {
 		alm->insertAttribute("dna_comp_armor_kinetic", kinResist);
@@ -370,7 +371,7 @@ void GeneticComponentImplementation::fillAttributeList(AttributeListMessage* alm
 		alm->insertAttribute("dna_comp_armor_electric", elecResist);
 		alm->insertAttribute("dna_comp_armor_acid", acidResist);
 		alm->insertAttribute("dna_comp_armor_stun", stunResist);
-		// alm->insertAttribute("dna_comp_armor_saber", saberResist);
+		alm->insertAttribute("dna_comp_armor_saber", saberResist);
 	}
 
 	alm->insertAttribute("spec_atk_1",convertSpecialAttack(special1));
@@ -389,8 +390,15 @@ void GeneticComponentImplementation::setSpecialResist(unsigned int type) {
 }
 
 float GeneticComponentImplementation::getEffectiveArmor() {
-	float effectiveCalc = (kinResist + energyResist + blastResist + heatResist + coldResist + elecResist + acidResist + stunResist) * 2.0f;
-
+	//float effectiveCalc = (kinResist + energyResist + blastResist + heatResist + coldResist + elecResist + acidResist + stunResist) * 2.0f;
+	if (fortitude < 500)
+		return fortitude/50;
+	if (fortitude > 500)
+		return (fortitude-500)/50;
+	if (fortitude == 500)
+		return 0;
+	return fortitude/50;
+	
 #ifdef DEBUG_GENETIC_LAB
 	info(true) << "--- GeneticComponentImplementation::getEffectiveArmor -- Returning: " << effectiveCalc;
 #endif

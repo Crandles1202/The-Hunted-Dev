@@ -282,44 +282,17 @@ void LightsaberCrystalComponentImplementation::fillAttributeList(AttributeListMe
 	}
 
 	PlayerObject* player = object->getPlayerObject();
-	if (object->hasSkill("force_title_jedi_rank_01") || player->isPrivileged()) {
-		if (ownerID == 0) {
-			StringBuffer str;
-			str << "\\#pcontrast2 UNTUNED";
-			alm->insertAttribute("crystal_owner", str);
-		} else {
-			alm->insertAttribute("crystal_owner", ownerName);
-		}
-
-		if (getColor() != 31) {
-			StringBuffer str3;
-			str3 << "@jedi_spam:saber_color_" << getColor();
-			alm->insertAttribute("color", str3);
-		} else {
-			if (ownerID != 0 || player->isPrivileged()) {
-				alm->insertAttribute("mindamage", damage);
-				alm->insertAttribute("maxdamage", damage);
-				alm->insertAttribute("wpn_attack_speed", attackSpeed);
-				alm->insertAttribute("wpn_wound_chance", woundChance);
-				alm->insertAttribute("wpn_attack_cost_health", sacHealth);
-				alm->insertAttribute("wpn_attack_cost_action", sacAction);
-				alm->insertAttribute("wpn_attack_cost_mind", sacMind);
-				alm->insertAttribute("forcecost", (int)getForceCost());
-
-				// For debugging
-				if (player->isPrivileged()) {
-					StringBuffer str;
-					str << "@jedi_spam:crystal_quality_" << getQuality();
-					alm->insertAttribute("challenge_level", itemLevel);
-					alm->insertAttribute("crystal_quality", str);
-				}
-			} else {
-				StringBuffer str;
-				str << "@jedi_spam:crystal_quality_" << getQuality();
-				alm->insertAttribute("crystal_quality", str);
-			}
-		}
+	if (object->hasSkill("force_title_jedi_rank_02") || player->isPrivileged()) {
+		alm->insertAttribute("mindamage", damage);
+		alm->insertAttribute("maxdamage", damage);
+		alm->insertAttribute("wpn_attack_speed", Math::getPrecision(attackSpeed, 2));
+		// alm->insertAttribute("wpn_wound_chance", woundChance);
+		// alm->insertAttribute("wpn_attack_cost_health", sacHealth);
+		// alm->insertAttribute("wpn_attack_cost_action", sacAction);
+		// alm->insertAttribute("wpn_attack_cost_mind", sacMind);
+		alm->insertAttribute("forcecost", (int)getForceCost());
 	}
+
 }
 
 void LightsaberCrystalComponentImplementation::fillObjectMenuResponse(ObjectMenuResponse* menuResponse, CreatureObject* player) {
