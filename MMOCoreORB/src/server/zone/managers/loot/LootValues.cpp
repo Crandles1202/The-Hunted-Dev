@@ -19,10 +19,10 @@ LootValues::LootValues(const LootItemTemplate* lootTemplate, int lootLevel, floa
 	recalculateValues(true);
 
 	addExperimentalAttribute("creatureLevel", "null", level, level, 0, true, RandomType::STATIC);
-	setCurrentValue("creatureLevel", level);
+	setCurrentValue("creatureLevel", level, true, level, true);
 
 	addExperimentalAttribute("modifier", "null", modifier, modifier, 0, true, RandomType::STATIC);
-	setCurrentValue("modifier", modifier);
+	setCurrentValue("modifier", modifier, true, level, true);
 }
 
 void LootValues::setLevel(const LootItemTemplate* lootTemplate, int lootLevel) {
@@ -205,10 +205,10 @@ void LootValues::setDamageValues() {
 			float minPercent = getCurrentPercentage("mindamage");
 			float minPercentMax = getMaxPercentage("mindamage");
 
-			setCurrentValue("maxdamage", minValue);
+			setCurrentValue("maxdamage", minValue, true, level, true);
 			setCurrentPercentage("maxdamage", minPercent, minPercentMax);
 
-			setCurrentValue("mindamage", maxValue);
+			setCurrentValue("mindamage", maxValue, true, level, true);
 			setCurrentPercentage("mindamage", maxPercent, maxPercentMax);
 		}
 	}
@@ -223,7 +223,7 @@ void LootValues::setStaticValue(const String& attribute) {
 		max = staticValues.getMaxValue(attribute);
 	}
 
-	setCurrentValue(attribute, min, min, max);
+	setCurrentValue(attribute, min, min, max, level, true);
 	setCurrentPercentage(attribute, 0.f, 0.f);
 }
 
@@ -235,7 +235,7 @@ void LootValues::setUniformValue(const String& attribute) {
 
 	float percent = getValuePercentage(min, max, value);
 
-	setCurrentValue(attribute, value, min, max);
+	setCurrentValue(attribute, value, min, max, level, true);
 	setCurrentPercentage(attribute, percent, 1.f);
 }
 
@@ -247,7 +247,7 @@ void LootValues::setNormalValue(const String& attribute) {
 
 	float percent = getValuePercentage(min, max, value);
 
-	setCurrentValue(attribute, value, min, max);
+	setCurrentValue(attribute, value, min, max, level, true);
 	setCurrentPercentage(attribute, percent, 1.f);
 }
 
@@ -260,7 +260,7 @@ void LootValues::setDynamicValue(const String& attribute, float percentageMax) {
 	float percent = getValuePercentage(min, max, value);
 	float percentMax = Math::max(1.f, percentageMax);
 
-	setCurrentValue(attribute, value, min, max);
+	setCurrentValue(attribute, value, min, max, level, true);
 	setCurrentPercentage(attribute, percent, percentMax);
 
 	setModifierValue(attribute, percentMax);
@@ -281,7 +281,7 @@ void LootValues::setModifierValue(const String& attribute, float percentageMax) 
 	float valueMax = getModifierValue(min, max, percentMax);
 	float value = getPercentageValue(valueMin, valueMax, percent);
 
-	setCurrentValue(attribute, value, valueMin, valueMax);
+	setCurrentValue(attribute, value, valueMin, valueMax, level, true);
 	setCurrentPercentage(attribute, percent, percentMax);
 }
 

@@ -7,7 +7,7 @@
 */
 
 #include "AttributesMap.h"
-#define DEBUG_ATTRIBUTES_MAP
+// #define DEBUG_ATTRIBUTES_MAP
 
 float AttributesMap::VALUENOTFOUND = -999999;
 const String AttributesMap::EMPTY;
@@ -132,7 +132,7 @@ short AttributesMap::getCombineType(const String& attribute) const {
 	return values->getCombineType();
 }
 
-void AttributesMap::setCurrentValue(const String& attribute, const float value) {
+void AttributesMap::setCurrentValue(const String& attribute, const float value, int level, bool looted) {
 	Locker lock(&mutex);
 
 	Reference<Values*> values = attributeValues.get(attribute);
@@ -143,47 +143,46 @@ void AttributesMap::setCurrentValue(const String& attribute, const float value) 
 	values->setValue(value);
 }
 
-void AttributesMap::setCurrentValue(const String& attribute, const float value, const float min, const float max) {
+void AttributesMap::setCurrentValue(const String& attribute, const float value, const float min, const float max, int level, bool looted) {
 	Locker lock(&mutex);
+
+	// 	//SET THE PROTECTION FOR LOOTED ITEMS
+	// //The attributes below correspond the the special protection values
+	// //armor effectivness holds the value for all non special protection values
+	if ((attribute == "armor_effectiveness" || attribute == "blasteffectiveness" || attribute == "heateffectiveness" ||
+		attribute == "kineticeffectiveness" || attribute == "energyeffectiveness" || attribute == "electricaleffectiveness" ||
+		attribute == "coldeffectiveness" || attribute == "acideffectiveness") && looted)
+	{
+		if (level >= 300)
+		{
+			float generateRandomNumber = (float) System::random(65);
+			value = generateRandomNumber;
+		}
+		else if (level >= 85 && level < 300)
+		{
+			float generateRandomNumber = (float) System::random(55);
+			value = generateRandomNumber;
+		}
+		else if (level >= 1 && level < 85)
+		{
+			float generateRandomNumber = (float) System::random(35);
+			value = generateRandomNumber;
+		}
+	}
+
+	// //There is no need for this if we are setting the percintages above
+	// //This only needs to be done to looted items
+	if (attribute == "armor_special_effectiveness")
+	{
+		value = 0;
+	}
 
 	Reference<Values*> values = attributeValues.get(attribute);
 
 	if (values == nullptr)
 		return;
 
-		// 	//SET THE PROTECTION FOR LOOTED ITEMS
-		// //The attributes below correspond the the special protection values
-		// //armor effectivness holds the value for all non special protection values
-		// if (attributeName == "armor_effectiveness" || attributeName == "blasteffectiveness" || attributeName == "heateffectiveness" ||
-		// 	attributeName == "kineticeffectiveness" || attributeName == "energyeffectiveness" || attributeName == "electricaleffectiveness" ||
-		// 	attributeName == "coldeffectiveness" || attributeName == "acideffectiveness")
-		// {
-		// 	if (level >= 300)
-		// 	{
-		// 		float generateRandomNumber = (float) System::random(65);
-		// 		newValue = generateRandomNumber;
-		// 	}
-		// 	else if (level >= 85 && level < 300)
-		// 	{
-		// 		float generateRandomNumber = (float) System::random(55);
-		// 		newValue = generateRandomNumber;
-		// 	}
-		// 	else if (level >= 1 && level < 85)
-		// 	{
-		// 		float generateRandomNumber = (float) System::random(35);
-		// 		newValue = generateRandomNumber;
-		// 	}
-		// }
-
-		// //There is no need for this if we are setting the percintages above
-		// //This only needs to be done to looted items
-		// if (attributeName == "armor_special_effectiveness" && looted == true)
-		// {
-		// 	newValue = 0;
-		// }
-
-	info(true) << "Values of " << value << " : " << values; 	
-	info(true) << "Attribue: " << attribute << " value: " << value << " min: " << min << " max: " << max;
+	info(true) << "Attribue: " << attribute << " value: " << value << " min: " << min << " max: " << max << " looted: " << looted << " level: " << level;
 	values->setValue(value);
 	values->setMaxValue(max);
 	values->setMinValue(min);

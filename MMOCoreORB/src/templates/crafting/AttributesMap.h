@@ -58,8 +58,8 @@ public:
 
 	short getCombineType(const String& attribute) const;
 
-	void setCurrentValue(const String& attribute, const float value);
-	void setCurrentValue(const String& attribute, const float value, const float min, const float max);
+	void setCurrentValue(const String& attribute, const float value, int level = 0, bool looted = false);
+	void setCurrentValue(const String& attribute, const float value, const float min, const float max, int level = 0, bool looted = false);
 
 	float getCurrentValue(const String& attribute) const;
 	float getCurrentValue(const int i) const;
