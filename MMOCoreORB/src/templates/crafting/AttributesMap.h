@@ -5,7 +5,6 @@
 
 #ifndef ATTRIBUTESMAP_H_
 #define ATTRIBUTESMAP_H_
-#define DEBUG_ATTRIBUTES_MAP
 
 #include "ValuesClasses.h"
 #include "system/util/Vector.h"

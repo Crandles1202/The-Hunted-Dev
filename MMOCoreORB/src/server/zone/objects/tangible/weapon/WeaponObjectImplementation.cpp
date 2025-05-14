@@ -305,13 +305,17 @@ void WeaponObjectImplementation::fillAttributeList(AttributeListMessage* alm, Cr
 	float minDmg = round(getMinDamage());
 	float maxDmg = round(getMaxDamage());
 
-	alm->insertAttribute("damage.wpn_damage_min", minDmg);
+	//This Removes Min damage
+	//alm->insertAttribute("damage.wpn_damage_min", minDmg);
 
 	alm->insertAttribute("damage.wpn_damage_max", maxDmg);
 
 	StringBuffer woundsratio;
 
+	//Caps the Wound Value to 50
 	float wnd = round(10 * getWoundsRatio()) / 10.0f;
+
+	if (wnd > 50) wnd = 50;
 
 	woundsratio << wnd << "%";
 
@@ -354,9 +358,17 @@ void WeaponObjectImplementation::fillAttributeList(AttributeListMessage* alm, Cr
 		alm->insertAttribute("@veteran_new:antidecay_examine_title", "@veteran_new:antidecay_examine_text");
 	}
 
+	if (isJediWeapon()) {
+		StringBuffer str3;
+		str3 << "@jedi_spam:saber_color_" << getBladeColor();
+
+		alm->insertAttribute("color", str3);
+		setCustomizationVariable("/private/index_color_blade", getBladeColor(), true);
+	}
+
 	// Force Cost
-	if (getForceCost() > 0)
-		alm->insertAttribute("forcecost", (int)getForceCost());
+	// if (getForceCost() > 0)
+	// 	alm->insertAttribute("forcecost", (int)getForceCost());
 
 	for (int i = 0; i < getNumberOfDots(); i++) {
 
@@ -716,18 +728,18 @@ String WeaponObjectImplementation::repairAttempt(int repairChance) {
 
 	if(repairChance < 25) {
 		message += "sys_repair_failed";
-		setMaxCondition(1, true);
+		setMaxCondition(getMaxCondition() * .5f, true);
 		setConditionDamage(0, true);
 	} else if(repairChance < 50) {
 		message += "sys_repair_imperfect";
-		setMaxCondition(getMaxCondition() * .65f, true);
+		setMaxCondition(getMaxCondition() * .75f, true);
 		setConditionDamage(0, true);
 	} else if(repairChance < 75) {
-		setMaxCondition(getMaxCondition() * .80f, true);
+		setMaxCondition(getMaxCondition() * .90f, true);
 		setConditionDamage(0, true);
 		message += "sys_repair_slight";
 	} else {
-		setMaxCondition(getMaxCondition() * .95f, true);
+		//setMaxCondition(getMaxCondition() * .95f, true);
 		setConditionDamage(0, true);
 		message += "sys_repair_perfect";
 	}
@@ -750,18 +762,27 @@ void WeaponObjectImplementation::decay(CreatureObject* user) {
 		Locker locker(_this.getReferenceUnsafeStaticCast());
 
 		if (isJediWeapon()) {
-			ManagedReference<SceneObject*> saberInv = getSlottedObject("saber_inv");
+			// ManagedReference<SceneObject*> saberInv = getSlottedObject("saber_inv");
 
-			if (saberInv == nullptr)
-				return;
+			// if (saberInv == nullptr)
+			// 	return;
 
-			// TODO: is this supposed to be every crystal, or random crystal(s)?
-			for (int i = 0; i < saberInv->getContainerObjectsSize(); i++) {
-				ManagedReference<LightsaberCrystalComponent*> crystal = saberInv->getContainerObject(i).castTo<LightsaberCrystalComponent*>();
+			// // TODO: is this supposed to be every crystal, or random crystal(s)?
+			// for (int i = 0; i < saberInv->getContainerObjectsSize(); i++) {
+			// 	ManagedReference<LightsaberCrystalComponent*> crystal = saberInv->getContainerObject(i).castTo<LightsaberCrystalComponent*>();
 
-				if (crystal != nullptr) {
-					crystal->inflictDamage(crystal, 0, 1, true, true);
-				}
+			// 	if (crystal != nullptr) {
+			// 		crystal->inflictDamage(crystal, 0, 1, true, true);
+			// 	}
+			// }
+
+				if (roll * 5 < chance) {//saber hilt decays but 5x less likely
+				inflictDamage(_this.getReferenceUnsafeStaticCast(), 0, 1, true, true);
+
+				if (((float)conditionDamage - 1 / (float)maxCondition < 0.75) && ((float)conditionDamage / (float)maxCondition > 0.75))
+					user->sendSystemMessage("@combat_effects:weapon_quarter");
+				if (((float)conditionDamage - 1 / (float)maxCondition < 0.50) && ((float)conditionDamage / (float)maxCondition > 0.50))
+					user->sendSystemMessage("@combat_effects:weapon_half");
 			}
 		} else {
 			inflictDamage(_this.getReferenceUnsafeStaticCast(), 0, 1, true, true);

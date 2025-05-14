@@ -7,7 +7,6 @@
 */
 
 #include "AttributesMap.h"
-// #define DEBUG_ATTRIBUTES_MAP
 
 float AttributesMap::VALUENOTFOUND = -999999;
 const String AttributesMap::EMPTY;
@@ -145,6 +144,7 @@ void AttributesMap::setCurrentValue(const String& attribute, float value, int le
 
 void AttributesMap::setCurrentValue(const String& attribute, float value, const float min, const float max, int level, bool looted) {
 	Locker lock(&mutex);
+	float generateRandomNumber;
 
 	// 	//SET THE PROTECTION FOR LOOTED ITEMS
 	// //The attributes below correspond the the special protection values
@@ -155,26 +155,70 @@ void AttributesMap::setCurrentValue(const String& attribute, float value, const 
 	{
 		if (level >= 300)
 		{
-			float generateRandomNumber = (float) System::random(65);
+			generateRandomNumber = (float) System::random(75);
+			//Reroll if bad
+			if (generateRandomNumber < 55.0f)
+			{
+				generateRandomNumber = (float) System::random(75);
+			}
+			
 			value = generateRandomNumber;
 		}
 		else if (level >= 85 && level < 300)
 		{
-			float generateRandomNumber = (float) System::random(55);
+			generateRandomNumber = (float) System::random(65);
 			value = generateRandomNumber;
 		}
 		else if (level >= 1 && level < 85)
 		{
-			float generateRandomNumber = (float) System::random(35);
+			generateRandomNumber = (float) System::random(45);
 			value = generateRandomNumber;
 		}
 	}
 
 	// //There is no need for this if we are setting the percintages above
 	// //This only needs to be done to looted items
-	if (attribute == "armor_special_effectiveness")
+	if (attribute == "armor_special_effectiveness" && looted)
 	{
 		value = 0;
+	}
+
+	if ( attribute == "attackhealthcost" || attribute == "attackactioncost" || attribute == "attackmindcost")
+	{
+		value = 0;
+	}
+	
+	// Change attackspeed here.
+	// 1.5 for looted 
+	// 2.0 for crafted
+	if (attribute == "attackspeed")
+	{
+
+		if (looted)
+		{
+			value = value - 1.5f;
+		} else {
+			value = value - 2.0f;
+		}
+
+		if ( value < 1.0f )
+		{
+			value  = 1.0f;
+		}
+		
+	}
+
+	// Change MaxDamage here
+	// looted *1.5
+	// crafted *2.0
+	if (attribute == "maxdamage")
+	{
+		if (looted)
+		{
+			value = value - 1.5f;
+		} else {
+			value = value - 2.0f;
+		}
 	}
 
 	Reference<Values*> values = attributeValues.get(attribute);
@@ -182,7 +226,6 @@ void AttributesMap::setCurrentValue(const String& attribute, float value, const 
 	if (values == nullptr)
 		return;
 
-	info(true) << "Attribue: " << attribute << " value: " << value << " min: " << min << " max: " << max << " looted: " << looted << " level: " << level;
 	values->setValue(value);
 	values->setMaxValue(max);
 	values->setMinValue(min);
