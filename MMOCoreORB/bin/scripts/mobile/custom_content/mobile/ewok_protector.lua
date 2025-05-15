@@ -46,7 +46,6 @@ ewok_protector = Creature:new {
 				{group = "clothing_attachments", chance = 1250000},
 				{group = "carbines", chance = 1250000}
 			},
-			lootChance = 10000000
 		}
 	},
 

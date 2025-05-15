@@ -14,7 +14,7 @@ mummer_common = {
 		{itemTemplate = "skill_buff_ranged_accuracy", weight = 500000},
 		{itemTemplate = "skill_buff_ranged_defense", weight = 500000},
 		{itemTemplate = "skill_buff_thrown_accuracy", weight = 500000},
-		{itemTemplate = "skill_buff_thrown_speed", weight = 500000}
+		{itemTemplate = "skill_buff_thrown_speed", weight = 500000},
 	}
 }
 

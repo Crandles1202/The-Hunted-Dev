@@ -43,7 +43,6 @@ crackdown_imperial_colonel = Creature:new {
 				{group = "armor_attachments", chance = 25000},
 				{group = "imperial_officer_common", chance = 450000}
 			},
-			lootChance = 2800000
 		}
 	},
 

@@ -34,7 +34,6 @@ adept_panshee_shaman = Creature:new {
 			groups = {
 				{group = "panshee_tribe_tier_1", chance = 10000000}
 			},
-			lootChance = 1460000
 		}
 	},
 

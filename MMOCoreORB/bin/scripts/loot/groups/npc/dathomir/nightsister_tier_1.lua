@@ -16,8 +16,6 @@ nightsister_tier_1 = {
 		{groupTemplate = "ranged_weapons", weight = 1400000},
 		{groupTemplate = "tailor_components", weight = 300000},
 		{groupTemplate = "wearables_common", weight = 700000},
-		{groupTemplate = "resource_creature", weight = 750000},
-		{groupTemplate = "resource_water", weight = 250000},
 		{groupTemplate = "crafting_component", weight = 250000},
 	}
 }

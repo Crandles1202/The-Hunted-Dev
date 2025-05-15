@@ -13,7 +13,7 @@ hutt_exp_common = {
 		{itemTemplate = "skill_buff_onehandmelee_accuracy", weight = 200000},
 		{itemTemplate = "skill_buff_onehandmelee_speed", weight = 200000},
 		{itemTemplate = "skill_buff_rifle_accuracy", weight = 200000},
-		{itemTemplate = "skill_buff_rifle_speed", weight = 200000}
+		{itemTemplate = "skill_buff_rifle_speed", weight = 200000},
 	}
 }
 

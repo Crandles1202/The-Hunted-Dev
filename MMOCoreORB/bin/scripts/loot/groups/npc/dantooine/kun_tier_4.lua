@@ -15,10 +15,6 @@ kun_tier_4 = {
 		{groupTemplate = "melee_weapons", weight = 900000},
 		{groupTemplate = "power_crystals", weight = 700000},
 		{groupTemplate = "wearables_all", weight = 1200000},
-		{groupTemplate = "resource_chemical", weight = 100000},
-		{groupTemplate = "resource_gemstone", weight = 100000},
-		{groupTemplate = "resource_metal", weight = 100000},
-		{groupTemplate = "resource_water", weight = 100000},
 		{groupTemplate = "crafting_component", weight = 100000},
 		{groupTemplate = "crafting_component_advanced", weight = 300000},
 	}

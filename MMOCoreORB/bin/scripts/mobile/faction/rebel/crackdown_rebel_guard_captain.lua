@@ -47,7 +47,6 @@ crackdown_rebel_guard_captain = Creature:new {
 				{group = "rebel_officer_common", chance = 450000},
 				{group = "wearables_common", chance = 1000000}
 			},
-			lootChance = 3000000
 		}
 	},
 

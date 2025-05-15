@@ -13,8 +13,6 @@ spider_nightsister_tier_4 = {
 		{groupTemplate = "power_crystals", weight = 400000},
 		{groupTemplate = "ranged_weapons", weight = 2900000},
 		{groupTemplate = "wearables_all", weight = 1200000},
-		{groupTemplate = "resource_creature", weight = 300000},
-		{groupTemplate = "resource_water", weight = 100000},
 		{groupTemplate = "crafting_component", weight = 100000},
 		{groupTemplate = "crafting_component_advanced", weight = 300000},
 	}

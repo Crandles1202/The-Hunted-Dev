@@ -49,7 +49,6 @@ bh_scientist = Creature:new {
 				{group = "clothing_attachments", chance = 1000000},
 				{group = "armor_attachments", chance = 1000000}
 			},
-			lootChance = 3680000
 		},
 		{
 			groups = {
@@ -65,7 +64,6 @@ bh_scientist = Creature:new {
 				{group = "clothing_attachments", chance = 1000000},
 				{group = "armor_attachments", chance = 1000000}
 			},
-			lootChance = 3680000
 		}
 	},
 

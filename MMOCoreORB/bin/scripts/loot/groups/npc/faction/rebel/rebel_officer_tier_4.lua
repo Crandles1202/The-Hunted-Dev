@@ -13,10 +13,6 @@ rebel_officer_tier_4 = {
 		{groupTemplate = "rebel_officer_common", weight = 300000},
 		{groupTemplate = "weapons_all", weight = 1000000},
 		{groupTemplate = "wearables_all", weight = 900000},
-		{groupTemplate = "resource_gemstone", weight = 100000},
-		{groupTemplate = "resource_metal", weight = 100000},
-		{groupTemplate = "resource_ore", weight = 100000},
-		{groupTemplate = "resource_water", weight = 100000},
 		{groupTemplate = "crafting_component", weight = 100000},
 		{groupTemplate = "crafting_component_advanced", weight = 300000},
 	}

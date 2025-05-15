@@ -46,7 +46,6 @@ bh_pirate_captain = Creature:new {
 				{group = "clothing_attachments", chance = 1000000},
 				{group = "armor_attachments", chance = 1000000}
 			},
-			lootChance = 3400000
 		}
 	},
 

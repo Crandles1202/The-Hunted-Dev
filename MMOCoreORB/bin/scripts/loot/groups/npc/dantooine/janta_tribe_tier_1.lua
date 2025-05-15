@@ -5,11 +5,11 @@ janta_tribe_tier_1 = {
 	minimumLevel = 0,
 	maximumLevel = -1,
 	lootItems = {
-		{groupTemplate = "janta_common", weight = 1400000},
-		{groupTemplate = "junk", weight = 4900000},
-		{groupTemplate = "loot_kit_parts", weight = 2700000},
-		{groupTemplate = "resource_creature", weight = 750000},
-		{groupTemplate = "resource_water", weight = 250000},
+		{groupTemplate = "janta_common", weight = 250000},
+		{groupTemplate = "junk", weight = 500000},
+		{groupTemplate = "loot_kit_parts", weight = 250000},
+		{groupTemplate = "armor_attachments", weight = 500000},
+		{groupTemplate = "clothing_attachments", weight = 500000},
 	}
 }
 

@@ -12,8 +12,6 @@ kunga_tribe_tier_2 = {
 		{groupTemplate = "power_crystals", weight = 400000},
 		{groupTemplate = "wearables_common", weight = 900000},
 		{groupTemplate = "wearables_uncommon", weight = 900000},
-		{groupTemplate = "resource_creature", weight = 600000},
-		{groupTemplate = "resource_water", weight = 200000},
 	}
 }
 

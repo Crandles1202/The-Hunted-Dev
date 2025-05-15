@@ -10,8 +10,6 @@ dantari_raiders_tier_1 = {
 		{groupTemplate = "junk", weight = 3600000},
 		{groupTemplate = "loot_kit_parts", weight = 2700000},
 		{groupTemplate = "wearables_common", weight = 1800000},
-		{groupTemplate = "resource_creature", weight = 750000},
-		{groupTemplate = "resource_water", weight = 250000},
 	}
 }
 

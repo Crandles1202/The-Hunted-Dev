@@ -41,7 +41,6 @@ bh_tusken_carnage_champion = Creature:new {
 				{group = "clothing_attachments", chance = 1000000},
 				{group = "armor_attachments", chance = 1000000}
 			},
-			lootChance = 5320000
 		},
 		{
 			groups = {
@@ -56,7 +55,6 @@ bh_tusken_carnage_champion = Creature:new {
 				{group = "clothing_attachments", chance = 1000000},
 				{group = "armor_attachments", chance = 1000000}
 			},
-			lootChance = 5320000
 		},
 		{
 			groups = {
@@ -72,7 +70,6 @@ bh_tusken_carnage_champion = Creature:new {
 				{group = "clothing_attachments", chance = 1000000},
 				{group = "armor_attachments", chance = 1000000}
 			},
-			lootChance = 5320000
 		},
 	},
 

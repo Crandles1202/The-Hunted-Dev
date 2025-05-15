@@ -41,7 +41,6 @@ bh_tusken_warlord = Creature:new {
 				{group = "clothing_attachments", chance = 1000000},
 				{group = "armor_attachments", chance = 1000000}
 			},
-			lootChance = 4220000
 		},
 		{
 			groups = {
@@ -56,7 +55,6 @@ bh_tusken_warlord = Creature:new {
 				{group = "clothing_attachments", chance = 1000000},
 				{group = "armor_attachments", chance = 1000000}
 			},
-			lootChance = 4220000
 		},
 		{
 			groups = {
@@ -71,7 +69,6 @@ bh_tusken_warlord = Creature:new {
 				{group = "clothing_attachments", chance = 1000000},
 				{group = "armor_attachments", chance = 1000000}
 			},
-			lootChance = 4220000
 		}
 	},
 

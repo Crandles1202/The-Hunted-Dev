@@ -11,10 +11,6 @@ sleemo_gang_tier_1 = {
 		{groupTemplate = "printer_parts", weight = 900000},
 		{groupTemplate = "ranged_weapons", weight = 1800000},
 		{groupTemplate = "wearables_common", weight = 1800000},
-		{groupTemplate = "resource_gemstone", weight = 250000},
-		{groupTemplate = "resource_metal", weight = 250000},
-		{groupTemplate = "resource_ore", weight = 250000},
-		{groupTemplate = "resource_water", weight = 250000},
 	}
 }
 

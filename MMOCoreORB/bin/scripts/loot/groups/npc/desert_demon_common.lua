@@ -14,7 +14,7 @@ desert_demon_common = {
 		{itemTemplate = "skill_buff_ranged_accuracy", weight = 750000},
 		{itemTemplate = "skill_buff_ranged_defense", weight = 750000},
 		{itemTemplate = "skill_buff_thrown_accuracy", weight = 750000},
-		{itemTemplate = "skill_buff_thrown_speed", weight = 750000}
+		{itemTemplate = "skill_buff_thrown_speed", weight = 750000},
 	}
 }
 

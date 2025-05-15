@@ -49,7 +49,6 @@ bh_canyon_corsair_captain = Creature:new {
 				{group = "clothing_attachments", chance = 1000000},
 				{group = "armor_attachments", chance = 1000000}
 			},
-			lootChance = 4000000
 		},
 		{
 			groups = {
@@ -64,7 +63,6 @@ bh_canyon_corsair_captain = Creature:new {
 				{group = "clothing_attachments", chance = 1000000},
 				{group = "armor_attachments", chance = 1000000}
 			},
-			lootChance = 4000000
 		}
 	},
 

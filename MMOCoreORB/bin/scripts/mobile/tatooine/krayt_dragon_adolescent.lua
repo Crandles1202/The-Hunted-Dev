@@ -39,7 +39,6 @@ krayt_dragon_adolescent = Creature:new {
 				{group = "armor_all", chance = 2000000},
 				{group = "weapons_all", chance = 2000000},
 			},
-			lootChance = 8000000
 		}
 	},
 

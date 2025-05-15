@@ -43,7 +43,6 @@ sith_shadow_outlaw_mission = Creature:new {
 			groups = {
 				{group = "village_resources", chance =  10000000}
 			},
-			lootChance = 7500000
 		},
 	},
 

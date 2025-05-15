@@ -54,7 +54,6 @@ bh_sennex_guard = Creature:new {
 				{group = "clothing_attachments", chance = 1000000},
 				{group = "armor_attachments", chance = 1000000}
 			},
-			lootChance = 3640000
 		},
 		{
 			groups = {
@@ -69,7 +68,6 @@ bh_sennex_guard = Creature:new {
 				{group = "clothing_attachments", chance = 1000000},
 				{group = "armor_attachments", chance = 1000000}
 			},
-			lootChance = 3640000
 		}
 	},
 

@@ -38,7 +38,6 @@ wise_gondula_ritualist = Creature:new {
 			groups = {
 				{group = "gondula_tribe_tier_2", chance = 10000000}
 			},
-			lootChance = 1820000
 		}
 	},
 

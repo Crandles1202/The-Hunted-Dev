@@ -8,10 +8,6 @@ bandit_tier_1 = {
 		{groupTemplate = "junk", weight = 4600000},
 		{groupTemplate = "loot_kit_parts", weight = 1400000},
 		{groupTemplate = "tailor_components", weight = 1000000},
-		{groupTemplate = "resource_gemstone", weight = 250000},
-		{groupTemplate = "resource_metal", weight = 250000},
-		{groupTemplate = "resource_ore", weight = 250000},
-		{groupTemplate = "resource_water", weight = 250000},
 		{groupTemplate = "melee_weapons_common", weight = 1000000},
 		{groupTemplate = "ranged_weapons_common", weight = 1000000},
 	}

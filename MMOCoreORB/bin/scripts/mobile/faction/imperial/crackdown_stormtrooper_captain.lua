@@ -47,7 +47,6 @@ crackdown_stormtrooper_captain = Creature:new {
 				{group = "imperial_officer_common", chance = 450000},
 				{group = "stormtrooper_common", chance = 100000}
 			},
-			lootChance = 2800000
 		}
 	},
 

@@ -49,7 +49,6 @@ hoverdale_bodyguard = Creature:new {
 				{group = "clothing_attachments", chance = 1000000},
 				{group = "armor_attachments", chance = 1000000}
 			},
-			lootChance = 4300000
 		},
 		{
 			groups = {
@@ -64,7 +63,6 @@ hoverdale_bodyguard = Creature:new {
 				{group = "clothing_attachments", chance = 1000000},
 				{group = "armor_attachments", chance = 1000000}
 			},
-			lootChance = 4300000
 		},
 		{
 			groups = {
@@ -80,7 +78,6 @@ hoverdale_bodyguard = Creature:new {
 				{group = "clothing_attachments", chance = 1000000},
 				{group = "armor_attachments", chance = 1000000}
 			},
-			lootChance = 4300000
 		}
 	},
 

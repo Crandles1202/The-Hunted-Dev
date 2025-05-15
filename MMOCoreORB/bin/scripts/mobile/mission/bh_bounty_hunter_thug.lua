@@ -47,7 +47,6 @@ bh_bounty_hunter_thug = Creature:new {
 				{group = "clothing_attachments", chance = 1000000},
 				{group = "armor_attachments", chance = 1000000}
 			},
-			lootChance = 3480000
 		},
 		{
 			groups = {
@@ -62,7 +61,6 @@ bh_bounty_hunter_thug = Creature:new {
 				{group = "clothing_attachments", chance = 1000000},
 				{group = "armor_attachments", chance = 1000000}
 			},
-			lootChance = 3480000
 		}
 	},
 

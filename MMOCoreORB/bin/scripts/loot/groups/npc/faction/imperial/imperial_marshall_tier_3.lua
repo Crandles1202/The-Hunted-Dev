@@ -16,10 +16,6 @@ imperial_marshall_tier_3 = {
 		{groupTemplate = "weapons_all", weight = 3600000},
 		{groupTemplate = "wearables_all", weight = 400000},
 		{groupTemplate = "wearables_rare", weight = 300000},
-		{groupTemplate = "resource_gemstone", weight = 150000},
-		{groupTemplate = "resource_metal", weight = 150000},
-		{groupTemplate = "resource_ore", weight = 150000},
-		{groupTemplate = "resource_water", weight = 150000},
 		{groupTemplate = "crafting_component", weight = 175000},
 		{groupTemplate = "crafting_component_advanced", weight = 175000},
 	}

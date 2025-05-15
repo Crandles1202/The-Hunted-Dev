@@ -42,7 +42,6 @@ port = Creature:new {
 				{group = "carbines", chance = 1000000},
 				{group = "tailor_components", chance = 500000}
 			},
-			lootChance = 3500000
 		}
 	},
 	conversationTemplate = "",

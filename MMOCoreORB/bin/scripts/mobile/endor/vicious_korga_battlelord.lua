@@ -36,7 +36,6 @@ vicious_korga_battlelord = Creature:new {
 			groups = {
 				{group = "korga_tribe_tier_2", chance = 10000000}
 			},
-			lootChance = 1960000
 		}
 	},
 

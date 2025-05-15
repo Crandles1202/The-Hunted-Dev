@@ -36,7 +36,6 @@ tricky_korga_scout = Creature:new {
 			groups = {
 				{group = "korga_tribe_tier_2", chance = 10000000}
 			},
-			lootChance = 1820000
 		}
 	},
 

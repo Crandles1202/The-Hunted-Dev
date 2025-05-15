@@ -35,7 +35,6 @@ masterful_ewok_warrior = Creature:new {
 			groups = {
 				{group = "gondula_tribe_tier_1", chance = 10000000}
 			},
-			lootChance = 1220000
 		}
 	},
 

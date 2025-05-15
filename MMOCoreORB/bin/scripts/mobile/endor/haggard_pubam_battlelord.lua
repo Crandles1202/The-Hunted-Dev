@@ -36,7 +36,6 @@ haggard_pubam_battlelord = Creature:new {
 			groups = {
 				{group = "pubam_tier_2", chance = 10000000}
 			},
-			lootChance = 1880000
 		}
 	},
 

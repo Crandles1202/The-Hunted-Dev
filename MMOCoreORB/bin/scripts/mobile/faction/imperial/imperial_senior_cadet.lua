@@ -33,7 +33,6 @@ imperial_senior_cadet = Creature:new {
 			groups = {
 				{group = "imperial_tier_1", chance = 10000000}
 			},
-			lootChance = 2200000
 		}
 	},
 

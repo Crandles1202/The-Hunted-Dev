@@ -5,7 +5,7 @@ minor_gorax = {
 	minimumLevel = 0,
 	maximumLevel = 0,
 	lootItems = {
-		{itemTemplate = "gorax_bone_shards_common", weight = 10000000}
+		{itemTemplate = "gorax_bone_shards_common", weight = 10000000},
 	}
 }
 

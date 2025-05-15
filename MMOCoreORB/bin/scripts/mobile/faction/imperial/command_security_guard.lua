@@ -34,7 +34,6 @@ command_security_guard = Creature:new {
 			groups = {
 				{group = "imperial_tier_1", chance = 10000000}
 			},
-			lootChance = 2300000
 		}
 	},
 

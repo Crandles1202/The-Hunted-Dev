@@ -12,10 +12,6 @@ dune_stalker_tier_1 = {
 		{groupTemplate = "printer_parts", weight = 700000},
 		{groupTemplate = "tailor_components", weight = 1000000},
 		{groupTemplate = "wearables_common", weight = 1400000},
-		{groupTemplate = "resource_gemstone", weight = 250000},
-		{groupTemplate = "resource_metal", weight = 250000},
-		{groupTemplate = "resource_ore", weight = 250000},
-		{groupTemplate = "resource_water", weight = 250000},
 		{groupTemplate = "crafting_component", weight = 250000},
 	}
 }

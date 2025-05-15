@@ -42,7 +42,6 @@ crackdown_imperial_master_sergeant = Creature:new {
 				{group = "clothing_attachments", chance = 25000},
 				{group = "armor_attachments", chance = 25000}
 			},
-			lootChance = 2800000
 		}
 	},
 

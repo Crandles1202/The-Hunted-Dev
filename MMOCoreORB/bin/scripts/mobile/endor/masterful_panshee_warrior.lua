@@ -35,7 +35,6 @@ masterful_panshee_warrior = Creature:new {
 			groups = {
 				{group = "panshee_tribe_tier_2", chance = 10000000}
 			},
-			lootChance = 1840000
 		}
 	},
 

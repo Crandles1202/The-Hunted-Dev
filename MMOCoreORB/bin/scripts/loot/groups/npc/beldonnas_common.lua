@@ -17,7 +17,7 @@ beldonnas_common = {
 		{itemTemplate = "skill_buff_rifle_accuracy", weight = 583333},
 		{itemTemplate = "skill_buff_rifle_speed", weight = 583333},		
 		{itemTemplate = "skill_buff_thrown_accuracy", weight = 583333},
-		{itemTemplate = "skill_buff_thrown_speed", weight = 583333}				
+		{itemTemplate = "skill_buff_thrown_speed", weight = 583333},
 	}
 }
 

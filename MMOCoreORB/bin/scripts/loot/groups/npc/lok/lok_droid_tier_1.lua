@@ -9,12 +9,10 @@ lok_droid_tier_1 = {
 		{groupTemplate = "nyms_common", weight = 800000},
 		{groupTemplate = "ranged_weapons", weight = 1700000},
 		{groupTemplate = "tailor_components", weight = 400000},
-		{groupTemplate = "resource_gemstone", weight = 250000},
-		{groupTemplate = "resource_metal", weight = 250000},
-		{groupTemplate = "resource_ore", weight = 250000},
-		{groupTemplate = "resource_water", weight = 250000},
 		{groupTemplate = "crafting_component", weight = 250000},
 		{groupTemplate = "component_enhancement", weight = 250000},
+		{groupTemplate = "armor_attachments", weight = 500000},
+		{groupTemplate = "clothing_attachments", weight = 500000},
 	}
 }
 

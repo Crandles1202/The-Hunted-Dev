@@ -5,7 +5,7 @@ rebel_officer_common = {
 	lootItems = {
 		{itemTemplate = "radar_screen_schematic", weight = 3333334},
 		{itemTemplate = "technical_console_schematic_1", weight = 3333333},
-		{itemTemplate = "technical_console_schematic_2", weight = 3333333}
+		{itemTemplate = "technical_console_schematic_2", weight = 3333333},
 	}
 }
 

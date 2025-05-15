@@ -39,7 +39,6 @@ juvenile_canyon_krayt_dragon = Creature:new {
 				{group = "armor_all", chance = 1750000},
 				{group = "weapons_all", chance = 1750000},
 			},
-			lootChance = 5500000
 		}
 	},
 

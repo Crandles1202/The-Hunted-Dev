@@ -9,7 +9,7 @@ binayre_common = {
 		{itemTemplate = "skill_buff_polearm_accuracy", weight = 1000000},
 		{itemTemplate = "skill_buff_polearm_speed", weight = 1000000},		
 		{itemTemplate = "skill_buff_twohandmelee_accuracy", weight = 1000000},
-		{itemTemplate = "skill_buff_twohandmelee_speed", weight = 1000000}	
+		{itemTemplate = "skill_buff_twohandmelee_speed", weight = 1000000},
 	}
 }
 

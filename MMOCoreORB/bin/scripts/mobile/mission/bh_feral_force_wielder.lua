@@ -43,7 +43,6 @@ bh_feral_force_wielder = Creature:new {
 				{group = "clothing_attachments", chance = 1000000},
 				{group = "armor_attachments", chance = 1000000}
 			},
-			lootChance = 5300000
 		},
 		{
 			groups = {
@@ -58,7 +57,6 @@ bh_feral_force_wielder = Creature:new {
 				{group = "clothing_attachments", chance = 1000000},
 				{group = "armor_attachments", chance = 1000000}
 			},
-			lootChance = 5300000
 		},
 		{
 			groups = {
@@ -74,7 +72,6 @@ bh_feral_force_wielder = Creature:new {
 				{group = "clothing_attachments", chance = 1000000},
 				{group = "armor_attachments", chance = 1000000}
 			},
-			lootChance = 5300000
 		},
 	},
 

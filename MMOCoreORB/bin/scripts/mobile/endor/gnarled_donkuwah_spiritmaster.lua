@@ -36,7 +36,6 @@ gnarled_donkuwah_spiritmaster = Creature:new {
 			groups = {
 				{group = "donkuwah_tribe_tier_1", chance = 10000000}
 			},
-			lootChance = 1700000
 		}
 	},
 

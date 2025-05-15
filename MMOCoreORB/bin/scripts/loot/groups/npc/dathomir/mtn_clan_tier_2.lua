@@ -14,8 +14,6 @@ mtn_clan_tier_2 = {
 		{groupTemplate = "ranged_weapons", weight = 2700000},
 		{groupTemplate = "tailor_components", weight = 400000},
 		{groupTemplate = "wearables_uncommon", weight = 400000},
-		{groupTemplate = "resource_creature", weight = 600000},
-		{groupTemplate = "resource_water", weight = 200000},
 		{groupTemplate = "crafting_component", weight = 225000},
 		{groupTemplate = "crafting_component_advanced", weight = 75000},
 	}

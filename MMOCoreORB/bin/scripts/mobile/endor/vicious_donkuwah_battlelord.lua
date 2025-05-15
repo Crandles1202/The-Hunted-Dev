@@ -36,7 +36,6 @@ vicious_donkuwah_battlelord = Creature:new {
 			groups = {
 				{group = "donkuwah_tribe_tier_2", chance = 10000000}
 			},
-			lootChance = 2020000
 		}
 	},
 

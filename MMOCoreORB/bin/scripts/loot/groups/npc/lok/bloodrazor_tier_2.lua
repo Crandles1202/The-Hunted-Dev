@@ -16,10 +16,6 @@ bloodrazor_tier_2 = {
 		{groupTemplate = "power_crystals", weight = 200000},
 		{groupTemplate = "tailor_components", weight = 800000},
 		{groupTemplate = "wearables_all", weight = 800000},
-		{groupTemplate = "resource_gemstone", weight = 200000},
-		{groupTemplate = "resource_metal", weight = 200000},
-		{groupTemplate = "resource_ore", weight = 200000},
-		{groupTemplate = "resource_water", weight = 200000},
 		{groupTemplate = "crafting_component", weight = 225000},
 		{groupTemplate = "crafting_component_advanced", weight = 75000},
 	}

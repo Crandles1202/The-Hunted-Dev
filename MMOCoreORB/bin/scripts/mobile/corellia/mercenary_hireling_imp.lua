@@ -38,7 +38,6 @@ mercenary_hireling_imp = Creature:new {
 			groups = {
 				{group = "junk", chance = 10000000},
 			},
-			lootChance = 5000000
 		}
 	},
 

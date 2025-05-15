@@ -42,7 +42,6 @@ outbreak_undead_deathtrooper_01_m = Creature:new {
 				{group = "carbines", chance = 1000000},
 				{group = "tailor_components", chance = 500000}
 			},
-			lootChance = 9000000
 		}
 	},
 

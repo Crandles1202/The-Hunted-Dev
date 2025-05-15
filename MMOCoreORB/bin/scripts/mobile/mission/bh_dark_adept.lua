@@ -43,7 +43,6 @@ bh_dark_adept = Creature:new {
 				{group = "clothing_attachments", chance = 1000000},
 				{group = "armor_attachments", chance = 1000000}
 			},
-			lootChance = 5400000
 		},
 		{
 			groups = {
@@ -58,7 +57,6 @@ bh_dark_adept = Creature:new {
 				{group = "clothing_attachments", chance = 1000000},
 				{group = "armor_attachments", chance = 1000000}
 			},
-			lootChance = 5400000
 		},
 		{
 			groups = {
@@ -74,7 +72,6 @@ bh_dark_adept = Creature:new {
 				{group = "clothing_attachments", chance = 1000000},
 				{group = "armor_attachments", chance = 1000000}
 			},
-			lootChance = 5400000
 		},
 	},
 

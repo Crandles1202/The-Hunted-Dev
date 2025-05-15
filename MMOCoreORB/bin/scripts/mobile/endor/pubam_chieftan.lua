@@ -36,7 +36,6 @@ pubam_chieftan = Creature:new {
 			groups = {
 				{group = "pubam_tier_2", chance = 10000000}
 			},
-			lootChance = 2020000
 		}
 	},
 

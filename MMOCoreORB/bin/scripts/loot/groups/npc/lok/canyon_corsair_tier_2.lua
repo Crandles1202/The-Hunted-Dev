@@ -15,10 +15,6 @@ canyon_corsair_tier_2 = {
 		{groupTemplate = "ranged_weapons", weight = 900000},
 		{groupTemplate = "tailor_components", weight = 800000},
 		{groupTemplate = "wearables_uncommon", weight = 300000},
-		{groupTemplate = "resource_gemstone", weight = 200000},
-		{groupTemplate = "resource_metal", weight = 200000},
-		{groupTemplate = "resource_ore", weight = 200000},
-		{groupTemplate = "resource_water", weight = 200000},
 		{groupTemplate = "crafting_component", weight = 225000},
 		{groupTemplate = "crafting_component_advanced", weight = 75000},
 	}

@@ -36,7 +36,6 @@ grungy_pubam_laborer = Creature:new {
 			groups = {
 				{group = "pubam_tier_2", chance = 10000000}
 			},
-			lootChance = 1900000
 		}
 	},
 

@@ -21,7 +21,7 @@ meatlump_common = {
 		{itemTemplate = "skill_buff_thrown_accuracy", weight = 400000},
 		{itemTemplate = "skill_buff_thrown_speed", weight = 400000},
 		{itemTemplate = "skill_buff_twohandmelee_accuracy", weight = 400000},
-		{itemTemplate = "skill_buff_twohandmelee_speed", weight = 400000}
+		{itemTemplate = "skill_buff_twohandmelee_speed", weight = 400000},
 	}
 }
 

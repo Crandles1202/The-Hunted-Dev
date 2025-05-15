@@ -41,7 +41,6 @@ ewok_guard = Creature:new {
 			groups = {
 				{group = "ewok", chance = 10000000}
 			},
-			lootChance = 3000000
 		}
 	},
 

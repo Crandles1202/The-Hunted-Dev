@@ -300,10 +300,10 @@ void LootManagerImplementation::setJunkValue(TangibleObject* prototype, const Lo
 }
 
 int LootManagerImplementation::calculateLootCredits(int level) {
-	int maxcredits = (int) round((.03f * level * level) + (3 * level) + 50);
-	int mincredits = (int) round((((float) maxcredits) * .5f) + (2.0f * level));
 
-	int credits = (level * 100) + System::random(level * 100) + System::random(5000);
+	//NOTES The-Hunted
+	//Set looted credit amount
+	int credits = (level * 25) + System::random(level * 25) + System::random(5000);
 
 	return credits;
 }

@@ -42,7 +42,6 @@ bh_terrorist = Creature:new {
 				{group = "clothing_attachments", chance = 1000000},
 				{group = "armor_attachments", chance = 1000000}
 			},
-			lootChance = 3340000
 		}
 	},
 

@@ -7,7 +7,7 @@ gorax_common = {
 	lootItems = {
 		{itemTemplate = "gorax_bone_shards", weight = 1000000},
 		{itemTemplate = "gorax_bone_shards_common", weight = 8800000},
-		{itemTemplate = "gorax_bone_shards_rare", weight = 200000}
+		{itemTemplate = "gorax_bone_shards_rare", weight = 200000},
 	}
 }
 

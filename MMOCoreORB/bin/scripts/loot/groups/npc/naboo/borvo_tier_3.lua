@@ -13,10 +13,6 @@ borvo_tier_3 = {
 		{groupTemplate = "melee_two_handed", weight = 1300000},
 		{groupTemplate = "tailor_components", weight = 1300000},
 		{groupTemplate = "wearables_common", weight = 900000},
-		{groupTemplate = "resource_gemstone", weight = 150000},
-		{groupTemplate = "resource_metal", weight = 150000},
-		{groupTemplate = "resource_ore", weight = 150000},
-		{groupTemplate = "resource_water", weight = 150000},
 		{groupTemplate = "crafting_component", weight = 175000},
 		{groupTemplate = "crafting_component_advanced", weight = 175000},
 	}

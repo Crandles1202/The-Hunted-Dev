@@ -43,7 +43,6 @@ sith_shadow_taskmaster = Creature:new {
 			groups = {
 				{group = "village_resources", chance =  10000000}
 			},
-			lootChance = 7500000
 		},
 	},
 

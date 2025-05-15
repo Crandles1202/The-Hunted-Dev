@@ -43,7 +43,6 @@ sith_shadow_thug_nonaggro = Creature:new {
 			groups = {
 				{group = "village_resources", chance =  10000000}
 			},
-			lootChance = 1000000
 		},
 	},
 

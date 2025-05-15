@@ -16,7 +16,7 @@ swooper_common = {
 		{itemTemplate = "skill_buff_thrown_accuracy", weight = 714285},
 		{itemTemplate = "skill_buff_thrown_speed", weight = 714285},
 		{itemTemplate = "skill_buff_twohandmelee_accuracy", weight = 714285},
-		{itemTemplate = "skill_buff_twohandmelee_speed", weight = 714285}		
+		{itemTemplate = "skill_buff_twohandmelee_speed", weight = 714285},
 	}
 }
 

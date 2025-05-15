@@ -33,7 +33,6 @@ enhanced_kwi = Creature:new {
 			groups = {
 				{group = "enhanced_kwi", chance = 10000000}
 			},
-			lootChance = 3120000
 		}
 	},
 

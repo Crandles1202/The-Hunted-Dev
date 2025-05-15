@@ -14,10 +14,6 @@ canyon_corsair_tier_1 = {
 		{groupTemplate = "power_crystals", weight = 300000},
 		{groupTemplate = "ranged_weapons", weight = 1000000},
 		{groupTemplate = "tailor_components", weight = 800000},
-		{groupTemplate = "resource_gemstone", weight = 250000},
-		{groupTemplate = "resource_metal", weight = 250000},
-		{groupTemplate = "resource_ore", weight = 250000},
-		{groupTemplate = "resource_water", weight = 250000},
 		{groupTemplate = "crafting_component", weight = 250000},
 	}
 }

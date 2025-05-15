@@ -36,7 +36,6 @@ korga_adept = Creature:new {
 			groups = {
 				{group = "korga_tribe_tier_1", chance = 10000000}
 			},
-			lootChance = 1200000
 		}
 	},
 

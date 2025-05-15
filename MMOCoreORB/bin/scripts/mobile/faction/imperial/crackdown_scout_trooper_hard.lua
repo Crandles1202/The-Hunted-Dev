@@ -44,7 +44,6 @@ crackdown_scout_trooper_hard = Creature:new {
 				{group = "armor_attachments", chance = 25000},
 				{group = "stormtrooper_common", chance = 100000}
 			},
-			lootChance = 2800000
 		}
 	},
 

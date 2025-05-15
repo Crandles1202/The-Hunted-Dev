@@ -43,7 +43,6 @@ bh_singing_mountain_clan_arch_witch = Creature:new {
 				{group = "clothing_attachments", chance = 1000000},
 				{group = "armor_attachments", chance = 1000000}
 			},
-			lootChance = 5140000
 		},
 		{
 			groups = {
@@ -58,7 +57,6 @@ bh_singing_mountain_clan_arch_witch = Creature:new {
 				{group = "clothing_attachments", chance = 1000000},
 				{group = "armor_attachments", chance = 1000000}
 			},
-			lootChance = 5140000
 		},
 		{
 			groups = {
@@ -73,7 +71,6 @@ bh_singing_mountain_clan_arch_witch = Creature:new {
 				{group = "clothing_attachments", chance = 1000000},
 				{group = "armor_attachments", chance = 1000000}
 			},
-			lootChance = 5140000
 		}
 	},
 

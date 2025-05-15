@@ -6,7 +6,7 @@ flail_common = {
 		{itemTemplate = "skill_buff_carbine_accuracy", weight = 2500000},
 		{itemTemplate = "skill_buff_carbine_speed", weight = 2500000},
 		{itemTemplate = "skill_buff_polearm_accuracy", weight = 2500000},
-		{itemTemplate = "skill_buff_polearm_speed", weight = 2500000}
+		{itemTemplate = "skill_buff_polearm_speed", weight = 2500000},
 	}
 }
 
