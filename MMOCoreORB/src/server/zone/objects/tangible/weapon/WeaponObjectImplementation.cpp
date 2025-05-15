@@ -307,7 +307,7 @@ void WeaponObjectImplementation::fillAttributeList(AttributeListMessage* alm, Cr
 
 	//NOTES The-Hunted
 	//This Removes Min damage
-	//alm->insertAttribute("damage.wpn_damage_min", minDmg);
+	alm->insertAttribute("damage.wpn_damage_min", minDmg);
 
 	alm->insertAttribute("damage.wpn_damage_max", maxDmg);
 
