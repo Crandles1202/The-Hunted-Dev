@@ -413,6 +413,7 @@ TangibleObject* LootManagerImplementation::createLootObject(TransactionLog& trx,
 
 	// Calculate level rank value chance
 	float chance = LootValues::getLevelRankValue(Math::max(level - 50, 0), 0.f, 0.35f) * levelChance;
+	info(true) << " ***************Chance on loot: " << chance;
 	float excMod = baseModifier;
 
 	if (System::random(legendaryChance) <= chance) {
