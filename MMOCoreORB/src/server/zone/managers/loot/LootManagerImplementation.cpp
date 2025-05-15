@@ -411,9 +411,10 @@ TangibleObject* LootManagerImplementation::createLootObject(TransactionLog& trx,
 		prototype->setSerialNumber(serial);
 	}
 
+	//NOTES The-Hunted
 	// Calculate level rank value chance
 	float chance = LootValues::getLevelRankValue(Math::max(level - 50, 0), 0.f, 0.35f) * levelChance;
-	//info(true) << " ***************Chance on loot: " << chance;
+	info(true) << " ***************Chance on loot: " << chance;
 	float excMod = baseModifier;
 
 	if (System::random(legendaryChance) <= chance) {
