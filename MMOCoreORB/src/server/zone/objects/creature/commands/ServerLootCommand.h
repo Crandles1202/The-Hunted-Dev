@@ -578,8 +578,8 @@ public:
 				int lootChance = collectionEntry->getLootChance();
 				//NOTES The-Hunted
 				//Log to see if this is where loot chance is rolled for all mobs.
-				info(true) << " SERVER LOOT COMMANDS:: Loot Chance: " << lootchance;
-
+				//info(true) << " SERVER LOOT COMMANDS:: Loot Chance: " << lootchance;
+				cout << " SERVER LOOT COMMANDS:: Loot Chance: " << lootchance << " " << endl;
 				if (lootChance <= 0)
 					continue;
 
