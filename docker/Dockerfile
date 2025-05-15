@@ -140,7 +140,7 @@ ENV STATUSPORT=${PORT_GROUP}455 \
     ADMIN_USER=admin \
     REPOS='The-Hunted-Dev' \
     REPO_PUBLIC_URL=https://github.com/Crandles1202/ \
-    REPO_PUBLIC_BRANCH='lootChanges'
+    REPO_PUBLIC_BRANCH='lootChanceChanges'
 
 ENV PATH=${HOME_DIR}/bin:/usr/local/bin:${PATH}
 
