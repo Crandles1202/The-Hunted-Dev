@@ -207,4 +207,3 @@ class LightsaberCrystalComponent extends Component {
 		return true;
 	}
 }
-
