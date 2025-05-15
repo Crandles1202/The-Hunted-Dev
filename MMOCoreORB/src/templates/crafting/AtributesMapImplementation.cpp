@@ -235,7 +235,9 @@ void AttributesMap::setCurrentValue(const String& attribute, float value, const 
 		return;
 
 
-	info(true) << " AttributesMap::getCurrentValue called for " << attribute << " with a value of " << values->getValue();
+	//NOTES The-Hunted
+	//Log for attribues and their values
+	//info(true) << " AttributesMap::getCurrentValue called for " << attribute << " with a value of " << values->getValue();
 
 	values->setValue(value);
 	values->setMaxValue(max);
