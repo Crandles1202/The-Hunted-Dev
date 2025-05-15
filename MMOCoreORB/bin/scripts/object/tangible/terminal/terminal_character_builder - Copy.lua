@@ -3238,7 +3238,6 @@ object_tangible_terminal_terminal_character_builder = object_tangible_terminal_s
 			--		"Grooved Two-handed Sword", "object/weapon/melee/2h_sword/2h_sword_katana_quest.iff",
 			--		"Scythe Blade", "object/weapon/melee/2h_sword/2h_sword_scythe.iff",
 					"Power Hammer", "object/weapon/melee/2h_sword/2h_sword_maul.iff",
-					"Power Hammer", "object/weapon/melee/2h_sword/2h_ban_hammer.iff",
 			--		"Two-handed Cleaver", "object/weapon/melee/2h_sword/2h_sword_cleaver.iff",
 			--		"Black Sun Executioner's Hack", "object/weapon/melee/2h_sword/2h_sword_blacksun_hack.iff",
 			--		"Gamorrean Battleaxe", "object/weapon/melee/2h_sword/2h_sword_battleaxe_quest.iff",

@@ -530,13 +530,6 @@ object_weapon_melee_2h_sword_shared_quest_2h_sword_maul = SharedWeaponObjectTemp
 
 }
 
-ObjectTemplates:addClientTemplate(object_weapon_melee_2h_sword_shared_quest_ban_hammer, "object/weapon/melee/2h_sword/shared_quest_ban_hammer.iff")
---****************************************************************************************************************************************************************************
-object_weapon_melee_2h_sword_shared_quest_ban_hammer = SharedWeaponObjectTemplate:new {
-	clientTemplateFileName = "object/weapon/melee/2h_sword/shared_quest_ban_hammer.iff"
-
-}
-
 ObjectTemplates:addClientTemplate(object_weapon_melee_2h_sword_shared_quest_2h_sword_maul, "object/weapon/melee/2h_sword/shared_quest_2h_sword_maul.iff")
 --****************************************************************************************************************************************************************************
 object_weapon_melee_2h_sword_shared_som_2h_sword_massassi = SharedWeaponObjectTemplate:new {
