@@ -105,7 +105,9 @@ public:
 		ManagedReference<TangibleObject*> prototype = nullptr;
 
 		if (itemTemplate->isRandomResourceContainer()) {
-			prototype = lootManager->createLootResource(lootName, zone->getZoneName());
+			//NOTES The-Hunted
+			//This is what gives resources as loot
+			//prototype = lootManager->createLootResource(lootName, zone->getZoneName());
 		} else {
 			prototype = lootManager->createLootObject(trx, itemTemplate, level, false);
 		}
@@ -184,7 +186,9 @@ public:
 		ManagedReference<TangibleObject*> prototype = nullptr;
 
 		if (itemTemplate->isRandomResourceContainer()) {
-			prototype = lootManager->createLootResource(lootName, zone->getZoneName());
+			//NOTES The-Hunted
+			//This is what gives resources as loot
+			//prototype = lootManager->createLootResource(lootName, zone->getZoneName());
 		} else {
 			prototype = lootManager->createLootObject(trx, itemTemplate, level, false);
 		}
@@ -570,7 +574,11 @@ public:
 		for (int i = 0; i < count; ++i) {
 			for (int j = 0; j < lootCollection->count(); ++j) {
 				const LootGroupCollectionEntry* collectionEntry = lootCollection->get(j);
+
 				int lootChance = collectionEntry->getLootChance();
+				//NOTES The-Hunted
+				//Log to see if this is where loot chance is rolled for all mobs.
+				info(true) << " SERVER LOOT COMMANDS:: Loot Chance: " << lootchance;
 
 				if (lootChance <= 0)
 					continue;
