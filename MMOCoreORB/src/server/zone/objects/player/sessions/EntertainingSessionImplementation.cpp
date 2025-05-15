@@ -893,7 +893,7 @@ void EntertainingSessionImplementation::activateEntertainerBuff(CreatureObject* 
 		if (buffStrength == 0)
 			return;
 
-		int buffDuration = buffStrength * 2 * 60 * 60;
+		buffDuration = buffStrength * 2 * 60 * 60;
 
 		ManagedReference<PerformanceBuff*> oldBuff_focus = nullptr;
 		ManagedReference<PerformanceBuff*> oldBuff_mind = nullptr;
@@ -1105,7 +1105,7 @@ void EntertainingSessionImplementation::awardEntertainerExperience() {
 			//NOTES The-Hunted
 			//Set 
 			String healxptype("entertainer_healing");
-			playerManager->awardExperience(player, healxptype, .5, true);
+			playerManager->awardExperience(player, healxptype, xpAmount * .5, true);
 
 			oldFlourishXp = flourishXp;
 			flourishXp = 0;
