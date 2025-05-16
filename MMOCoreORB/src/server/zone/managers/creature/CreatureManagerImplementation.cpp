@@ -697,6 +697,9 @@ int CreatureManagerImplementation::notifyDestruction(TangibleObject* destructor,
 			TransactionLog trx(TrxCode::NPCLOOT, destructedObject);
 			creatureInventory->setContainerOwnerID(ownerID);
 
+			//NOTES The-Hunted
+			//each one of these if blocks correspond to a looted item
+			//right now we are looting 3 items
 			if (lootManager->createLoot(trx, creatureInventory, destructedObject)) {
 				trx.commit(true);
 			} else if (trx.isEnabled() && !trx.isAborted()) {
