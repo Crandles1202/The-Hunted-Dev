@@ -5,16 +5,17 @@ mtn_clan_tier_1 = {
 	minimumLevel = 0,
 	maximumLevel = -1,
 	lootItems = {
+		{groupTemplate = "junk", weight = 1500000},
 		{groupTemplate = "armor_attachments", weight = 100000},
 		{groupTemplate = "clothing_attachments", weight = 100000},
-		{groupTemplate = "color_crystals", weight = 300000},
-		{groupTemplate = "junk", weight = 1500000},
-		{groupTemplate = "loot_kit_parts", weight = 1100000},
-		{groupTemplate = "melee_weapons", weight = 1500000},
-		{groupTemplate = "power_crystals", weight = 250000},
-		{groupTemplate = "ranged_weapons", weight = 1900000},
-		{groupTemplate = "tailor_components", weight = 300000},
 		{groupTemplate = "crafting_component", weight = 250000},
+		{groupTemplate = "tailor_components", weight = 300000},
+		{groupTemplate = "melee_weapons", weight = 1500000},
+		{groupTemplate = "color_crystals", weight = 300000},
+		{groupTemplate = "ranged_weapons", weight = 1900000},
+		{groupTemplate = "loot_kit_parts", weight = 1100000},
+		{groupTemplate = "power_crystals", weight = 250000},
+
 	}
 }
 

@@ -34,6 +34,7 @@ fenri_dalso = Creature:new {
 			groups = {
 				{group = "fenri_dalso_drop", chance = 10000000}
 			},
+			lootChance = 10000000
 		}
 	},
 

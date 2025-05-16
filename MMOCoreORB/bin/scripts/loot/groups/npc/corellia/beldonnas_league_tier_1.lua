@@ -5,16 +5,16 @@ beldonnas_league_tier_1 = {
 	minimumLevel = 0,
 	maximumLevel = -1,
 	lootItems = {
-		{groupTemplate = "beldonnas_common", weight = 1100000},
-		{groupTemplate = "junk", weight = 1700000},
-		{groupTemplate = "loot_kit_parts", weight = 1100000},
-		{groupTemplate = "tailor_components", weight = 550000},
-		{groupTemplate = "wearables_all", weight = 2300000},
-		{groupTemplate = "crafting_component", weight = 250000},
-		{groupTemplate = "melee_weapons_common", weight = 1000000},
-		{groupTemplate = "ranged_weapons_common", weight = 1000000},
-		{groupTemplate = "armor_attachments", weight = 500000},
-		{groupTemplate = "clothing_attachments", weight = 500000},
+		{groupTemplate = "junk", weight = 2500000},
+		{groupTemplate = "armor_attachments", weight = 1400000},
+		{groupTemplate = "clothing_attachments", weight = 1400000},
+		{groupTemplate = "crafting_component", weight = 1000000},
+		{groupTemplate = "tailor_components", weight = 800000},
+		{groupTemplate = "wearables_all", weight = 700000},
+		{groupTemplate = "melee_weapons_common", weight = 500000},
+		{groupTemplate = "ranged_weapons_common", weight = 400000},
+		{groupTemplate = "loot_kit_parts", weight = 300000},
+		{groupTemplate = "beldonnas_common", weight = 300000},
 	}
 }
 

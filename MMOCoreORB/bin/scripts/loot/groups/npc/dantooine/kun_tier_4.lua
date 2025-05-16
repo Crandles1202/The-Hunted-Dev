@@ -5,18 +5,18 @@ kun_tier_4 = {
 	minimumLevel = 0,
 	maximumLevel = -1,
 	lootItems = {
+		{groupTemplate = "junk", weight = 2700000},
 		{groupTemplate = "armor_attachments", weight = 1000000},
 		{groupTemplate = "clothing_attachments", weight = 1000000},
-		{groupTemplate = "color_crystals", weight = 700000},
-		{groupTemplate = "force_hunter_rare", weight = 100000},
-		{groupTemplate = "holocron_dark", weight = 500000},
-		{groupTemplate = "holocron_light", weight = 400000},
-		{groupTemplate = "junk", weight = 2700000},
-		{groupTemplate = "melee_weapons", weight = 900000},
-		{groupTemplate = "power_crystals", weight = 700000},
 		{groupTemplate = "wearables_all", weight = 1200000},
-		{groupTemplate = "crafting_component", weight = 100000},
+		{groupTemplate = "melee_weapons", weight = 900000},
+		{groupTemplate = "color_crystals", weight = 700000},
+		{groupTemplate = "power_crystals", weight = 600000},
+		{groupTemplate = "holocron_dark", weight = 450000},
+		{groupTemplate = "holocron_light", weight = 400000},
 		{groupTemplate = "crafting_component_advanced", weight = 300000},
+		{groupTemplate = "crafting_component", weight = 100000},
+		{groupTemplate = "force_hunter_rare", weight = 50000},
 	}
 }
 

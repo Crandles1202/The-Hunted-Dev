@@ -5,13 +5,13 @@ kunga_tribe_tier_2 = {
 	minimumLevel = 0,
 	maximumLevel = -1,
 	lootItems = {
-		{groupTemplate = "armor_attachments", weight = 500000},
-		{groupTemplate = "clothing_attachments", weight = 500000},
 		{groupTemplate = "junk", weight = 3300000},
 		{groupTemplate = "loot_kit_parts", weight = 2700000},
-		{groupTemplate = "power_crystals", weight = 400000},
 		{groupTemplate = "wearables_common", weight = 900000},
 		{groupTemplate = "wearables_uncommon", weight = 900000},
+		{groupTemplate = "armor_attachments", weight = 500000},
+		{groupTemplate = "clothing_attachments", weight = 500000},
+		{groupTemplate = "power_crystals", weight = 400000},
 	}
 }
 

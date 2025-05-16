@@ -5,13 +5,14 @@ followers_of_lord_nyax_tier_4 = {
 	minimumLevel = 0,
 	maximumLevel = -1,
 	lootItems = {
-		{groupTemplate = "armor_attachments", weight = 1000000},
-		{groupTemplate = "clothing_attachments", weight = 1000000},
-		{groupTemplate = "grenades_looted", weight = 900000},
-		{groupTemplate = "junk", weight = 3600000},
-		{groupTemplate = "nyax", weight = 2700000},
-		{groupTemplate = "crafting_component", weight = 100000},
-		{groupTemplate = "crafting_component_advanced", weight = 300000},
+		{groupTemplate = "junk", weight = 3500000},
+		{groupTemplate = "armor_attachments", weight = 1800000},
+		{groupTemplate = "clothing_attachments", weight = 1500000},
+		{groupTemplate = "crafting_component", weight = 700000},
+		{groupTemplate = "crafting_component_advanced", weight = 600000},
+		{groupTemplate = "grenades_looted", weight = 700000},
+		{groupTemplate = "nyax", weight = 500000},
+
 	}
 }
 
