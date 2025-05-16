@@ -702,6 +702,18 @@ int CreatureManagerImplementation::notifyDestruction(TangibleObject* destructor,
 			} else if (trx.isEnabled() && !trx.isAborted()) {
 				trx.abort() << "createLoot failed for ai object for unknown reason.";
 			}
+
+			if (lootManager->createLoot(trx, creatureInventory, destructedObject)) {
+				trx.commit(true);
+			} else if (trx.isEnabled() && !trx.isAborted()) {
+				trx.abort() << "createLoot failed for ai object.";
+			}
+
+			if (lootManager->createLoot(trx, creatureInventory, destructedObject)) {
+				trx.commit(true);
+			} else if (trx.isEnabled() && !trx.isAborted()) {
+				trx.abort() << "createLoot failed for ai object.";
+			}
 		}
 
 		// Check to see if we can expedite the despawn of this corpse
